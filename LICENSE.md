@@ -1,6 +1,6 @@
 # License
 
-Copyright (c) 2025 Sua Maestà. All rights reserved.
+Copyright (c) 2025 @Saaam1607. All rights reserved.
 
 This source code and all associated files are the exclusive property of Samuel Casagrande Cecchin.
 
