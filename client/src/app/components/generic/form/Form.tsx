@@ -1,13 +1,13 @@
-import { Form } from 'react-bootstrap';
+import { Form as BootstrapForm }  from 'react-bootstrap';
 
-type FormWrapperProps = {
+type FormProps = {
   isEditing: boolean;
   children: React.ReactNode;
 };
 
-export default function FormWrapper({ isEditing, children }: FormWrapperProps) {
+export default function Form({ isEditing, children }: FormProps) {
   return (
-    <Form
+    <BootstrapForm
       className="flex-grow-1 pe-2"
       style={{
         pointerEvents: isEditing ? 'auto' : 'none',
@@ -15,6 +15,6 @@ export default function FormWrapper({ isEditing, children }: FormWrapperProps) {
       }}
     >
       {children}
-    </Form>
+    </BootstrapForm>
   );
 }

@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 
 import IngredientProp from '../../types/IngredientProp';
 
-import CardWrapper from './CardWrapper';
-import FormWrapper from './FormWrapper';
-import FormTitle from './FormTitle';
-import CardImage from './CardImage';
-import FormControl from './FormControl';
-import FormCheck from './FormCheck';
+import Card from '../generic/card/Card';
+import Form from '../generic/form/Form';
+import Title from '../generic/form/Title';
+import CardImage from '../generic/card/CardImage';
+import Control from '../generic/form/Control';
+import Check from '../generic/form/Check';
 
-import '../styles/card.css';
+import '../../styles/card.css';
 
 interface IngredientCardProps {
   ingredient: IngredientProp;
@@ -18,6 +18,11 @@ interface IngredientCardProps {
 }
 
 export default function IngredientCard({ item, isSelected, setIsSelected, isEditing, editItem }: IngredientCardProps) {
+
+  function handelImageChange(newImage: string) {
+    const newIngredient = { ...item, image: newImage };
+    editItem(newIngredient);
+  }
 
   function handleDescriptionChange(event: React.ChangeEvent<HTMLInputElement>) {
     const newIngredient = { ...item, description: event.target.value };
@@ -35,18 +40,19 @@ export default function IngredientCard({ item, isSelected, setIsSelected, isEdit
   }
 
   return (
-    <CardWrapper
+    <Card
       isSelected={isSelected}
       isEditing={isEditing}
       onClick={() => setIsSelected()}
     >
-      <CardImage image={item.image} isEditing={isEditing} />
+      <CardImage image={item.image} updateImage={handelImageChange} isEditing={isEditing} />
 
-      <FormWrapper isEditing={isEditing}>
+      <Form isEditing={isEditing}>
 
-        <FormTitle title={item.name} />
+        <Title title={item.name} />
         
-        <FormControl
+        <Control
+          type="textarea"
           item={item}
           value={item.description}
           fieldName="Description"
@@ -55,14 +61,14 @@ export default function IngredientCard({ item, isSelected, setIsSelected, isEdit
         />
 
         <div className="d-flex gap-5">
-          <FormCheck
+          <Check
             item={item}
             value={item.outOfStock}
             fieldName="Out Of Stock"
             isEditing={isEditing}
             handleChange={handleOutOfStockChange}
           />
-          <FormCheck
+          <Check
             item={item}
             value={item.disabled}
             fieldName="Disabled"
@@ -71,7 +77,7 @@ export default function IngredientCard({ item, isSelected, setIsSelected, isEdit
           />
         </div> 
 
-      </FormWrapper>
-    </CardWrapper>
+      </Form>
+    </Card>
   );
 }

@@ -2,11 +2,13 @@ import { useState, useCallback } from 'react';
 
 import Cropper from 'react-easy-crop';
 
-import { Form, Button } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 
 import { Trash, ImagePlus  } from 'lucide-react';
 
-import '../styles/imageUploader.css';
+import IconButton from '../button/IconButton';
+
+import '../../../styles/imageUploader.css';
 
 export default function ImageUploader({ uploadedImage, setUploadedImage, croppedAreaPixels, setCroppedAreaPixels }) {
 
@@ -87,7 +89,7 @@ export default function ImageUploader({ uploadedImage, setUploadedImage, cropped
                 onDrop={handleDrop}
               >
                 <ImagePlus width={50} height={50} style={{ color: 'grey' }} />
-                <p>{isDragging ? 'Rilascia qui il file' : 'Upload Image'}</p>
+                <p>{isDragging ? 'Release File Here' : 'Upload Image'}</p>
               </div>
             </label>
           ) : (
@@ -113,14 +115,8 @@ export default function ImageUploader({ uploadedImage, setUploadedImage, cropped
           )}
       </div> 
 
-      <Button
-        variant="danger rounded-circle"
-        className="d-flex align-items-center p-2 mt-1"
-        style={{ height: 'fit-content'}}
-        title="Drop Image"
-      >
-        <Trash size={18} onClick={handleDeleteImage} />
-      </Button>
+      <IconButton variant="danger" iconName="Trash" title="Drop Image" onClick={handleDeleteImage} />
+
     </div>
   );
 }

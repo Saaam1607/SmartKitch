@@ -15,9 +15,9 @@ import { Pizza } from 'lucide-react';
 import { HandPlatter } from 'lucide-react';
 import { Utensils } from 'lucide-react';
 
-import Ingredients from './Ingredients'
+import IngredientsRegistry from './IngredientsRegistry'
 
-export default function Registry() {
+export default function Registries() {
 
   const [selectedRegistry, setSelectedRegistry] = useState('ingredients');
 
@@ -70,7 +70,7 @@ export default function Registry() {
         </Container>
       </Navbar>
       <div style={{ flexGrow: 1, overflow: 'hidden' }}>
-        {selectedRegistry === 'ingredients' && <Ingredients />}
+        {selectedRegistry === 'ingredients' && <IngredientsRegistry />}
       </div>
     </div>
   );

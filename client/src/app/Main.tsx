@@ -3,7 +3,7 @@ import Nav from 'react-bootstrap/Nav';
 import NavbarBrand from 'react-bootstrap/NavbarBrand';
 import Container from 'react-bootstrap/Container';
 
-import Registry from './pages/registries/Registry';
+import Registries from './pages/registries/Registries';
 import { CircleUserRound, Settings } from 'lucide-react';
 
 import Logo from '../assets/images/logo.png';
@@ -41,7 +41,7 @@ export default function Main() {
       </div>
 
       <div className="d-flex flex-column" style={{ flexGrow: 1, overflow: 'hidden' }}>
-        <Registry />
+        <Registries />
       </div>
     </div>
   );

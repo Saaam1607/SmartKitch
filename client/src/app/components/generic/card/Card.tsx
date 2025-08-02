@@ -1,18 +1,18 @@
-import { Card } from 'react-bootstrap';
+import { Card as BootstrapCard } from 'react-bootstrap';
 
-type CardWrapperProps = {
+type CardProps = {
   isSelected: boolean;
   isEditing: boolean;
   onClick: () => void;
   children: React.ReactNode;
 };
 
-export default function CardWrapper({
+export default function Card({
   isSelected,
   isEditing,
   onClick,
   children,
-}: CardWrapperProps) {
+}: CardProps) {
   const backgroundColor = isSelected
     ? (isEditing ? 'rgba(217, 217, 217, 1)' : 'rgba(236, 236, 236, 1)')
     : 'transparent';
@@ -22,7 +22,7 @@ export default function CardWrapper({
     : '2px solid transparent';
 
   return (
-    <Card
+    <BootstrapCard
       className={`m-0`}
       draggable="false"
       style={{
@@ -34,9 +34,9 @@ export default function CardWrapper({
         onClick();
       }}
     >
-      <Card.Body className="d-flex gap-2 m-0 p-0">
+      <BootstrapCard.Body className="d-flex gap-2 m-0 p-0">
         {children}
-      </Card.Body>
-    </Card>
+      </BootstrapCard.Body>
+    </BootstrapCard>
   );
 }

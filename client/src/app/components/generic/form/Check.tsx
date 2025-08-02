@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Form } from 'react-bootstrap';
-import '../styles/formCheck.css';
+import '../../../styles/formCheck.css';
 
-export default function FormCheck({ item, value, fieldName, isEditing, handleChange }) {
+export default function Check({ item, value, fieldName, isEditing, handleChange }) {
   return (
     <Form.Group className="mb-1">
       <div className={`checkbox-wrapper-42 ${isEditing ? 'editing' : ''}`}>

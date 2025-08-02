@@ -1,0 +1,23 @@
+.icon-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 35px;
+  max-height: 35px;
+  min-height: 35px;
+  min-width: 35px;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.icon-button .lucide {
+  width: 19px;
+  height: 19px;
+  stroke-width: 2px;
+  transition: width 0.3s ease, height 0.3s ease;
+}
+
+.icon-button:hover .lucide {
+  width: 21px;
+  height: 21px;
+}

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import { Form } from 'react-bootstrap';
 
-export default function FormTitle({ title }) {
+export default function Title({ title }) {
 
   return (
     <Form.Label
