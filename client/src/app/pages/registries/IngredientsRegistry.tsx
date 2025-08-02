@@ -1,31 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
-import Navbar from 'react-bootstrap/Navbar';
-import Nav from 'react-bootstrap/Nav';
-import NavLink from 'react-bootstrap/NavLink';
-import NavbarBrand from 'react-bootstrap/NavbarBrand';
-import Container from 'react-bootstrap/Container';
-
-import { Form } from 'react-bootstrap';
-
-import { Search } from "lucide-react";
-
-import { toast } from 'sonner';
-
-import { motion } from "motion/react"
-
-import IconButton from '../../components/generic/button/IconButton';
 import IngredientCard from '../../components/ingredients/IngredientCard';
 import IngredientCreationModal from '../../components/ingredients/IngredientCreationModal';
+
+import Registry from './Registry'
 import Check from '../../components/generic/form/Check';
-import RegistryNavBar from '../../components/generic/registry/RegistryNavBar';
-import FiltersContainer from '../../components/generic/filters/FiltersContainer';
 
-import Ingredients from './Ingredients';
-
-import IngredientProp from '../../types/IngredientProp';
-
-let originalIngredients: IngredientProp[] = [
+let originalItems: IngredientProp[] = [
   {
     name: 'Apple',
     description: 'A sweet red fruit aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa',
@@ -63,10 +44,9 @@ let originalIngredients: IngredientProp[] = [
   },
 ];
 
-
-function Filters({ showFilters, filterByOutOfStock, setFilterByOutOfStock, filterByDisabled, setFilterByDisabled }) {
+function Filters({ filterByOutOfStock, setFilterByOutOfStock, filterByDisabled, setFilterByDisabled }) {
   return (
-    <FiltersContainer showFilters={showFilters}>
+    <>
       <Check
         item={{ name: 'Out of Stock Filter' }}
         value={filterByOutOfStock}
@@ -81,162 +61,75 @@ function Filters({ showFilters, filterByOutOfStock, setFilterByOutOfStock, filte
         isEditing={true}
         handleChange={() => setFilterByDisabled(!filterByDisabled)}
       />
-    </FiltersContainer>
+    </>
   );
 }
 
 export default function IngredientsRegistry() {
 
-  const [searchTerm, setSearchTerm] = useState('');
-  const [allIngredients] = useState(originalIngredients);
-  
-  const [showFilters, setShowFilters] = useState(false);
-  
-  const [filteredIngredients, setFilteredIngredients] = useState<IngredientProp[]>(originalIngredients);
+  const [allItems] = useState(originalItems);
+  const [searchedItems, setSearchedItems] = useState<IngredientProp[]>(originalItems);
+  const [filteredItems, setFilteredItems] = useState<IngredientProp[]>(originalItems);
+    
   const [filterByOutOfStock, setFilterByOutOfStock] = useState(false);
   const [filterByDisabled, setFilterByDisabled] = useState(false);
-
-  const [selectedItem, setSelectedItem] = useState<string | null>(null);
-  const [isEditing, setIsEditing] = useState(false);
   
-  const [showCreationModal, setShowCreationModal] = useState(false);
-
-  const [itemBeforeEdit, setItemBeforeEdit] = useState<IngredientProp | null>(null);
+  const keyField = "name"
 
   useEffect(() => {
-    let results = allIngredients.filter((ingredient) =>
-      ingredient.name.toLowerCase().includes(searchTerm.toLowerCase())
+    let results = searchedItems;
+
+    if (filterByOutOfStock)
+      results = results.filter(item => item.outOfStock);
+
+    if (filterByDisabled)
+      results = results.filter(item => item.disabled);
+
+    setFilteredItems(results);
+  }, [searchedItems, filterByOutOfStock, filterByDisabled]);
+
+  function handleSearch(searchTerm: string) {
+    let results = allItems.filter((item) =>
+      item[keyField].toLowerCase().includes(searchTerm.toLowerCase())
     );
-
-    if (filterByOutOfStock) {
-      results = results.filter(ingredient => ingredient.outOfStock);
-    }
-
-    if (filterByDisabled) {
-      results = results.filter(ingredient => ingredient.disabled);
-    }
-
-    setFilteredIngredients(results);
-  }, [searchTerm, allIngredients, filterByOutOfStock, filterByDisabled]);
-
-
-
-  function handleSelection(ingredientName: string) {
-    if (isEditing) {
-      if (selectedItem != ingredientName) {
-        toast.warning("Finish editing before selecting another ingredient");
-      }
-      return;
-    }
-
-    if (selectedItem === ingredientName) {
-      setSelectedItem(null);
-      return;
-    }
-    setSelectedItem(ingredientName);
+    setSearchedItems(results);
   }
 
-  function startEditing() {
-    if (selectedItem) {
-      setItemBeforeEdit(filteredIngredients.find(item => item.name === selectedItem) || null);
-      setIsEditing(true);
-    }
+  function createItem(newItem: IngredientProp) {
+    originalItems.push(newItem);
+    setFilteredItems([...originalItems]);
   }
 
-  function endEditing() {
-    setIsEditing(false);
-  }
-
-  function editItem(ingredient: IngredientProp) {
-    if (isEditing && selectedItem) {
-      setFilteredIngredients(filteredIngredients.map(item =>
-        item.name === selectedItem ? ingredient : item
-      ));
-      setSelectedItem(ingredient.name);
-    }
-  }
-
-  function undoItemChanges() {
-    if (isEditing) {
-      setFilteredIngredients(filteredIngredients.map(item =>
-        item.name === selectedItem ? itemBeforeEdit || item : item
-      ));
-      setIsEditing(false);
-      toast.info("Changes reverted");
-    }
-  }
-
-  function saveItemChanges() {
-    if (isEditing) {
-      setIsEditing(false);
-      toast.success("Ingredient updated successfully");
-    }
-  }
-
-  function handleFiltersClick() {
-    setShowFilters(!showFilters)
-  }
-
-  function handleCreationModalClick() {
-    setShowCreationModal(true);
+  function editItem(newItem: IngredientProp) {
+    setFilteredItems(filteredItems.map(item =>
+      item[keyField] === newItem[keyField] ? newItem : item
+    ));
   }
 
   return (
-    <div
-      style={{ height: '100%', backgroundColor: "beige" }}
-      className="d-flex flex-column"
-    >
-      <IngredientCreationModal
-        show={showCreationModal}
-        close={() => setShowCreationModal(false)}
-        createNewIngredient={(ingredient: IngredientProp) => {
-          originalIngredients.push(ingredient);
-          setFilteredIngredients([...originalIngredients]);
-          setShowCreationModal(false);
-        }}
-      />
-
-      <RegistryNavBar
-        handleFiltersClick={handleFiltersClick}
-        searchTerm={searchTerm}
-        setSearchTerm={setSearchTerm}
-        startEditing={startEditing}
-        saveItemChanges={saveItemChanges}
-        undoItemChanges={undoItemChanges}
-        handleCreationModalClick={handleCreationModalClick}
-        selectedItem={selectedItem}
-        isEditing={isEditing}
-        filters={
-          <Filters
-            showFilters={showFilters}
-            filterByOutOfStock={filterByOutOfStock}
-            setFilterByOutOfStock={setFilterByOutOfStock}
-            filterByDisabled={filterByDisabled}
-            setFilterByDisabled={setFilterByDisabled}
-          />
-        }
-      />
-
-      <div
-        className="customScrollbar d-flex flex-column gap-2 mx-3 my-2 p-2 rounded"
-        style={{
-          flexGrow: 1,
-          overflowX: 'hidden',
-          overflowY: 'auto',
-          backgroundColor: 'white'
-        }}
-      >
-        {filteredIngredients.map((ingredient) => (
-          <IngredientCard
-            key={ingredient.name}
-            item={ingredient}
-            isSelected={ingredient.name === selectedItem}
-            setIsSelected={() => handleSelection(ingredient.name)}
-            isEditing={isEditing && ingredient.name === selectedItem}
-            editItem={editItem}
-          />
-        ))}
-      </div>
-    </div>
+    <Registry
+      items={filteredItems}
+      setItems={setFilteredItems}
+      keyField={"name"}
+      cardComponent={IngredientCard}
+      handleSearch={handleSearch}
+      createItem={createItem}
+      editItem={editItem}
+      filtersComponent={
+        <Filters
+          filterByOutOfStock={filterByOutOfStock}
+          setFilterByOutOfStock={setFilterByOutOfStock}
+          filterByDisabled={filterByDisabled}
+          setFilterByDisabled={setFilterByDisabled}
+        />
+      }
+      renderCreationModal={(visible, close) => (
+        <IngredientCreationModal
+          visible={visible}
+          close={close}
+          create={createItem}
+        />
+      )}
+    />
   );
 }

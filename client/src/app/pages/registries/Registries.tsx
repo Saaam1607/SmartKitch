@@ -16,6 +16,7 @@ import { HandPlatter } from 'lucide-react';
 import { Utensils } from 'lucide-react';
 
 import IngredientsRegistry from './IngredientsRegistry'
+import DishesRegistry from './DishesRegistry'
 
 export default function Registries() {
 
@@ -71,6 +72,7 @@ export default function Registries() {
       </Navbar>
       <div style={{ flexGrow: 1, overflow: 'hidden' }}>
         {selectedRegistry === 'ingredients' && <IngredientsRegistry />}
+        {selectedRegistry === 'dishes' && <DishesRegistry />}
       </div>
     </div>
   );

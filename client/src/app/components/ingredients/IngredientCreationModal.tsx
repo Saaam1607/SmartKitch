@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import Modal from '../generic/modal/Modal';
 import ImageUploader from '../generic/image/ImageUploader';
@@ -12,47 +12,12 @@ import getCroppedImg from '../../utils/getCroppedImg';
 import '../../styles/creationModal.css';
 
 interface IngredientCreationModalProps {
-  show: boolean;
+  visible: boolean;
   close: () => void;
-  createNewIngredient: (ingredient: IngredientProp) => void;
+  create: (ingredient: IngredientProp) => void;
 }
 
-// function createImage(url) {
-//   return new Promise((resolve, reject) => {
-//     const image = new Image();
-//     image.onload = () => resolve(image);
-//     image.onerror = (error) => reject(error);
-//     image.src = url;
-//   });
-// }
-
-// async function getCroppedImg(imageSrc, crop) {
-//   const image = await createImage(imageSrc);
-//   const canvas = document.createElement('canvas');
-//   canvas.width = crop.width;
-//   canvas.height = crop.height;
-//   const ctx = canvas.getContext('2d');
-
-//   ctx.drawImage(
-//     image,
-//     crop.x,
-//     crop.y,
-//     crop.width,
-//     crop.height,
-//     0,
-//     0,
-//     crop.width,
-//     crop.height
-//   );
-
-//   return new Promise((resolve) => {
-//     canvas.toBlob((blob) => {
-//       resolve(blob);
-//     }, 'image/jpeg');
-//   });
-// }
-
-export default function IngredientCreationModal({ show, close, createNewIngredient }: IngredientCreationModalProps) {
+export default function IngredientCreationModal({ visible, close, create }: IngredientCreationModalProps) {
 
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -62,6 +27,14 @@ export default function IngredientCreationModal({ show, close, createNewIngredie
 
   const [uploadedImage, setUploadedImage] = useState(null);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+
+  useEffect(() => {
+    setName("");
+    setDescription("");
+    setOutOfStock(false);
+    setDisabled(false);
+    setUploadedImage(null);
+  }, [visible])
 
   async function createItem() {
     let newIngredient: IngredientProp = {
@@ -82,14 +55,14 @@ export default function IngredientCreationModal({ show, close, createNewIngredie
       newIngredient = { ...newIngredient };
     }
 
-    createNewIngredient(newIngredient);
+    create(newIngredient);
     close();
   }
 
   return (
     <Modal
       title="New Ingredient"
-      show={show}
+      show={visible}
       close={close}
       saveItem={createItem}
     >
