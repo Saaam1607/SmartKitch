@@ -1,0 +1,52 @@
+.menu-button a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 0.5rem 0 0.5rem;
+  text-decoration: none;
+  /* border: 1px solid red; */
+}
+
+.menu-button p {
+  margin: 0;
+  padding: 0;
+  font-size: 1rem;
+  position: relative;
+}
+
+.menu-button .active p {
+  color: white;
+}
+
+.menu-button p::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 1px;
+  background-color: white;
+  transition: width 0.4s ease, left 0.4s ease;
+}
+
+.menu-button .active p::after {
+  width: 100%;
+  left: 0;
+}
+
+.menu-button svg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:  transform 0.2s ease;
+  margin-right: 0.5rem;
+
+}
+
+.menu-button a:hover svg {
+  transform: scale(1.1);
+}
+
+.menu-button a:active svg  {
+  transform: scale(0.9);
+}

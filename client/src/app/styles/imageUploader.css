@@ -1,0 +1,19 @@
+.upload-image-container {
+  border: 2px solid transparent;
+  transition: border 0.3s ease, filter 0.3s ease;
+}
+
+.upload-image-container:hover,
+.upload-image-container.dashed {
+  border: 2px dashed #aaa;
+}
+
+.upload-image-container:hover svg,
+.upload-image-container.dashed svg {
+  filter: brightness(0.7) grayscale(1) contrast(1.2);
+  transition: filter 0.3s ease;
+}
+
+.reactEasyCrop_Container {
+  border-radius: 0.5rem;
+}

@@ -1,0 +1,19 @@
+.customScrollbar::-webkit-scrollbar {
+  width: 10px;
+}
+
+.customScrollbar::-webkit-scrollbar-track {
+  background: lightgrey;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+
+.customScrollbar::-webkit-scrollbar-thumb {
+  background: darkgrey;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+
+.customScrollbar::-webkit-scrollbar-thumb:hover {
+  background: grey;
+}
