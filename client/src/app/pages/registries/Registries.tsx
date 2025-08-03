@@ -1,5 +1,7 @@
 'use client';
 
+import useStore from '../../state/useStore'
+
 import React, { useEffect, useState } from 'react';
 
 import Navbar from 'react-bootstrap/Navbar';
@@ -15,15 +17,25 @@ import { Pizza } from 'lucide-react';
 import { HandPlatter } from 'lucide-react';
 import { Utensils } from 'lucide-react';
 
+import { toast } from 'sonner';
+
 import IngredientsRegistry from './IngredientsRegistry'
 import DishesRegistry from './DishesRegistry'
 
 export default function Registries() {
 
-  const [selectedRegistry, setSelectedRegistry] = useState('ingredients');
+  const { isEditing, setIsEditing } = useStore();
+  const { componentKey, setComponentKey } = useStore();
+
+  const [selectedRegistry, setSelectedRegistry] = useState('dishes');
 
   const handleSelect = (eventKey) => {
-    setSelectedRegistry(eventKey);
+    if (!isEditing) {
+      setComponentKey("");
+      setSelectedRegistry(eventKey);
+    } else {
+      toast.warning("Finish editing before changing section");
+    }
   }
 
   const isActive = (path: string) => {

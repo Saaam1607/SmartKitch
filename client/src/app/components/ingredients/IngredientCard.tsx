@@ -20,23 +20,23 @@ interface IngredientCardProps {
 export default function IngredientCard({ item, isSelected, setIsSelected, isEditing, editItem }: IngredientCardProps) {
 
   function handelImageChange(newImage: string) {
-    const newIngredient = { ...item, image: newImage };
-    editItem(newIngredient);
+    const newItem = { ...item, image: newImage };
+    editItem(newItem);
   }
 
   function handleDescriptionChange(event: React.ChangeEvent<HTMLInputElement>) {
-    const newIngredient = { ...item, description: event.target.value };
-    editItem(newIngredient);
+    const newItem = { ...item, description: event.target.value };
+    editItem(newItem);
   }
 
   function handleOutOfStockChange(event: React.ChangeEvent<HTMLInputElement>) {
-    const newIngredient = { ...item, outOfStock: event.target.checked };
-    editItem(newIngredient);
+    const newItem = { ...item, outOfStock: event.target.checked };
+    editItem(newItem);
   }
 
   function handleDisabledChange(event: React.ChangeEvent<HTMLInputElement>) {
-    const newIngredient = { ...item, disabled: event.target.checked };
-    editItem(newIngredient);
+    const newItem = { ...item, disabled: event.target.checked };
+    editItem(newItem);
   }
 
   return (

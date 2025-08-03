@@ -68,6 +68,7 @@ function PriceInput({ type, step, item, value, fieldName, isEditing, handleChang
         style={{
           ...commonStyle,
           ...getCommonEditingStyle(isEditing),
+          width: '100px'
         }}
       >
         <input

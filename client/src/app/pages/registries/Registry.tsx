@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
+import useStore from '../../state/useStore'
+
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import NavLink from 'react-bootstrap/NavLink';
@@ -34,31 +36,34 @@ export default function Registry({
   renderCreationModal,
 }) {
 
-  const [selectedItem, setSelectedItem] = useState<string | null>(null);
-  const [isEditing, setIsEditing] = useState(false);
-  
+  const { componentKey, setComponentKey } = useStore();
+  const { isEditing, setIsEditing } = useStore();
+
   const [itemBeforeEdit, setItemBeforeEdit] = useState<IngredientProp | null>(null);
 
   const Card = cardComponent;
 
   function handleSelection(item: string) {
     if (isEditing) {
-      if (selectedItem != item) {
+      if (componentKey != item) {
         toast.warning("Finish editing before selecting another item");
       }
       return;
     }
 
-    if (selectedItem === item) {
-      setSelectedItem(null);
+    if (componentKey === item) {
+      setComponentKey("");
+      setComponentSection("");
       return;
     }
-    setSelectedItem(item);
+
+    setComponentKey(item);
+    
   }
 
   function startEditing() {
-    if (selectedItem) {
-      setItemBeforeEdit(items.find(item => item[keyField] === selectedItem) || null);
+    if (componentKey) {
+      setItemBeforeEdit(items.find(item => item[keyField] === componentKey) || null);
       setIsEditing(true);
     }
   }
@@ -70,7 +75,7 @@ export default function Registry({
   function undoItemChanges() {
     if (isEditing) {
       setItems(items.map(item =>
-        item[keyField] === selectedItem ? itemBeforeEdit || item : item
+        item[keyField] === componentKey ? itemBeforeEdit || item : item
       ));
       setIsEditing(false);
       toast.info("Changes reverted");
@@ -94,7 +99,7 @@ export default function Registry({
         startEditing={startEditing}
         saveItemChanges={saveItemChanges}
         undoItemChanges={undoItemChanges}
-        selectedItem={selectedItem}
+        selectedItem={componentKey}
         isEditing={isEditing}
         filters={filtersComponent}
         renderCreationModal={renderCreationModal}
@@ -113,9 +118,9 @@ export default function Registry({
           <Card
             key={item[keyField]}
             item={item}
-            isSelected={item[keyField] === selectedItem}
+            isSelected={item[keyField] === componentKey}
             setIsSelected={() => handleSelection(item[keyField])}
-            isEditing={isEditing && item[keyField] === selectedItem}
+            isEditing={isEditing && item[keyField] === componentKey}
             editItem={editItem}
           />
         ))}
