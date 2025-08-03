@@ -6,7 +6,7 @@ import IngredientCreationModal from '../../components/ingredients/IngredientCrea
 import Registry from './Registry'
 import Check from '../../components/generic/form/Check';
 
-let originalItems: DishProp[] = [
+const originalItems: DishProp[] = [
   {
     name: 'Margherita',
     description: 'A pizza bla bla bla aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa',
@@ -87,7 +87,7 @@ export default function DishesRegistry() {
 
   function handleSearch(searchTerm: string) {
     setLastSearchTerm(searchTerm);
-    let results = allItems.filter((item) =>
+    const results = allItems.filter((item) =>
       item[keyField].toLowerCase().includes(searchTerm.toLowerCase())
     );
     setSearchedItems(results);

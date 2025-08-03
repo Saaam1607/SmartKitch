@@ -13,13 +13,16 @@ import ComboList from '../generic/form/ComboList';
 import '../../styles/card.css';
 
 interface DishCardProps {
-  ingredient: DishProp;
-  isSelected: boolean;
+
+  item: string;
+  isSelected: bool;
   setIsSelected: () => void;
+  isEditing: bool;
+  editItem: () => void;
 }
 
 //! Temp
-let ingredientList = [
+const ingredientList = [
   "Tomato",
   "Mozzarella",
   "Mushrooms",

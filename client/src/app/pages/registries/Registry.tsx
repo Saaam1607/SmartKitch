@@ -53,7 +53,6 @@ export default function Registry({
 
     if (componentKey === item) {
       setComponentKey("");
-      setComponentSection("");
       return;
     }
 

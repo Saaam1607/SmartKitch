@@ -2,12 +2,10 @@
 
 import useStore from '../../state/useStore'
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
-import NavLink from 'react-bootstrap/NavLink';
-import NavbarBrand from 'react-bootstrap/NavbarBrand';
 import Container from 'react-bootstrap/Container';
 
 import Item from 'react-bootstrap/Item';
