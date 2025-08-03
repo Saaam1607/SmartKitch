@@ -15,9 +15,9 @@ import '../../styles/card.css';
 interface DishCardProps {
 
   item: string;
-  isSelected: bool;
+  isSelected: boolean;
   setIsSelected: () => void;
-  isEditing: bool;
+  isEditing: boolean;
   editItem: () => void;
 }
 
@@ -34,32 +34,38 @@ const ingredientList = [
 export default function DishCard({ item, isSelected, setIsSelected, isEditing, editItem }: DishCardProps) {
 
   function handlePriceChange(event: React.ChangeEvent<HTMLInputElement>) {
+    if (!item) return;
     const newItem = { ...item, price: event.target.value };
     editItem(newItem);
   }
 
   function handelImageChange(newImage: string) {
+    if (!item) return;
     const newItem = { ...item, image: newImage };
     editItem(newItem);
   }
 
   function handleDescriptionChange(event: React.ChangeEvent<HTMLInputElement>) {
+    if (!item) return;
     const newItem = { ...item, description: event.target.value };
     editItem(newItem);
   }
 
   function handleOutOfStockChange(event: React.ChangeEvent<HTMLInputElement>) {
+    if (!item) return;
     const newItem = { ...item, outOfStock: event.target.checked };
     editItem(newItem);
   }
 
   function handleDisabledChange(event: React.ChangeEvent<HTMLInputElement>) {
+    if (!item) return;
     const newItem = { ...item, disabled: event.target.checked };
     editItem(newItem);
   }
 
   function handleIngredientAddition(newValue: string) {
     if (!item.ingredients.includes(newValue)) {
+      if (!item) return;
       const newItem = {
         ...item,
         ingredients: [...item.ingredients, newValue],
@@ -70,6 +76,7 @@ export default function DishCard({ item, isSelected, setIsSelected, isEditing, e
 
   function handleIngredientRemoval(oldValue: string) {
     if (item.ingredients.includes(oldValue)) {
+      if (!item) return;
       const newItem = {
         ...item,
         ingredients: item.ingredients.filter(i => i !== oldValue),

@@ -3,10 +3,10 @@ import { create } from 'zustand';
 type Store = {
   componentKey: string;
   componentSection: string;
-  isEditing: bool;
+  isEditing: boolean;
   setComponentKey: (newComponentKey: string) => void;
   // setComponentSection: (newComponentSection: string) => void;
-  setIsEditing: (newIsEditing: bool) => void;
+  setIsEditing: (newIsEditing: boolean) => void;
 };
 
 const useStore = create<Store>((set) => ({
@@ -22,7 +22,7 @@ const useStore = create<Store>((set) => ({
   //   set({ componentSection: newComponentSection });
   // },
   
-  setIsEditing: (newIsEditing: bool) => {
+  setIsEditing: (newIsEditing: boolean) => {
     set({ isEditing: newIsEditing });
   },
 
