@@ -6,7 +6,7 @@ import IngredientCreationModal from '../../components/ingredients/IngredientCrea
 import Registry from './Registry'
 import Check from '../../components/generic/form/Check';
 
-let originalItems: IngredientProp[] = [
+const originalItems: IngredientProp[] = [
   {
     name: 'Apple',
     description: 'A sweet red fruit aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa',
@@ -89,7 +89,7 @@ export default function IngredientsRegistry() {
   }, [searchedItems, filterByOutOfStock, filterByDisabled]);
 
   function handleSearch(searchTerm: string) {
-    let results = allItems.filter((item) =>
+    const results = allItems.filter((item) =>
       item[keyField].toLowerCase().includes(searchTerm.toLowerCase())
     );
     setSearchedItems(results);
