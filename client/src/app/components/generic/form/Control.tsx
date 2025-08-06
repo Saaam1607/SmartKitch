@@ -19,12 +19,20 @@ const getCommonEditingStyle = (isEditing: boolean): React.CSSProperties => ({
   border: isEditing ? '2px solid rgb(30, 109, 206)' : '2px solid lightgrey',
 });
 
-function TextArea({ item, value, fieldName, isEditing, handleChange }) {
+interface TextAreaProps {
+  itemKey: string;
+  value: string;
+  fieldName: string;
+  isEditing: boolean;
+  handleChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
+}
+
+function TextArea({ itemKey, value, fieldName, isEditing, handleChange }: TextAreaProps) {
   return (
     <textarea
       className="ps-2 rounded customScrollbar customTextarea"
       value={value}
-      id={`${fieldName}-${item.name}`}
+      id={`${fieldName}-${itemKey}`}
       onChange={handleChange}
       style={{
         ...commonStyle,
@@ -37,15 +45,25 @@ function TextArea({ item, value, fieldName, isEditing, handleChange }) {
   );
 }
 
-function PriceInput({ type, step, item, value, fieldName, isEditing, handleChange }) {
+interface PriceInputProps {
+  type: string;
+  step: number;
+  itemKey: string;
+  value: number;
+  fieldName: string;
+  isEditing: boolean;
+  handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+function PriceInput({ type, step, itemKey, value, fieldName, isEditing, handleChange }: PriceInputProps) {
 
   const handleIncrement = () => {
-    const newValue = parseFloat(value || '0') + parseFloat(step);
+    const newValue = value + step;
     fakeChange(newValue);
   };
 
   const handleDecrement = () => {
-    const newValue = parseFloat(value || '0') - parseFloat(step);
+    const newValue = value - step;
     fakeChange(newValue);
   };
 
@@ -76,7 +94,7 @@ function PriceInput({ type, step, item, value, fieldName, isEditing, handleChang
           step={step}
           className="ps-2 rounded customScrollbar"
           value={value}
-          id={`${fieldName}-${item.name}`}
+          id={`${fieldName}-${itemKey}`}
           onChange={handleChange}
           style={{
             width: '100%',
@@ -117,13 +135,22 @@ function PriceInput({ type, step, item, value, fieldName, isEditing, handleChang
   );
 }
 
-function TextInput({ type, item, value, fieldName, isEditing, handleChange }) {
+interface TextInputProps {
+  type: string;
+  itemKey: string;
+  value: string;
+  fieldName: string;
+  isEditing: boolean;
+  handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+function TextInput({ type, itemKey, value, fieldName, isEditing, handleChange }: TextInputProps) {
   return (
     <input
       type={type}
       className="ps-2 rounded customScrollbar"
       value={value}
-      id={`${fieldName}-${item.name}`}
+      id={`${fieldName}-${itemKey}`}
       onChange={handleChange}
       style={{
         ...commonStyle,
@@ -133,13 +160,23 @@ function TextInput({ type, item, value, fieldName, isEditing, handleChange }) {
   );
 }
 
-export default function Control({ type, step, item, value, fieldName, isEditing, handleChange }) {
+interface ControlProps {
+  type: string;
+  step?: number;
+  itemKey: string;
+  value: string | number;
+  fieldName: string;
+  isEditing: boolean;
+  handleChange: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+}
+
+export default function Control({ type, step, itemKey, value, fieldName, isEditing, handleChange } : ControlProps) {
 
   return (
     <Form.Group className="mb-1 d-flex flex-column align-items-left">
       <Form.Label
         className="m-0 ms-2"
-        htmlFor={`${fieldName}-${item.name}`}
+        htmlFor={`${fieldName}-${itemKey}`}
         style={{
           fontSize: '0.85rem',
           pointerEvents: 'none',
@@ -151,8 +188,8 @@ export default function Control({ type, step, item, value, fieldName, isEditing,
 
       {type === 'textarea' && (
         <TextArea
-          item={item}
-          value={value}
+          itemKey={itemKey}
+          value={value as string}
           fieldName={fieldName}
           isEditing={isEditing}
           handleChange={handleChange}
@@ -161,8 +198,8 @@ export default function Control({ type, step, item, value, fieldName, isEditing,
       {type === 'text' && (
         <TextInput
           type={type}
-          item={item}
-          value={value}
+          itemKey={itemKey}
+          value={value as string}
           fieldName={fieldName}
           isEditing={isEditing}
           handleChange={handleChange}
@@ -171,9 +208,9 @@ export default function Control({ type, step, item, value, fieldName, isEditing,
       {type === 'price' && (
         <PriceInput
           type={type}
-          step={step}
-          item={item}
-          value={value}
+          step={step || 1}
+          itemKey={itemKey}
+          value={value as number}
           fieldName={fieldName}
           isEditing={isEditing}
           handleChange={handleChange}

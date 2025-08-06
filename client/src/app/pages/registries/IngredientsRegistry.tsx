@@ -6,6 +6,8 @@ import IngredientCreationModal from '../../components/ingredients/IngredientCrea
 import Registry from './Registry'
 import Check from '../../components/generic/form/Check';
 
+import IngredientProp from '../../types/IngredientProp';
+
 const originalItems: IngredientProp[] = [
   {
     name: 'Apple',
@@ -44,7 +46,15 @@ const originalItems: IngredientProp[] = [
   },
 ];
 
-function Filters({ filterByOutOfStock, setFilterByOutOfStock, filterByDisabled, setFilterByDisabled }) {
+interface FiltersProps {
+  filterByOutOfStock: boolean;
+  setFilterByOutOfStock: (value: boolean) => void;
+  filterByDisabled: boolean;
+  setFilterByDisabled: (value: boolean) => void;
+}
+
+
+function Filters({ filterByOutOfStock, setFilterByOutOfStock, filterByDisabled, setFilterByDisabled } : FiltersProps ) {
   return (
     <>
       <Check
@@ -123,7 +133,7 @@ export default function IngredientsRegistry() {
           setFilterByDisabled={setFilterByDisabled}
         />
       }
-      renderCreationModal={(visible, close) => (
+      renderCreationModal={(visible: boolean, close: () => void) => (
         <IngredientCreationModal
           visible={visible}
           close={close}

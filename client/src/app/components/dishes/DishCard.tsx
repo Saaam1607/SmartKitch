@@ -13,12 +13,11 @@ import ComboList from '../generic/form/ComboList';
 import '../../styles/card.css';
 
 interface DishCardProps {
-
-  item: string;
+  item: DishProp;
   isSelected: boolean;
   setIsSelected: () => void;
   isEditing: boolean;
-  editItem: () => void;
+  editItem: (item: DishProp) => void;
 }
 
 //! Temp
@@ -35,7 +34,8 @@ export default function DishCard({ item, isSelected, setIsSelected, isEditing, e
 
   function handlePriceChange(event: React.ChangeEvent<HTMLInputElement>) {
     if (!item) return;
-    const newItem = { ...item, price: event.target.value };
+
+    const newItem: DishProp = { ...item, price: parseFloat(event.target.value) };
     editItem(newItem);
   }
 
@@ -122,7 +122,7 @@ export default function DishCard({ item, isSelected, setIsSelected, isEditing, e
           handleValueAddition={handleIngredientAddition}
           handleValueRemoval={handleIngredientRemoval}
           fieldName="Ingredients"
-          key={item.name}
+          itemKey={item.name}
           isEditing={isEditing}
         />
 

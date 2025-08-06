@@ -5,4 +5,5 @@ export default interface DishProp {
   image: string;
   outOfStock: boolean;
   disabled: boolean;
+  ingredients: string[];
 }

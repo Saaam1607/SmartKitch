@@ -12,9 +12,11 @@ import Check from '../generic/form/Check';
 import '../../styles/card.css';
 
 interface IngredientCardProps {
-  ingredient: IngredientProp;
+  item: IngredientProp;
   isSelected: boolean;
   setIsSelected: () => void;
+  isEditing: boolean;
+  editItem: (item: IngredientProp) => void;
 }
 
 export default function IngredientCard({ item, isSelected, setIsSelected, isEditing, editItem }: IngredientCardProps) {
