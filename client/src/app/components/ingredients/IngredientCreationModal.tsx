@@ -5,6 +5,8 @@ import ImageUploader from '../generic/image/ImageUploader';
 import Control from '../generic/form/Control';
 import Check from '../generic/form/Check';
 
+import { Area } from 'react-easy-crop';
+
 import IngredientProp from '../../types/IngredientProp';
 
 import getCroppedImg from '../../utils/getCroppedImg';
@@ -25,8 +27,8 @@ export default function IngredientCreationModal({ visible, close, create }: Ingr
   const [outOfStock, setOutOfStock] = useState(false);
   const [disabled, setDisabled] = useState(false);
 
-  const [uploadedImage, setUploadedImage] = useState(null);
-  const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+  const [uploadedImage, setUploadedImage] = useState<string | null>(null);
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
 
   useEffect(() => {
     setName("");
@@ -46,7 +48,7 @@ export default function IngredientCreationModal({ visible, close, create }: Ingr
     }
 
     if (uploadedImage && croppedAreaPixels) {
-      const croppedBlob = await getCroppedImg(uploadedImage, croppedAreaPixels);
+      const croppedBlob = await getCroppedImg(uploadedImage, croppedAreaPixels) as Blob;
       newIngredient = {
         ...newIngredient,
         image: URL.createObjectURL(croppedBlob),
@@ -68,7 +70,7 @@ export default function IngredientCreationModal({ visible, close, create }: Ingr
     >
       <Control
         type="text"
-        item={{ name: name }}
+        itemKey={name}
         value={name}
         fieldName="Name"
         isEditing={true}
@@ -77,30 +79,28 @@ export default function IngredientCreationModal({ visible, close, create }: Ingr
 
       <Control
         type="textarea"
-        item={{ name: name }}
+        itemKey={name}
         value={description}
         fieldName="Description"
         isEditing={true}
         handleChange={(e) => setDescription(e.target.value)}
       />
-
       <ImageUploader
         uploadedImage={uploadedImage}
         setUploadedImage={setUploadedImage}
-        croppedAreaPixels={croppedAreaPixels}
-        setCroppedAreaPixels={setCroppedAreaPixels}
+        setCroppedAreaPixels={(area: Area) => setCroppedAreaPixels(area)}
       />
 
       <div className="d-flex gap-5">
         <Check
-          item={{ name: name }}
+          itemKey={name}
           value={outOfStock}
           fieldName="Out Of Stock"
           isEditing={true}
           handleChange={() => setOutOfStock(!outOfStock)}
         />
         <Check
-          item={{ name: name }}
+          itemKey={name}
           value={disabled}
           fieldName="Disabled"
           isEditing={true}

@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
 
 import Navbar from 'react-bootstrap/Navbar';
-import Nav from 'react-bootstrap/Nav';
-import NavLink from 'react-bootstrap/NavLink';
-import NavbarBrand from 'react-bootstrap/NavbarBrand';
 import Container from 'react-bootstrap/Container';
 
 import { motion } from "motion/react"
@@ -19,11 +16,10 @@ type RegistryNavBarProps = {
   startEditing: () => void;
   saveItemChanges: () => void;
   undoItemChanges: () => void;
-  selectedItem: boolean;
+  isAnItemSelected: boolean;
   isEditing: boolean;
   filters: React.ReactNode;
-  renderCreationModal: (visible, close) => React.ReactNode;
-  children: React.ReactNode;
+  renderCreationModal: (visible: boolean, close: () => void) => React.ReactNode;
 };
 
 export default function RegistryNavBar({
@@ -31,11 +27,10 @@ export default function RegistryNavBar({
   startEditing,
   saveItemChanges,
   undoItemChanges,
-  selectedItem,
+  isAnItemSelected,
   isEditing,
   filters,
   renderCreationModal,
-  children
  }: RegistryNavBarProps) {
 
   const [searchTerm, setSearchTerm] = useState("");
@@ -97,7 +92,7 @@ export default function RegistryNavBar({
               damping: 20
             }}
           >
-            {selectedItem ? (
+            {isAnItemSelected ? (
               !isEditing ? (
                 <motion.div
                   key="view"

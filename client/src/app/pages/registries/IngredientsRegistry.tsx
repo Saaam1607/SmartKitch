@@ -58,14 +58,14 @@ function Filters({ filterByOutOfStock, setFilterByOutOfStock, filterByDisabled, 
   return (
     <>
       <Check
-        item={{ name: 'Out of Stock Filter' }}
+        itemKey={ 'Out of Stock Filter' }
         value={filterByOutOfStock}
         fieldName="Out of Stock"
         isEditing={true}
         handleChange={() => setFilterByOutOfStock(!filterByOutOfStock)}
       />
       <Check
-        item={{ name: 'Disabled Filter' }}
+        itemKey={ 'Disabled Filter' }
         value={filterByDisabled}
         fieldName="Disabled"
         isEditing={true}

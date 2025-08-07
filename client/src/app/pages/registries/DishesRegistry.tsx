@@ -37,18 +37,25 @@ const originalItems: DishProp[] = [
   },
 ];
 
-function Filters({ filterByOutOfStock, setFilterByOutOfStock, filterByDisabled, setFilterByDisabled }) {
+interface FiltersProps {
+  filterByOutOfStock: boolean;
+  setFilterByOutOfStock: (value: boolean) => void;
+  filterByDisabled: boolean;
+  setFilterByDisabled: (value: boolean) => void;
+}
+
+function Filters({ filterByOutOfStock, setFilterByOutOfStock, filterByDisabled, setFilterByDisabled }: FiltersProps) {
   return (
     <>
       <Check
-        item={{ name: 'Out of Stock Filter' }}
+        itemKey="Out of Stock Filter"
         value={filterByOutOfStock}
         fieldName="Out of Stock"
         isEditing={true}
         handleChange={() => setFilterByOutOfStock(!filterByOutOfStock)}
       />
       <Check
-        item={{ name: 'Disabled Filter' }}
+        itemKey="Disabled Filter"
         value={filterByDisabled}
         fieldName="Disabled"
         isEditing={true}
@@ -123,12 +130,13 @@ export default function DishesRegistry() {
           setFilterByDisabled={setFilterByDisabled}
         />
       }
-      renderCreationModal={(visible, close) => (
-        <IngredientCreationModal
-          visible={visible}
-          close={close}
-          create={createItem}
-        />
+      renderCreationModal={(visible: boolean, close: () => void) => (
+        <></>
+        // <IngredientCreationModal
+        //   visible={visible}
+        //   close={close}
+        //   create={createItem}
+        // />
       )}
     />
   );

@@ -4,8 +4,18 @@ import { Form, Button, ListGroup, InputGroup } from 'react-bootstrap';
 
 import { X } from 'lucide-react';
 
-export default function ComboList({ valueList, dataList, handleValueAddition, handleValueRemoval, fieldName, itemKey, isEditing }) {
-  
+interface ComboListProps {
+  valueList: string[];
+  dataList: string[];
+  handleValueAddition: (value: string) => void;
+  handleValueRemoval: (value: string) => void;
+  fieldName: string;
+  itemKey: string;
+  isEditing: boolean;
+}
+
+export default function ComboList({ valueList, dataList, handleValueAddition, handleValueRemoval, fieldName, itemKey, isEditing }: ComboListProps) {
+
   const [valueToAdd, setValueToAdd] = useState("");
   const [availableValues, SetAvailableValues] = useState(dataList.filter(el => !valueList.includes(el)));
 

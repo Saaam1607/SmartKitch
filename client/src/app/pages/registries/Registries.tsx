@@ -8,8 +8,6 @@ import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import Container from 'react-bootstrap/Container';
 
-import Item from 'react-bootstrap/Item';
-
 import { ChefHat } from 'lucide-react';
 import { Pizza } from 'lucide-react';
 import { HandPlatter } from 'lucide-react';
@@ -22,15 +20,17 @@ import DishesRegistry from './DishesRegistry'
 
 export default function Registries() {
 
-  const { isEditing, setIsEditing } = useStore();
-  const { componentKey, setComponentKey } = useStore();
+  const { isEditing } = useStore();
+  const { setComponentKey } = useStore();
 
   const [selectedRegistry, setSelectedRegistry] = useState('dishes');
 
-  const handleSelect = (eventKey) => {
+  const handleSelect = (eventKey: string | null) => {
     if (!isEditing) {
       setComponentKey("");
-      setSelectedRegistry(eventKey);
+      if (eventKey) {
+        setSelectedRegistry(eventKey);
+      }
     } else {
       toast.warning("Finish editing before changing section");
     }

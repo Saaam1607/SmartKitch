@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import DishProp from '../../types/DishProp';
 
@@ -10,15 +10,9 @@ import Control from '../generic/form/Control';
 import Check from '../generic/form/Check';
 import ComboList from '../generic/form/ComboList';
 
-import '../../styles/card.css';
+import CardComponentProps from '../../types/props/CardComponentProps';
 
-interface DishCardProps {
-  item: DishProp;
-  isSelected: boolean;
-  setIsSelected: () => void;
-  isEditing: boolean;
-  editItem: (item: DishProp) => void;
-}
+import '../../styles/card.css';
 
 //! Temp
 const ingredientList = [
@@ -30,9 +24,9 @@ const ingredientList = [
   "Cheese",
 ]
 
-export default function DishCard({ item, isSelected, setIsSelected, isEditing, editItem }: DishCardProps) {
+export default function DishCard({ item, isSelected, setIsSelected, isEditing, editItem }: CardComponentProps<DishProp>) {
 
-  function handlePriceChange(event: React.ChangeEvent<HTMLInputElement>) {
+  function handlePriceChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
     if (!item) return;
 
     const newItem: DishProp = { ...item, price: parseFloat(event.target.value) };
@@ -45,7 +39,7 @@ export default function DishCard({ item, isSelected, setIsSelected, isEditing, e
     editItem(newItem);
   }
 
-  function handleDescriptionChange(event: React.ChangeEvent<HTMLInputElement>) {
+  function handleDescriptionChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
     if (!item) return;
     const newItem = { ...item, description: event.target.value };
     editItem(newItem);
@@ -100,7 +94,7 @@ export default function DishCard({ item, isSelected, setIsSelected, isEditing, e
         <Control
           type="price"
           step={0.1}
-          item={item}
+          itemKey={item.name}
           value={item.price}
           fieldName="Price"
           isEditing={isEditing}
@@ -109,7 +103,7 @@ export default function DishCard({ item, isSelected, setIsSelected, isEditing, e
 
         <Control
           type="textarea"
-          item={item}
+          itemKey={item.name}
           value={item.description}
           fieldName="Description"
           isEditing={isEditing}
@@ -128,14 +122,14 @@ export default function DishCard({ item, isSelected, setIsSelected, isEditing, e
 
         <div className="d-flex gap-5">
           <Check
-            item={item}
+            itemKey={item.name}
             value={item.outOfStock}
             fieldName="Out Of Stock"
             isEditing={isEditing}
             handleChange={handleOutOfStockChange}
           />
           <Check
-            item={item}
+            itemKey={item.name}
             value={item.disabled}
             fieldName="Disabled"
             isEditing={isEditing}

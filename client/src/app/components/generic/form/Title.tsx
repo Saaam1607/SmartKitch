@@ -1,8 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import { Form } from 'react-bootstrap';
 
-export default function Title({ title }) {
+interface TitleProps {
+  title: string;
+}
+
+export default function Title({ title }: TitleProps) {
 
   return (
     <Form.Label

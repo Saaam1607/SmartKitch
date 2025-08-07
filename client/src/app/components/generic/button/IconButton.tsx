@@ -17,7 +17,7 @@ export default function IconButton({
   onClick,
 }: IconButtonProps) {
 
-  const LucideIcon = LucideIcons[iconName];
+  const LucideIcon = LucideIcons[iconName as keyof typeof LucideIcons] as React.ElementType | undefined;
 
   return (
     <Button
@@ -25,7 +25,7 @@ export default function IconButton({
       className="icon-button d-flex align-items-center"
       title={title}
     >
-      <LucideIcon onClick={onClick} />
+      {LucideIcon ? <LucideIcon onClick={onClick} /> : null}
     </Button>
   );
 }

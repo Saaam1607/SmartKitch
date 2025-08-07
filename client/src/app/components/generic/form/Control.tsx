@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
-import { Card, Form, Button, Image as BootstrapImage } from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
 
 import { Plus, Minus } from 'lucide-react';
 

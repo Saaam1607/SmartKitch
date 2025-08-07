@@ -1,27 +1,31 @@
 import { useState, useCallback } from 'react';
 
-import Cropper from 'react-easy-crop';
+import Cropper, { Area } from 'react-easy-crop';
 
-import { Button } from 'react-bootstrap';
-
-import { Trash, ImagePlus  } from 'lucide-react';
+import {  ImagePlus  } from 'lucide-react';
 
 import IconButton from '../button/IconButton';
 
 import '../../../styles/imageUploader.css';
 
-export default function ImageUploader({ uploadedImage, setUploadedImage, croppedAreaPixels, setCroppedAreaPixels }) {
+interface ImageUploaderProps {
+  uploadedImage: string | null;
+  setUploadedImage: (image: string | null) => void;
+  setCroppedAreaPixels: (area: Area) => void;
+}
+
+export default function ImageUploader({ uploadedImage, setUploadedImage, setCroppedAreaPixels }: ImageUploaderProps) {
 
   const [isDragging, setIsDragging] = useState(false);
 
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
 
-  const onCropComplete = useCallback((_, areaPixels) => {
+  const onCropComplete = useCallback((_croppedArea: Area, areaPixels: Area) => {
     setCroppedAreaPixels(areaPixels);
-  }, []);
+  }, [setCroppedAreaPixels]);
 
-  const handleDragOver = useCallback((e) => {
+  const handleDragOver = useCallback((e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     setIsDragging(true);
   }, []);
@@ -30,7 +34,7 @@ export default function ImageUploader({ uploadedImage, setUploadedImage, cropped
     setIsDragging(false);
   }, []);
 
-  const handleDrop = useCallback((e) => {
+  const handleDrop = useCallback((e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     setIsDragging(false);
     const files = e.dataTransfer.files;
@@ -40,17 +44,19 @@ export default function ImageUploader({ uploadedImage, setUploadedImage, cropped
     }
   }, []);
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setImageFile(file);
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files && files[0]) {
+      setImageFile(files[0]);
     }
   };
 
-  function setImageFile(file) {
+  function setImageFile(file: File) {
     const reader = new FileReader();
     reader.onloadend = () => {
-      setUploadedImage(reader.result);
+      if (typeof reader.result === 'string' || reader.result === null) {
+        setUploadedImage(reader.result);
+      }
     };
     reader.readAsDataURL(file);
   }
@@ -96,7 +102,6 @@ export default function ImageUploader({ uploadedImage, setUploadedImage, cropped
             <div
               style={{
                 position: 'relative',
-                width: '100%',
                 width: '200px',
                 height: '150px',
               }}

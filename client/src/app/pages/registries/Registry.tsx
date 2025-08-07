@@ -2,62 +2,56 @@ import React, { useState, useEffect } from 'react';
 
 import useStore from '../../state/useStore'
 
-import Navbar from 'react-bootstrap/Navbar';
-import Nav from 'react-bootstrap/Nav';
-import NavLink from 'react-bootstrap/NavLink';
-import NavbarBrand from 'react-bootstrap/NavbarBrand';
-import Container from 'react-bootstrap/Container';
-
-import { Form } from 'react-bootstrap';
-
-import { Search } from "lucide-react";
-
 import { toast } from 'sonner';
 
-import { motion } from "motion/react"
-
-import IconButton from '../../components/generic/button/IconButton';
-import Check from '../../components/generic/form/Check';
 import RegistryNavBar from '../../components/generic/registry/RegistryNavBar';
 
-import Ingredients from './Ingredients';
+import BaseItem from '../../types/BaseItem';
+import CardComponentProps from '../../types/props/CardComponentProps';
 
-import IngredientProp from '../../types/IngredientProp';
+interface RegistryProps<T extends BaseItem> {
+  items: T[];
+  setItems: (items: T[]) => void;
+  keyField: keyof T;
+  cardComponent: React.ComponentType<CardComponentProps<T>>;
+  handleSearch: (searchTerm: string) => void;
+  createItem: (item: T) => void;
+  editItem: (item: T) => void;
+  filtersComponent?: React.ReactNode;
+  renderCreationModal: (visible: boolean, close: () => void) => React.ReactNode;
+}
 
-export default function Registry({
+export default function Registry<T extends BaseItem>({
   items,
   setItems,
   keyField,
-  cardComponent,
+  cardComponent: Card,
   handleSearch,
   createItem,
   editItem,
   filtersComponent,
   renderCreationModal,
-}) {
+} : RegistryProps<T>) {
 
   const { componentKey, setComponentKey } = useStore();
   const { isEditing, setIsEditing } = useStore();
 
-  const [itemBeforeEdit, setItemBeforeEdit] = useState<IngredientProp | null>(null);
+  const [itemBeforeEdit, setItemBeforeEdit] = useState<T | null>(null);
 
-  const Card = cardComponent;
-
-  function handleSelection(item: string) {
+  function handleSelection(itemKey: string) {
     if (isEditing) {
-      if (componentKey != item) {
+      if (componentKey != itemKey) {
         toast.warning("Finish editing before selecting another item");
       }
       return;
     }
 
-    if (componentKey === item) {
+    if (componentKey === itemKey) {
       setComponentKey("");
       return;
     }
 
-    setComponentKey(item);
-    
+    setComponentKey(itemKey);
   }
 
   function startEditing() {
@@ -98,7 +92,7 @@ export default function Registry({
         startEditing={startEditing}
         saveItemChanges={saveItemChanges}
         undoItemChanges={undoItemChanges}
-        selectedItem={componentKey}
+        isAnItemSelected={componentKey !== ""}
         isEditing={isEditing}
         filters={filtersComponent}
         renderCreationModal={renderCreationModal}
@@ -115,10 +109,10 @@ export default function Registry({
       >
         {items.map((item) => (
           <Card
-            key={item[keyField]}
+            key={String(item[keyField])}
             item={item}
             isSelected={item[keyField] === componentKey}
-            setIsSelected={() => handleSelection(item[keyField])}
+            setIsSelected={() => handleSelection(String(item[keyField]))}
             isEditing={isEditing && item[keyField] === componentKey}
             editItem={editItem}
           />

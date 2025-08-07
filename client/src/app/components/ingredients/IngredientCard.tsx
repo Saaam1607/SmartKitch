@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import IngredientProp from '../../types/IngredientProp';
 
@@ -9,17 +9,11 @@ import CardImage from '../generic/card/CardImage';
 import Control from '../generic/form/Control';
 import Check from '../generic/form/Check';
 
+import CardComponentProps from '../../types/props/CardComponentProps';
+
 import '../../styles/card.css';
 
-interface IngredientCardProps {
-  item: IngredientProp;
-  isSelected: boolean;
-  setIsSelected: () => void;
-  isEditing: boolean;
-  editItem: (item: IngredientProp) => void;
-}
-
-export default function IngredientCard({ item, isSelected, setIsSelected, isEditing, editItem }: IngredientCardProps) {
+export default function IngredientCard({ item, isSelected, setIsSelected, isEditing, editItem }: CardComponentProps<IngredientProp>) {
 
   function handelImageChange(newImage: string) {
     if (!item) return;
@@ -27,7 +21,7 @@ export default function IngredientCard({ item, isSelected, setIsSelected, isEdit
     editItem(newItem);
   }
 
-  function handleDescriptionChange(event: React.ChangeEvent<HTMLInputElement>) {
+  function handleDescriptionChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
     if (!item) return;
     const newItem = { ...item, description: event.target.value };
     editItem(newItem);
@@ -59,7 +53,7 @@ export default function IngredientCard({ item, isSelected, setIsSelected, isEdit
         
         <Control
           type="textarea"
-          item={item}
+          itemKey={item.name}
           value={item.description}
           fieldName="Description"
           isEditing={isEditing}
@@ -68,14 +62,14 @@ export default function IngredientCard({ item, isSelected, setIsSelected, isEdit
 
         <div className="d-flex gap-5">
           <Check
-            item={item}
+            itemKey={item.name}
             value={item.outOfStock}
             fieldName="Out Of Stock"
             isEditing={isEditing}
             handleChange={handleOutOfStockChange}
           />
           <Check
-            item={item}
+            itemKey={item.name}
             value={item.disabled}
             fieldName="Disabled"
             isEditing={isEditing}

@@ -7,15 +7,21 @@ import ImageUploader from '../../generic/image/ImageUploader';
 
 import getCroppedImg from '../../../utils/getCroppedImg';
 
-export default function CardImage({ image, updateImage, isEditing }) {
+interface CardImageProps {
+  image: string;
+  updateImage: (image: string) => void;
+  isEditing: boolean;
+}
+
+export default function CardImage({ image, updateImage, isEditing }: CardImageProps) {
 
   const [showEditModal, setShowEditModal] = useState(false);
-  const [newImage, setNewImage] = useState(image);
-  const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+  const [newImage, setNewImage] = useState<string | null>(null);
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState<null | { x: number; y: number; width: number; height: number }>(null);
 
   async function saveChanges() {
     if (newImage) {
-      const croppedBlob = await getCroppedImg(newImage, croppedAreaPixels);
+      const croppedBlob = await getCroppedImg(newImage, croppedAreaPixels) as Blob;
       updateImage(URL.createObjectURL(croppedBlob));
     } else {
       updateImage("");
@@ -39,7 +45,6 @@ export default function CardImage({ image, updateImage, isEditing }) {
         <ImageUploader
           uploadedImage={newImage}
           setUploadedImage={setNewImage}
-          croppedAreaPixels={croppedAreaPixels}
           setCroppedAreaPixels={setCroppedAreaPixels}
         />
       </Modal>
@@ -60,6 +65,7 @@ export default function CardImage({ image, updateImage, isEditing }) {
           >
             <img
               className="rounded-start faded"
+              alt={"Card Image"}
               src={image}
               style={{
                 width: '200px',
