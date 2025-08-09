@@ -80,7 +80,7 @@ export default function ImageUploader({ uploadedImage, setUploadedImage, setCrop
               <div
                 className={`d-flex flex-column rounded upload-image-container ${isDragging ? 'dashed' : ''}`}
                 style={{
-                  width: '200px',
+                  width: '150px',
                   height: '150px',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -102,16 +102,16 @@ export default function ImageUploader({ uploadedImage, setUploadedImage, setCrop
             <div
               style={{
                 position: 'relative',
-                width: '200px',
+                width: '150px',
                 height: '150px',
               }}
-              className="border border-danger rounded"
+              className="rounded"
             >
               <Cropper
                 image={uploadedImage}
                 crop={crop}
                 zoom={zoom}
-                aspect={4 / 3}
+                aspect={1 / 1}
                 onCropChange={setCrop}
                 onZoomChange={setZoom}
                 onCropComplete={onCropComplete}

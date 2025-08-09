@@ -16,7 +16,7 @@ const commonStyle = {
 
 const getCommonEditingStyle = (isEditing: boolean): React.CSSProperties => ({
   backgroundColor: isEditing ? 'white' : 'transparent',
-  border: isEditing ? '2px solid rgb(30, 109, 206)' : '2px solid lightgrey',
+  border: isEditing ? '2px solid rgb(30, 109, 206)' : '2px solid transparent',
 });
 
 interface TextAreaProps {
@@ -30,14 +30,14 @@ interface TextAreaProps {
 function TextArea({ itemKey, value, fieldName, isEditing, handleChange }: TextAreaProps) {
   return (
     <textarea
-      className="ps-2 rounded customScrollbar customTextarea"
+      className="ps-2 rounded customScrollbar"
       value={value}
       id={`${fieldName}-${itemKey}`}
       onChange={handleChange}
       style={{
         ...commonStyle,
         ...getCommonEditingStyle(isEditing),
-        lineHeight: '1.1',
+        lineHeight: '1',
         height: '60px',
         resize: 'none',
       }}
@@ -178,7 +178,7 @@ export default function Control({ type, step, itemKey, value, fieldName, isEditi
         className="m-0 ms-2"
         htmlFor={`${fieldName}-${itemKey}`}
         style={{
-          fontSize: '0.85rem',
+          fontSize: '0.75rem',
           pointerEvents: 'none',
           userSelect: 'none'
         }}

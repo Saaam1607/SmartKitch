@@ -22,7 +22,8 @@ export default function CardImage({ image, updateImage, isEditing }: CardImagePr
   async function saveChanges() {
     if (newImage) {
       const croppedBlob = await getCroppedImg(newImage, croppedAreaPixels) as Blob;
-      updateImage(URL.createObjectURL(croppedBlob));
+      const imageUrl = URL.createObjectURL(croppedBlob);
+      updateImage(imageUrl);
     } else {
       updateImage("");
     }
@@ -54,36 +55,37 @@ export default function CardImage({ image, updateImage, isEditing }: CardImagePr
           <div
             className="rounded-start"
             style={{
-              width: '200px',
+              width: '150px',
               height: '150px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               userSelect: 'none',
-              pointerEvents: 'none',
+              pointerEvents: 'none'
             }} 
           >
             <img
-              className="rounded-start faded"
+              className=""
               alt={"Card Image"}
               src={image}
               style={{
-                width: '200px',
+                width: '150px',
                 height: '150px',
                 objectFit: 'cover',
+                borderRadius: "15px"
               }}
             /> 
           </div>
         ) : (
           <div
-            className="rounded-start faded"
+            className="faded"
             style={{
-              width: '200px',
+              width: '150px',
               height: '150px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              backgroundColor: '#f0f0f0',
+              backgroundColor: '#f0f0f0'
             }} 
           >
             <Image width={50} height={50} style={{color: "grey"}}/>

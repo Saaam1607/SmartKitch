@@ -7,18 +7,20 @@ import { motion } from "motion/react"
 
 import { Search } from 'lucide-react';
 
+import { emitter } from '../../../eventBus/eventBus';
+
 import Form from 'react-bootstrap/Form';
 import IconButton from '../button/IconButton';
-import FiltersContainer from '../filters/FiltersContainer'
 
 type RegistryNavBarProps = {
   handleSearch: (searchTerm: string) => void;
   startEditing: () => void;
   saveItemChanges: () => void;
   undoItemChanges: () => void;
+  showFilters: boolean;
+  setShowFilters: () => void;
   isAnItemSelected: boolean;
   isEditing: boolean;
-  filters: React.ReactNode;
   renderCreationModal: (visible: boolean, close: () => void) => React.ReactNode;
 };
 
@@ -27,14 +29,14 @@ export default function RegistryNavBar({
   startEditing,
   saveItemChanges,
   undoItemChanges,
+  showFilters,
+  setShowFilters,
   isAnItemSelected,
   isEditing,
-  filters,
   renderCreationModal,
  }: RegistryNavBarProps) {
 
   const [searchTerm, setSearchTerm] = useState("");
-  const [showFilters, setShowFilters] = useState(false);
   const [showCreationModal, setShowCreationModal] = useState(false);
 
   function handleFiltersClick() {
@@ -61,20 +63,34 @@ export default function RegistryNavBar({
 
       <Navbar bg="transparent" data-bs-theme="light" className="d-flex justify-content-center p-0" > 
         <Container fluid className="d-flex align-items-center justify-content-between" style={{ width: '100%' }}>
-          <div className="d-flex align-items-center">
+          <div
+            className="d-flex align-items-center gap-2 me-2"
+            style={{
+              width: '100%',
+            }}
+          >
             
-            <IconButton variant="secondary" iconName="SlidersHorizontal" onClick={handleFiltersClick} />
+            <IconButton
+              variant="outline-secondary"
+              iconName="SlidersHorizontal" 
+              color="rgb(89, 92, 94)"
+              borderColor="rgb(223, 226, 230)"
+              onClick={handleFiltersClick}
+            />
             
-            <Form className="d-flex p-1" style={{ width: '100%', maxWidth: '400px' }}>
+            <Form className="d-flex" style={{ width: '100%', maxWidth: '600px' }}>
               <div
-                className="d-flex align-items-center bg-white border rounded-pill px-3 shadow-sm"
-                style={{ width: "100%" }}
+                className="d-flex align-items-center bg-white border px-2 gap-2 shadow-sm"
+                style={{
+                  width: "100%",
+                  borderRadius: '10px'
+                }}
               >
-                <Search size={20} className="text-muted me-1" />
+                <Search size={20} className="text-muted" color="rgb(89, 92, 94)" strokeWidth={1}/>
                 <Form.Control
                   type="search"
                   placeholder="Search..."
-                  className="border-0 shadow-none flex-grow-1"
+                  className="p-0 py-1 m-0 shadow-none flex-grow-1 border-0"
                   aria-label="Search"
                   value={searchTerm}
                   onChange={handleSearchChange}
@@ -104,7 +120,7 @@ export default function RegistryNavBar({
                 >
                   <div className="d-flex gap-1">
                     <IconButton variant="warning" iconName="Pencil" onClick={startEditing} />
-                    <IconButton variant="danger" iconName="Trash" onClick={() => {}} />
+                    <IconButton variant="danger" iconName="Trash" onClick={() => { emitter.emit('deleteItem') }} />
                   </div>
                 </motion.div>
               ) : (
@@ -117,7 +133,7 @@ export default function RegistryNavBar({
                   transition={{ duration: 0.2 }}
                 >
                   <div className="d-flex gap-1">
-                    <IconButton variant="success" iconName="Save" onClick={saveItemChanges} />
+                    <IconButton variant="success" iconName="Save" onClick={() => { emitter.emit('saveEdit') }} />
                     <IconButton variant="secondary" iconName="RotateCcw" onClick={undoItemChanges} />
                   </div>
                 </motion.div>
@@ -138,11 +154,6 @@ export default function RegistryNavBar({
 
         </Container>
       </Navbar>
-      
-      <FiltersContainer showFilters={showFilters}>
-        {filters}
-      </FiltersContainer>
-
     </>
   );
 }

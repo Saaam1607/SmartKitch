@@ -5,7 +5,9 @@ import '../../../styles/iconButton.css';
 
 type IconButtonProps = {
   variant: string;
-  iconName: string
+  iconName: string;
+  color?: string;
+  borderColor?: string
   title?: string;
   onClick: () => void;
 };
@@ -13,6 +15,8 @@ type IconButtonProps = {
 export default function IconButton({
   variant,
   iconName,
+  color,
+  borderColor,
   title,
   onClick,
 }: IconButtonProps) {
@@ -21,8 +25,13 @@ export default function IconButton({
 
   return (
     <Button
-      variant={`${variant} rounded-circle`}
-      className="icon-button d-flex align-items-center"
+      variant={`${variant}`}
+      className={`icon-button d-flex align-items-center`}
+      style={{
+        borderRadius: '10px',
+        // ...(color && { color: color }),
+        ...(borderColor && { border: "1px solid " + borderColor })
+      }}
       title={title}
     >
       {LucideIcon ? <LucideIcon onClick={onClick} /> : null}

@@ -8,7 +8,7 @@ type FormProps = {
 export default function Form({ isEditing, children }: FormProps) {
   return (
     <BootstrapForm
-      className="flex-grow-1 pe-2"
+      className="flex-grow-1"
       style={{
         pointerEvents: isEditing ? 'auto' : 'none',
         userSelect: isEditing ? 'auto' : 'none'

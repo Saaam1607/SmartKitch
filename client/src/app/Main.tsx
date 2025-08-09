@@ -1,3 +1,5 @@
+"use client";
+
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import NavbarBrand from 'react-bootstrap/NavbarBrand';
@@ -8,11 +10,26 @@ import { CircleUserRound, Settings } from 'lucide-react';
 
 import Logo from '../assets/images/logo.png';
 
+import { LoadingProvider, useLoading } from './loadingProvider/LoadingProvider';
+import Spinner from './LoadingProvider/Spinner';
+
+
 import './styles/fonts.css';
 import './styles/logo.css';
 import './styles/menu-button.css';
 
 import Link from 'next/link';
+
+function RegistriesContent() {
+  const { loading } = useLoading();
+
+  return (
+    <>
+      {loading && <Spinner />}
+      <Registries />
+    </>
+  );
+}
 
 export default function Main() {
   return (
@@ -22,17 +39,17 @@ export default function Main() {
         <Navbar bg="dark" data-bs-theme="dark" className="p-0" >
           <Container fluid>
             <NavbarBrand>
-              <h2 className="logo">SmartKitch</h2>
+              <h4 className="logo">SmartKitch</h4>
             </NavbarBrand>
             <Nav className="ms-auto">
               <Link href="/settings">
                 <div className="nav-link d-flex align-items-center">
-                  <Settings size={30} />
+                  <Settings size={25} />
                 </div>
               </Link>
               <Link href="/profile">
                 <div className="nav-link d-flex align-items-center">
-                  <CircleUserRound size={30} />
+                  <CircleUserRound size={25} />
                 </div>
               </Link>
             </Nav>
@@ -41,7 +58,9 @@ export default function Main() {
       </div>
 
       <div className="d-flex flex-column" style={{ flexGrow: 1, overflow: 'hidden' }}>
-        <Registries />
+        <LoadingProvider>
+          <RegistriesContent />
+        </LoadingProvider>
       </div>
     </div>
   );

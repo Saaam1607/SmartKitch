@@ -11,7 +11,7 @@ export default function Title({ title }: TitleProps) {
   return (
     <Form.Label
       className="m-0 mb-1 fw-bold"
-      style={{fontSize: '1.2rem'}}
+      style={{fontSize: '1.35rem'}}
     >
       {title}
     </Form.Label>

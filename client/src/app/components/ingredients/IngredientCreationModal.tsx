@@ -51,7 +51,7 @@ export default function IngredientCreationModal({ visible, close, create }: Ingr
       const croppedBlob = await getCroppedImg(uploadedImage, croppedAreaPixels) as Blob;
       newIngredient = {
         ...newIngredient,
-        image: URL.createObjectURL(croppedBlob),
+        image: croppedBlob,
       };
     } else {
       newIngredient = { ...newIngredient };

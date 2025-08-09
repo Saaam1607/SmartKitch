@@ -23,7 +23,7 @@ export default function Registries() {
   const { isEditing } = useStore();
   const { setComponentKey } = useStore();
 
-  const [selectedRegistry, setSelectedRegistry] = useState('dishes');
+  const [selectedRegistry, setSelectedRegistry] = useState('ingredients');
 
   const handleSelect = (eventKey: string | null) => {
     if (!isEditing) {
@@ -80,7 +80,13 @@ export default function Registries() {
           </Nav>
         </Container>
       </Navbar>
-      <div style={{ flexGrow: 1, overflow: 'hidden' }}>
+      <div
+        className=""
+        style={{
+          flexGrow: 1,
+          overflow: 'hidden',
+        }}
+      >
         {selectedRegistry === 'ingredients' && <IngredientsRegistry />}
         {selectedRegistry === 'dishes' && <DishesRegistry />}
       </div>

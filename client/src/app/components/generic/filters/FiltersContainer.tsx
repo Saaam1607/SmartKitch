@@ -12,11 +12,17 @@ export default function FiltersContainer({ showFilters, children }: FiltersProps
     <motion.div
       layout
       transition={{ duration: 0.3, ease: 'easeOut' }}
+      style={{
+        height: '100%',
+      }}
     >
       {showFilters && (
         <div
-          className="mx-3 p-2 rounded border"
-          style={{ backgroundColor: 'lightgrey' }}
+          className="p-3 rounded border"
+          style={{
+            height: '100%',
+            backgroundColor: 'rgb(237, 233, 232)'
+          }}
         >
           <p className="m-0">Filters:</p>
           <div className="d-flex gap-5">

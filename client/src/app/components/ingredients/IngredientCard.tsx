@@ -45,39 +45,51 @@ export default function IngredientCard({ item, isSelected, setIsSelected, isEdit
       isEditing={isEditing}
       onClick={() => setIsSelected()}
     >
-      <CardImage image={item.image} updateImage={handelImageChange} isEditing={isEditing} />
+      <CardImage
+        image={item.image}
+        updateImage={handelImageChange}
+        isEditing={isEditing}
+      />
 
-      <Form isEditing={isEditing}>
+      <div
+        className="w-100 p-2 ps-3"
+        style={{
+          borderTopRightRadius: "15px",
+          borderBottomRightRadius: "15px",
+        }}
+      >
+        <Form isEditing={isEditing}>
 
-        <Title title={item.name} />
-        
-        <Control
-          type="textarea"
-          itemKey={item.name}
-          value={item.description}
-          fieldName="Description"
-          isEditing={isEditing}
-          handleChange={handleDescriptionChange}
-        />
-
-        <div className="d-flex gap-5">
-          <Check
+          <Title title={item.name} />
+          
+          <Control
+            type="textarea"
             itemKey={item.name}
-            value={item.outOfStock}
-            fieldName="Out Of Stock"
+            value={item.description}
+            fieldName="Description"
             isEditing={isEditing}
-            handleChange={handleOutOfStockChange}
+            handleChange={handleDescriptionChange}
           />
-          <Check
-            itemKey={item.name}
-            value={item.disabled}
-            fieldName="Disabled"
-            isEditing={isEditing}
-            handleChange={handleDisabledChange}
-          />
-        </div> 
 
-      </Form>
+          <div className="d-flex gap-5">
+            <Check
+              itemKey={item.name}
+              value={item.outOfStock}
+              fieldName="Out Of Stock"
+              isEditing={isEditing}
+              handleChange={handleOutOfStockChange}
+            />
+            <Check
+              itemKey={item.name}
+              value={item.disabled}
+              fieldName="Disabled"
+              isEditing={isEditing}
+              handleChange={handleDisabledChange}
+            />
+          </div> 
+
+        </Form>
+      </div>
     </Card>
   );
 }
