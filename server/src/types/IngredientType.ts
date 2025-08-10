@@ -4,6 +4,8 @@ interface BaseItem {
   image: string;
   outOfStock: boolean;
   disabled: boolean;
+  isAddable: boolean;
+  additionPrice: boolean;
 }
 
 export default interface Ingredient extends BaseItem {

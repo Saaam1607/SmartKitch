@@ -17,7 +17,7 @@ import useStore from '../../state/useStore'
 
 import '../../styles/card.css';
 
-export default function IngredientCard({ item, editItem, saveChanges, undoChanges }: CardComponentProps<IngredientProp>) {
+export default function IngredientCard({ item, editItem, saveChanges, undoChanges, deleteItem }: CardComponentProps<IngredientProp>) {
 
   const { componentKey, setComponentKey } = useStore();
 
@@ -40,8 +40,18 @@ export default function IngredientCard({ item, editItem, saveChanges, undoChange
   }
 
   function handleDescriptionChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
-    if (!item) return;
     const newItem = { ...item, description: event.target.value };
+    editItem(newItem);
+  }
+
+  function handleIsAddableChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const newItem = { ...item, isAddable: event.target.checked };
+    editItem(newItem);
+  }
+
+  function handleAdditionPriceChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const num = event.target.value === '' ? '' : parseFloat(event.target.value);
+    const newItem: DishProp = { ...item, additionPrice: parseFloat(num) };
     editItem(newItem);
   }
 
@@ -89,6 +99,26 @@ export default function IngredientCard({ item, editItem, saveChanges, undoChange
               handleChange={handleDescriptionChange}
             />
 
+            <div className="d-flex align-items-center gap-5">
+              <Check
+                itemKey={item.name}
+                value={item.isAddable}
+                fieldName="Is Addable"
+                isEditing={isEditing}
+                handleChange={handleIsAddableChange}
+              />
+
+              <Control
+                type="price"
+                step={0.1}
+                itemKey={item.name}
+                value={item.additionPrice}
+                fieldName="Addition Price"
+                isEditing={isEditing}
+                handleChange={handleAdditionPriceChange}
+              />
+            </div>
+
             <div className="d-flex gap-5">
               <Check
                 itemKey={item.name}
@@ -111,13 +141,26 @@ export default function IngredientCard({ item, editItem, saveChanges, undoChange
         <div className="d-flex flex-column gap-2 p-2">
           {!isEditing ? (
             <>
-              <IconButton variant="outline-secondary" iconName="Pencil" title="Drop Image" onClick={() => startEdit(item.name)} />
-              <IconButton variant="outline-danger" iconName="Trash" title="Drop Image" onClick={() => {}} />
+              <IconButton
+                variant="outline-secondary"
+                iconName="Pencil"
+                color="rgb(219, 123, 33)"
+                borderColor="rgb(223, 226, 230)"
+                title="Edit"
+                onClick={() => startEdit(item.name)}
+              />
+              <IconButton
+                variant="outline-danger"
+                // borderColor="rgb(223, 226, 230)"
+                iconName="Trash"
+                title="Delete"
+                onClick={() => {deleteItem(item.name)}}
+              />
             </>
           ) : (
             <>
-              <IconButton variant="success" iconName="Save" onClick={saveChanges} />
-              <IconButton variant="secondary" iconName="RotateCcw" onClick={() => { undoChanges(itemBeforeEdit) }} />
+              <IconButton variant="success" iconName="Save" title="Save Changes" onClick={saveChanges} />
+              <IconButton variant="secondary" iconName="RotateCcw" title="Discard Changes" onClick={() => { undoChanges(itemBeforeEdit) }} />
             </>
           )}
         </div>

@@ -29,7 +29,7 @@ export default function IconButton({
       className={`icon-button d-flex align-items-center`}
       style={{
         borderRadius: '10px',
-        // ...(color && { color: color }),
+        ...(color && { color: color }),
         ...(borderColor && { border: "1px solid " + borderColor })
       }}
       title={title}

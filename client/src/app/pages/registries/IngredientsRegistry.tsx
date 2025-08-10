@@ -66,6 +66,7 @@ export default function IngredientsRegistry() {
       setLoading(true);
       try {
         const data = await fetchIngredients();
+        console.log(data)
         setAllItems(data);
         setSearchedItems(data);
         setFilteredItems(data);
@@ -116,12 +117,7 @@ export default function IngredientsRegistry() {
     ));
   }
 
-  function saveChanges() {
-    saveEdit()
-    resetComponentKey();
-  }
-
-  async function saveEdit() {
+  async function saveChanges() {
     const foundItem = filteredItems.find(item => item[keyField] === componentKey);
     try {
       await editIngredient(foundItem);
@@ -132,19 +128,20 @@ export default function IngredientsRegistry() {
     } catch (error) {
       console.error(error);
     }
+    resetComponentKey();
   }
 
-  async function deleteItem() {
-    try {
-      await deleteIngredient(componentKey);
-      setIsEditing(false);
-      setComponentKey("");
-      const freshData = await fetchIngredients();
-      setAllItems(freshData);
-      setSearchedItems(freshData);
-      setFilteredItems(freshData);
-    } catch (error) {
-      console.error(error);
+  async function deleteItem(itemKey: string) {
+    if (componentKey === "") {
+      try {
+        await deleteIngredient(itemKey);
+        const freshData = await fetchIngredients();
+        setAllItems(freshData);
+        setSearchedItems(freshData);
+        setFilteredItems(freshData);
+      } catch (error) {
+        console.error(error);
+      }
     }
   }
 
@@ -158,6 +155,7 @@ export default function IngredientsRegistry() {
       createItem={createItem}
       editItem={editItem}
       saveChanges={saveChanges}
+      deleteItem={deleteItem}
       filtersComponent={
         <Filters
           filterByOutOfStock={filterByOutOfStock}

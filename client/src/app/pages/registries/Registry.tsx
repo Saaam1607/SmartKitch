@@ -20,6 +20,7 @@ interface RegistryProps<T extends BaseItem> {
   handleSearch: (searchTerm: string) => void;
   editItem: (item: T) => void;
   saveChanges: () => void;
+  deleteItem: (itemKey: string) => void;
   filtersComponent?: React.ReactNode;
   renderCreationModal: (visible: boolean, close: () => void) => React.ReactNode;
 }
@@ -32,6 +33,7 @@ export default function Registry<T extends BaseItem>({
   handleSearch,
   editItem,
   saveChanges,
+  deleteItem,
   filtersComponent,
   renderCreationModal,
 } : RegistryProps<T>) {
@@ -89,6 +91,7 @@ export default function Registry<T extends BaseItem>({
             editItem={editItem}
             undoChanges={undoChanges}
             saveChanges={saveChanges}
+            deleteItem={deleteItem}
             cardComponent={Card}
           />
 

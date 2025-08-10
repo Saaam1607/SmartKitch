@@ -57,14 +57,18 @@ interface PriceInputProps {
 
 function PriceInput({ type, step, itemKey, value, fieldName, isEditing, handleChange }: PriceInputProps) {
 
+  const numericValue = typeof value === 'number' ? value : parseFloat(value) || 0;
+
   const handleIncrement = () => {
-    const newValue = value + step;
+    const newValue = numericValue + step;
     fakeChange(newValue);
   };
 
   const handleDecrement = () => {
-    const newValue = value - step;
-    fakeChange(newValue);
+    if (numericValue > 0) {
+      const newValue = numericValue - step;
+      fakeChange(newValue);
+    }
   };
 
   const fakeChange = (newVal: number) => {
@@ -93,7 +97,7 @@ function PriceInput({ type, step, itemKey, value, fieldName, isEditing, handleCh
           type="number"
           step={step}
           className="ps-2 rounded customScrollbar"
-          value={value}
+          value={value || ''}
           id={`${fieldName}-${itemKey}`}
           onChange={handleChange}
           style={{

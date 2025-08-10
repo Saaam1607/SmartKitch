@@ -54,7 +54,6 @@ export default function RegistryNavBar({ handleSearch, showFilters, setShowFilte
               width: '100%',
             }}
           >
-            
             <IconButton
               variant="outline-secondary"
               iconName="SlidersHorizontal" 
@@ -82,28 +81,37 @@ export default function RegistryNavBar({ handleSearch, showFilters, setShowFilte
                 />
               </div>
             </Form>
+
+            <Form className="d-flex" style={{ width: '100%', maxWidth: '200px' }}>
+              <div
+                className="d-flex align-items-center bg-white border px-2 gap-2 shadow-sm"
+                style={{
+                  width: "100%",
+                  borderRadius: '10px'
+                }}
+              >
+                <Form.Select
+                  className="p-0 py-1 m-0 shadow-none flex-grow-1 border-0"
+
+                >
+                  <option>Alphabetical Asc</option>
+                  <option>Alphabetical Desc</option>
+                </Form.Select>
+                {/* <Form.Control
+                  type="search"
+                  placeholder="Search..."
+                  className="p-0 py-1 m-0 shadow-none flex-grow-1 border-0"
+                  aria-label="Search"
+                  value={searchTerm}
+                  onChange={handleSearchChange}
+                /> */}
+              </div>
+            </Form>
+
+
           </div>
             
-          <motion.div
-            className="d-flex align-items-center gap-1"
-            layout
-            transition={{
-              type: "spring",
-              stiffness: 250,
-              damping: 20
-            }}
-          >
-              <motion.div
-                key="add"
-                layout
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.2 }}
-              >
-                <IconButton variant="primary" iconName="Plus" onClick={handleCreationModalClick} />
-              </motion.div>
-          </motion.div>
+          <IconButton variant="secondary" iconName="Plus" onClick={handleCreationModalClick} />
 
         </Container>
       </Navbar>

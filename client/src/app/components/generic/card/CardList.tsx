@@ -5,6 +5,7 @@ export default function CardList({
   editItem,
   saveChanges,
   undoChanges,
+  deleteItem,
   cardComponent: RegistryCard,
 }) {
 
@@ -34,6 +35,7 @@ export default function CardList({
               editItem={editItem}
               saveChanges={saveChanges}
               undoChanges={undoChanges}
+              deleteItem={deleteItem}
             />
           </div>
         );

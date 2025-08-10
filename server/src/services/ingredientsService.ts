@@ -3,7 +3,7 @@ import pool from '../config/database';
 import Ingredient from '../types/IngredientType';
 
 export const getIngredients = async (): Promise<Ingredient[]> => {
-  const result = await pool.query('SELECT name, description, image, out_of_stock AS "outOfStock", disabled FROM ingredients');
+  const result = await pool.query('SELECT name, description, image, out_of_stock AS "outOfStock", disabled, is_addable AS "isAddable", addition_price AS "additionPrice" FROM ingredients');
   const ingredients = result.rows.map(row => {
     const base64Image = row.image.toString('base64');
     const mimeType = 'image/jpeg';
@@ -22,15 +22,17 @@ export const createIngredient = async (newIngredient: Ingredient): Promise<Ingre
   const buffer = Buffer.from(base64Data, 'base64');
 
   const result = await pool.query(`
-    INSERT INTO ingredients (name, description, image, out_of_stock, disabled)
-    VALUES ($1, $2, $3, $4, $5)
-    RETURNING name, description, image, out_of_stock AS "outOfStock", disabled
+    INSERT INTO ingredients (name, description, image, out_of_stock, disabled, isAddable, additionPrice)
+    VALUES ($1, $2, $3, $4, $5, $6, $7)
+    RETURNING name, description, image, out_of_stock AS "outOfStock", disabled, is_addable AS "isAddable", addition_price AS "additionPrice"
   `, [
       newIngredient.name,
       newIngredient.description,
       buffer,
       newIngredient.outOfStock,
-      newIngredient.disabled
+      newIngredient.disabled,
+      newIngredient.isAddable,
+      newIngredient.additionPrice
     ]
   );
   return result.rows[0];
@@ -45,15 +47,19 @@ export const editIngredient = async (newIngredient: Ingredient): Promise<Ingredi
     SET description = $2,
         image = $3,
         out_of_stock = $4,
-        disabled = $5
+        disabled = $5,
+        is_addable = $6,
+        addition_price = $7
     WHERE name = $1
-    RETURNING name, description, image, out_of_stock AS "outOfStock", disabled
+    RETURNING name, description, image, out_of_stock AS "outOfStock", disabled, is_addable AS "isAddable", addition_price AS "additionPrice"
   `, [
       newIngredient.name,
       newIngredient.description,
       buffer,
       newIngredient.outOfStock,
-      newIngredient.disabled
+      newIngredient.disabled,
+      newIngredient.isAddable,
+      newIngredient.additionPrice
     ]
   );
 
