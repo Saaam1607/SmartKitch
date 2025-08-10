@@ -14,27 +14,12 @@ import IconButton from '../button/IconButton';
 
 type RegistryNavBarProps = {
   handleSearch: (searchTerm: string) => void;
-  startEditing: () => void;
-  saveItemChanges: () => void;
-  undoItemChanges: () => void;
   showFilters: boolean;
   setShowFilters: () => void;
-  isAnItemSelected: boolean;
-  isEditing: boolean;
   renderCreationModal: (visible: boolean, close: () => void) => React.ReactNode;
 };
 
-export default function RegistryNavBar({
-  handleSearch,
-  startEditing,
-  saveItemChanges,
-  undoItemChanges,
-  showFilters,
-  setShowFilters,
-  isAnItemSelected,
-  isEditing,
-  renderCreationModal,
- }: RegistryNavBarProps) {
+export default function RegistryNavBar({ handleSearch, showFilters, setShowFilters, renderCreationModal }: RegistryNavBarProps) {
 
   const [searchTerm, setSearchTerm] = useState("");
   const [showCreationModal, setShowCreationModal] = useState(false);
@@ -108,37 +93,6 @@ export default function RegistryNavBar({
               damping: 20
             }}
           >
-            {isAnItemSelected ? (
-              !isEditing ? (
-                <motion.div
-                  key="view"
-                  layout
-                  initial={{ opacity: 0, y: -5 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -5 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <div className="d-flex gap-1">
-                    <IconButton variant="warning" iconName="Pencil" onClick={startEditing} />
-                    <IconButton variant="danger" iconName="Trash" onClick={() => { emitter.emit('deleteItem') }} />
-                  </div>
-                </motion.div>
-              ) : (
-                <motion.div
-                  key="edit"
-                  layout
-                  initial={{ opacity: 0, y: -5 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -5 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <div className="d-flex gap-1">
-                    <IconButton variant="success" iconName="Save" onClick={() => { emitter.emit('saveEdit') }} />
-                    <IconButton variant="secondary" iconName="RotateCcw" onClick={undoItemChanges} />
-                  </div>
-                </motion.div>
-              )
-            ) : (
               <motion.div
                 key="add"
                 layout
@@ -149,7 +103,6 @@ export default function RegistryNavBar({
               >
                 <IconButton variant="primary" iconName="Plus" onClick={handleCreationModalClick} />
               </motion.div>
-            )}
           </motion.div>
 
         </Container>

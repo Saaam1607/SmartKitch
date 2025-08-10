@@ -2,12 +2,10 @@ import '../../../styles/scrollbar.css'
 
 export default function CardList({
   items,
-  keyField,
-  componentKey,
-  handleSelection,
-  isEditing,
   editItem,
-  cardComponent: Card,
+  saveChanges,
+  undoChanges,
+  cardComponent: RegistryCard,
 }) {
 
   return (
@@ -31,12 +29,11 @@ export default function CardList({
               boxShadow: "0 4px 15px rgba(0,0,0,0.08)"
             }}
           >
-            <Card
+            <RegistryCard
               item={item}
-              isSelected={item[keyField] === componentKey}
-              setIsSelected={() => handleSelection(String(item[keyField]))}
-              isEditing={isEditing && item[keyField] === componentKey}
               editItem={editItem}
+              saveChanges={saveChanges}
+              undoChanges={undoChanges}
             />
           </div>
         );

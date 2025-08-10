@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 import IngredientProp from '../../types/IngredientProp';
 
@@ -13,9 +13,25 @@ import IconButton from '../generic/button/IconButton'
 
 import CardComponentProps from '../../types/props/CardComponentProps';
 
+import useStore from '../../state/useStore'
+
 import '../../styles/card.css';
 
-export default function IngredientCard({ item, isSelected, setIsSelected, isEditing, editItem }: CardComponentProps<IngredientProp>) {
+export default function IngredientCard({ item, editItem, saveChanges, undoChanges }: CardComponentProps<IngredientProp>) {
+
+  const { componentKey, setComponentKey } = useStore();
+
+  const [isEditing, setIsEditing] = useState(false);
+  const [itemBeforeEdit, setItemBeforeEdit] = useState<T | null>(null);
+  
+  useEffect(() => {
+    setIsEditing(componentKey === item.name)
+  }, [componentKey])
+
+  function startEdit() {
+    setItemBeforeEdit(item);
+    setComponentKey(item.name);
+  }
 
   function handelImageChange(newImage: string) {
     if (!item) return;
@@ -43,7 +59,6 @@ export default function IngredientCard({ item, isSelected, setIsSelected, isEdit
 
   return (
     <Card
-      isSelected={isSelected}
       isEditing={isEditing}
       onClick={() => {}}
     >
@@ -96,13 +111,13 @@ export default function IngredientCard({ item, isSelected, setIsSelected, isEdit
         <div className="d-flex flex-column gap-2 p-2">
           {!isEditing ? (
             <>
-              <IconButton variant="outline-secondary" iconName="Pencil" title="Drop Image" onClick={() => setIsSelected()} />
+              <IconButton variant="outline-secondary" iconName="Pencil" title="Drop Image" onClick={() => startEdit(item.name)} />
               <IconButton variant="outline-danger" iconName="Trash" title="Drop Image" onClick={() => {}} />
             </>
           ) : (
             <>
-              <IconButton variant="success" iconName="Save" onClick={() => {}} />
-              <IconButton variant="secondary" iconName="RotateCcw" onClick={() => {}} />
+              <IconButton variant="success" iconName="Save" onClick={saveChanges} />
+              <IconButton variant="secondary" iconName="RotateCcw" onClick={() => { undoChanges(itemBeforeEdit) }} />
             </>
           )}
         </div>

@@ -88,7 +88,7 @@ export default function Registries() {
         }}
       >
         {selectedRegistry === 'ingredients' && <IngredientsRegistry />}
-        {selectedRegistry === 'dishes' && <DishesRegistry />}
+        {/* {selectedRegistry === 'dishes' && <DishesRegistry />} */}
       </div>
     </div>
   );

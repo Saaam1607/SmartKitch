@@ -1,29 +1,25 @@
 import { Card as BootstrapCard } from 'react-bootstrap';
 
 type CardProps = {
-  isSelected: boolean;
   isEditing: boolean;
   onClick: () => void;
   children: React.ReactNode;
 };
 
 export default function Card({
-  isSelected,
   isEditing,
   onClick,
   children,
 }: CardProps) {
-  const backgroundColor = isSelected
-    ? (isEditing ? 'rgba(193, 210, 216, 1)' : 'rgba(255, 229, 217, 1)')
-    : 'white';
+  const backgroundColor = (!isEditing ? '' : 'rgba(255, 229, 217, 1)');
 
-  const border = isSelected && isEditing
+  const border = isEditing
     ? '2px solid #007bff'
     : '2px solid white';
 
   return (
     <BootstrapCard
-      className={`m-0 border-0 `}
+      className={`m-0 border-0`}
       draggable="false"
       style={{
         borderRadius: '15px',

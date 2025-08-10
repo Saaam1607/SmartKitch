@@ -4,10 +4,7 @@ import IngredientCard from '../../components/ingredients/IngredientCard';
 import IngredientCreationModal from '../../components/ingredients/IngredientCreationModal';
 
 import Registry from './Registry'
-import Check from '../../components/generic/form/Check';
 import Switch from '../../components/generic/form/Switch';
-
-
 
 import IngredientProp from '../../types/IngredientProp';
 
@@ -51,8 +48,7 @@ function Filters({ filterByOutOfStock, setFilterByOutOfStock, filterByDisabled, 
 
 export default function IngredientsRegistry() {
 
-  const { isEditing, setIsEditing } = useStore();
-  const { componentKey, setComponentKey } = useStore();
+  const { componentKey, setComponentKey, resetComponentKey } = useStore();
 
   const { setLoading } = useLoading();
 
@@ -95,23 +91,6 @@ export default function IngredientsRegistry() {
   }, [searchedItems, filterByOutOfStock, filterByDisabled]);
 
 
-  useEffect(() => {
-    function handleSaveEdit() {
-      saveEdit()
-      setIsEditing(false);
-    }
-    
-    emitter.on('saveEdit', handleSaveEdit);
-    emitter.on('deleteItem', deleteItem);
-    
-    return () => {
-      emitter.off('saveEdit', handleSaveEdit);
-      emitter.off('deleteItem', deleteItem);
-    } 
-  
-  }, [componentKey, filteredItems]);
-
-
   function handleSearch(searchTerm: string) {
     const results = allItems.filter((item) =>
       item[keyField].toLowerCase().includes(searchTerm.toLowerCase())
@@ -137,14 +116,15 @@ export default function IngredientsRegistry() {
     ));
   }
 
-
+  function saveChanges() {
+    saveEdit()
+    resetComponentKey();
+  }
 
   async function saveEdit() {
     const foundItem = filteredItems.find(item => item[keyField] === componentKey);
     try {
       await editIngredient(foundItem);
-      setIsEditing(false);
-      setComponentKey("");
       const freshData = await fetchIngredients();
       setAllItems(freshData);
       setSearchedItems(freshData);
@@ -177,6 +157,7 @@ export default function IngredientsRegistry() {
       handleSearch={handleSearch}
       createItem={createItem}
       editItem={editItem}
+      saveChanges={saveChanges}
       filtersComponent={
         <Filters
           filterByOutOfStock={filterByOutOfStock}
