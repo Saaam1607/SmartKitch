@@ -23,7 +23,7 @@ export default function Switch({ itemKey, value, fieldName, isEditing, handleCha
           label={fieldName}
           checked={value}
           onChange={handleChange}
-          className="d-flex align-items-center justify-content-start m-0 p-0 gap-2"
+          className="custom-switch d-flex align-items-center justify-content-start m-0 p-0 gap-2"
         />
       </div>
     </Form.Group>

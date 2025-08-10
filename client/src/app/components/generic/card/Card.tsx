@@ -14,7 +14,7 @@ export default function Card({
   children,
 }: CardProps) {
   const backgroundColor = isSelected
-    ? (isEditing ? 'rgba(193, 210, 216, 1)' : 'rgba(217, 227, 230, 1)')
+    ? (isEditing ? 'rgba(193, 210, 216, 1)' : 'rgba(255, 229, 217, 1)')
     : 'white';
 
   const border = isSelected && isEditing
@@ -27,7 +27,7 @@ export default function Card({
       draggable="false"
       style={{
         borderRadius: '15px',
-        // boxShadow: 'rgba(0, 0, 0, 0.2) 0px 2px 6px',
+        boxShadow: 'rgba(0, 0, 0, 0.2) 0px 2px 6px',
         backgroundColor,
       }}
       onClick={(e) => {

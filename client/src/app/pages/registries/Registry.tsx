@@ -6,6 +6,7 @@ import { toast } from 'sonner';
 
 import RegistryNavBar from '../../components/generic/registry/RegistryNavBar';
 
+import CardList from '../../components/generic/card/CardList'
 import BaseItem from '../../types/BaseItem';
 import CardComponentProps from '../../types/props/CardComponentProps';
 import FiltersContainer from '../../components/generic/filters/FiltersContainer'
@@ -71,6 +72,7 @@ export default function Registry<T extends BaseItem>({
     }
 
     setComponentKey(itemKey);
+    setIsEditing(true);
   }
 
   function startEditing() {
@@ -100,6 +102,11 @@ export default function Registry<T extends BaseItem>({
       toast.success("Item updated successfully");
     }
   }
+
+  const cardVariants = {
+    hidden: { opacity: 0, y: 50 }, // parte bassa e trasparente
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
+  };
 
   return (
     <div
@@ -144,19 +151,47 @@ export default function Registry<T extends BaseItem>({
             </FiltersContainer>
 
           </div>
-      
-          <div
-            className="customScrollbar d-flex flex-column gap-3 rounded p-3"
+
+
+
+<CardList
+  items={items}
+  keyField={keyField}
+  componentKey={componentKey}
+  handleSelection={handleSelection}
+  isEditing={isEditing}
+  editItem={editItem}
+  cardComponent={Card}
+/>
+
+
+          {/* <div
+            ref={containerRef}
+            className="customScrollbar"
             style={{
+              padding: "20px",
+              background: "#f9f9f9",
               flexGrow: 1,
               overflowX: 'hidden',
               overflowY: 'auto',
-              backgroundColor: 'white',
-              backgroundColor: 'rgb(242, 242, 242)',
             }}
           >
-            {items.map((item) => (
-              <div ref={divRef} key={String(item[keyField])}>
+            {items.map((item, i) => (
+              <motion.div
+                key={i}
+                className="card"
+                style={{
+                  margin: "20px 0",
+                  padding: "20px",
+                  background: "white",
+                  borderRadius: "12px",
+                  boxShadow: "0 4px 15px rgba(0,0,0,0.08)"
+                }}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ root: containerRef, once: false, amount: 0.1 }}
+                variants={getVariants()}
+              >
                 <Card
                   item={item}
                   isSelected={item[keyField] === componentKey}
@@ -164,13 +199,11 @@ export default function Registry<T extends BaseItem>({
                   isEditing={isEditing && item[keyField] === componentKey}
                   editItem={editItem}
                 />
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </div> */}
 
       </div>
-
-
     </div>
   );
 }

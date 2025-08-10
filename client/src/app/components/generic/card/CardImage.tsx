@@ -94,8 +94,12 @@ export default function CardImage({ image, updateImage, isEditing }: CardImagePr
 
         {isEditing && (
           <div
-            className="position-absolute top-0 end-0 p-1"
-            style={{ zIndex: 1 }}
+            className="d-flex align-items-center justify-content-center position-absolute top-0 end-0 p-2 m-1"
+            style={{
+              backgroundColor: "white",
+              borderRadius: '50%',
+              zIndex: 1
+            }}
           >
             <Pencil size={15} onClick={() => {setShowEditModal(true)}} />
           </div>
