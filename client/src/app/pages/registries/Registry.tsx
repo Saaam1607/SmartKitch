@@ -6,50 +6,39 @@ import { toast } from 'sonner';
 
 import RegistryNavBar from '../../components/generic/registry/RegistryNavBar';
 
-import CardList from '../../components/generic/card/CardList'
+import Card from '../../components/generic/card/Card'
+import FiltersContainer from '../../components/generic/filters/FiltersContainer'
+
 import BaseItem from '../../types/BaseItem';
 import CardComponentProps from '../../types/props/CardComponentProps';
-import FiltersContainer from '../../components/generic/filters/FiltersContainer'
+import CrudService from "../../types/CrudService";
 
 
 interface RegistryProps<T extends BaseItem> {
   items: T[];
-  setItems: (items: T[]) => void;
-  keyField: keyof T;
-  cardComponent: React.ComponentType<CardComponentProps<T>>;
+  keyField: string;
+  cardComponent: React.ReactNode;
+  updateItem: (newItem: T) => void;
+  service: CrudService<T>,
   handleSearch: (searchTerm: string) => void;
-  editItem: (item: T) => void;
-  saveChanges: () => void;
-  deleteItem: (itemKey: string) => void;
   filtersComponent?: React.ReactNode;
   renderCreationModal: (visible: boolean, close: () => void) => React.ReactNode;
 }
 
 export default function Registry<T extends BaseItem>({
   items,
-  setItems,
   keyField,
-  cardComponent: Card,
+  cardComponent,
+  updateItem,
+  service,
   handleSearch,
-  editItem,
-  saveChanges,
-  deleteItem,
   filtersComponent,
   renderCreationModal,
 } : RegistryProps<T>) {
 
   const { componentKey, resetComponentKey } = useStore();
-  const [showFilters, setShowFilters] = useState<boolean>(true);
 
-  function undoChanges(prevItem: T) {
-    if (componentKey) {
-      setItems(items.map(item =>
-        item[keyField] === componentKey ? prevItem || item : item
-      ));
-      resetComponentKey();
-      toast.info("Changes reverted");
-    }
-  }
+  const [showFilters, setShowFilters] = useState<boolean>(true);
 
   return (
     <div
@@ -86,15 +75,38 @@ export default function Registry<T extends BaseItem>({
             </FiltersContainer>
           </div>
           
-          <CardList
-            items={items}
-            editItem={editItem}
-            undoChanges={undoChanges}
-            saveChanges={saveChanges}
-            deleteItem={deleteItem}
-            cardComponent={Card}
-          />
-
+          <div
+            className="d-flex flex-column gap-3 customScrollbar"
+            style={{
+              padding: "20px",
+              background: "#f9f9f9",
+              borderRadius: "15px",
+              flexGrow: 1,
+              overflowX: "hidden",
+              overflowY: "auto",
+            }}
+          >
+            {items.map((item, i) => {
+              return (
+                <div
+                  key={i}
+                  style={{
+                    borderRadius: "12px",
+                    boxShadow: "0 4px 15px rgba(0,0,0,0.08)"
+                  }}
+                >
+                  <Card
+                    item={item}
+                    keyField={keyField}
+                    updateItem={updateItem}
+                    service={service}
+                    cardComponent={cardComponent}
+                  />
+                </div>
+              );
+            })}
+          </div>
+ 
       </div>
     </div>
   );

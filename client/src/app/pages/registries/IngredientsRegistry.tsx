@@ -10,11 +10,11 @@ import IngredientProp from '../../types/IngredientProp';
 
 import { useLoading } from '../../loadingProvider/LoadingProvider';
 
-import { fetchIngredients, addIngredient, editIngredient, deleteIngredient } from '../../services/ingredientsService';
+import ingredientsService from '../../services/ingredientsService';
 
 import useStore from '../../state/useStore'
 
-import { emitter } from '../../eventBus/eventBus';
+
 
 
 interface FiltersProps {
@@ -49,6 +49,7 @@ function Filters({ filterByOutOfStock, setFilterByOutOfStock, filterByDisabled, 
 export default function IngredientsRegistry() {
 
   const { componentKey, setComponentKey, resetComponentKey } = useStore();
+  const { ingredients, updateIngredient, setIngredients } = useStore();
 
   const { setLoading } = useLoading();
 
@@ -65,11 +66,8 @@ export default function IngredientsRegistry() {
     async function fetchData() {
       setLoading(true);
       try {
-        const data = await fetchIngredients();
-        console.log(data)
-        setAllItems(data);
-        setSearchedItems(data);
-        setFilteredItems(data);
+        const data = await ingredientsService.fetchItems();
+        setIngredients(data)
       } catch (error) {
         console.error(error);
       } finally {
@@ -78,6 +76,12 @@ export default function IngredientsRegistry() {
     }
     fetchData();
   }, [setLoading]);
+
+  useEffect(() => {
+    setAllItems(ingredients);
+    setSearchedItems(ingredients);
+    setFilteredItems(ingredients);
+  }, [ingredients]);
 
   useEffect(() => {
     let results = searchedItems;
@@ -91,7 +95,6 @@ export default function IngredientsRegistry() {
     setFilteredItems(results);
   }, [searchedItems, filterByOutOfStock, filterByDisabled]);
 
-
   function handleSearch(searchTerm: string) {
     const results = allItems.filter((item) =>
       item[keyField].toLowerCase().includes(searchTerm.toLowerCase())
@@ -103,59 +106,20 @@ export default function IngredientsRegistry() {
     try {
       await addIngredient(newItem); 
       const freshData = await fetchIngredients();
-      setAllItems(freshData);
-      setSearchedItems(freshData);
-      setFilteredItems(freshData);
+      setIngredients(freshData);
     } catch (error) {
       console.error(error);
-    }
-  }
-
-  function editItem(newItem: IngredientProp) {
-    setFilteredItems(filteredItems.map(item =>
-      item[keyField] === newItem[keyField] ? newItem : item
-    ));
-  }
-
-  async function saveChanges() {
-    const foundItem = filteredItems.find(item => item[keyField] === componentKey);
-    try {
-      await editIngredient(foundItem);
-      const freshData = await fetchIngredients();
-      setAllItems(freshData);
-      setSearchedItems(freshData);
-      setFilteredItems(freshData);
-    } catch (error) {
-      console.error(error);
-    }
-    resetComponentKey();
-  }
-
-  async function deleteItem(itemKey: string) {
-    if (componentKey === "") {
-      try {
-        await deleteIngredient(itemKey);
-        const freshData = await fetchIngredients();
-        setAllItems(freshData);
-        setSearchedItems(freshData);
-        setFilteredItems(freshData);
-      } catch (error) {
-        console.error(error);
-      }
     }
   }
 
   return (
     <Registry
       items={filteredItems}
-      setItems={setFilteredItems}
       keyField={"name"}
       cardComponent={IngredientCard}
+      updateItem={updateIngredient}
+      service={ingredientsService}
       handleSearch={handleSearch}
-      createItem={createItem}
-      editItem={editItem}
-      saveChanges={saveChanges}
-      deleteItem={deleteItem}
       filtersComponent={
         <Filters
           filterByOutOfStock={filterByOutOfStock}

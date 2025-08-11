@@ -1,45 +1,14 @@
-import '../../../styles/scrollbar.css'
+import '../../../styles/scrollbar.css';
+
+import Card from './Card';
 
 export default function CardList({
   items,
-  editItem,
-  saveChanges,
-  undoChanges,
-  deleteItem,
-  cardComponent: RegistryCard,
+  keyField,
+  cardComponent,
 }) {
 
   return (
-    <div
-      className="d-flex flex-column gap-3 customScrollbar"
-      style={{
-        padding: "20px",
-        background: "#f9f9f9",
-        borderRadius: "15px",
-        flexGrow: 1,
-        overflowX: "hidden",
-        overflowY: "auto",
-      }}
-    >
-      {items.map((item, i) => {
-        return (
-          <div
-            key={i}
-            style={{
-              borderRadius: "12px",
-              boxShadow: "0 4px 15px rgba(0,0,0,0.08)"
-            }}
-          >
-            <RegistryCard
-              item={item}
-              editItem={editItem}
-              saveChanges={saveChanges}
-              undoChanges={undoChanges}
-              deleteItem={deleteItem}
-            />
-          </div>
-        );
-      })}
-    </div>
+    <></>
   );
 }

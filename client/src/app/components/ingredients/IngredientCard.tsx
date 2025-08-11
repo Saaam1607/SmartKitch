@@ -1,82 +1,69 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
 import IngredientProp from '../../types/IngredientProp';
 
-import Card from '../generic/card/Card';
 import Form from '../generic/form/Form';
 import Title from '../generic/form/Title';
 import CardImage from '../generic/card/CardImage';
 import Control from '../generic/form/Control';
 import Check from '../generic/form/Check';
 
-import IconButton from '../generic/button/IconButton'
 
 import CardComponentProps from '../../types/props/CardComponentProps';
 
-import useStore from '../../state/useStore'
 
 import '../../styles/card.css';
 
-export default function IngredientCard({ item, editItem, saveChanges, undoChanges, deleteItem }: CardComponentProps<IngredientProp>) {
-
-  const { componentKey, setComponentKey } = useStore();
-
-  const [isEditing, setIsEditing] = useState(false);
-  const [itemBeforeEdit, setItemBeforeEdit] = useState<T | null>(null);
-  
-  useEffect(() => {
-    setIsEditing(componentKey === item.name)
-  }, [componentKey])
-
-  function startEdit() {
-    setItemBeforeEdit(item);
-    setComponentKey(item.name);
-  }
+export default function IngredientCard({ item, isEditing, edit }: CardComponentProps<IngredientProp>) {
 
   function handelImageChange(newImage: string) {
     if (!item) return;
     const newItem = { ...item, image: newImage };
-    editItem(newItem);
+    edit(newItem);
   }
 
   function handleDescriptionChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
     const newItem = { ...item, description: event.target.value };
-    editItem(newItem);
+    edit(newItem);
   }
 
   function handleIsAddableChange(event: React.ChangeEvent<HTMLInputElement>) {
     const newItem = { ...item, isAddable: event.target.checked };
-    editItem(newItem);
+    edit(newItem);
   }
 
   function handleAdditionPriceChange(event: React.ChangeEvent<HTMLInputElement>) {
     const num = event.target.value === '' ? '' : parseFloat(event.target.value);
     const newItem: DishProp = { ...item, additionPrice: parseFloat(num) };
-    editItem(newItem);
+    edit(newItem);
   }
 
   function handleOutOfStockChange(event: React.ChangeEvent<HTMLInputElement>) {
     if (!item) return;
     const newItem = { ...item, outOfStock: event.target.checked };
-    editItem(newItem);
+    edit(newItem);
   }
 
   function handleDisabledChange(event: React.ChangeEvent<HTMLInputElement>) {
     if (!item) return;
     const newItem = { ...item, disabled: event.target.checked };
-    editItem(newItem);
+    edit(newItem);
   }
 
   return (
-    <Card
-      isEditing={isEditing}
-      onClick={() => {}}
-    >
-      <CardImage
-        image={item.image}
-        updateImage={handelImageChange}
-        isEditing={isEditing}
-      />
+    <div className="d-flex w-100" >
+      <div
+        className="d-flex align-items-center p-2"
+        style={{
+          minHeight: '100%'
+        }}
+      >
+        <CardImage
+          image={item.image}
+          updateImage={handelImageChange}
+          isEditing={isEditing}
+        />
+      </div>
 
       <div className="d-flex w-100">
         <div
@@ -137,35 +124,7 @@ export default function IngredientCard({ item, editItem, saveChanges, undoChange
             </div> 
           </Form>
         </div>
-
-        <div className="d-flex flex-column gap-2 p-2">
-          {!isEditing ? (
-            <>
-              <IconButton
-                variant="outline-secondary"
-                iconName="Pencil"
-                color="rgb(219, 123, 33)"
-                borderColor="rgb(223, 226, 230)"
-                title="Edit"
-                onClick={() => startEdit(item.name)}
-              />
-              <IconButton
-                variant="outline-danger"
-                // borderColor="rgb(223, 226, 230)"
-                iconName="Trash"
-                title="Delete"
-                onClick={() => {deleteItem(item.name)}}
-              />
-            </>
-          ) : (
-            <>
-              <IconButton variant="success" iconName="Save" title="Save Changes" onClick={saveChanges} />
-              <IconButton variant="secondary" iconName="RotateCcw" title="Discard Changes" onClick={() => { undoChanges(itemBeforeEdit) }} />
-            </>
-          )}
-        </div>
-
       </div>
-    </Card>
+    </div>
   );
 }

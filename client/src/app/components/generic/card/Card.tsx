@@ -1,16 +1,78 @@
+import React, { useState, useEffect } from 'react';
+
 import { Card as BootstrapCard } from 'react-bootstrap';
 
-type CardProps = {
-  isEditing: boolean;
-  onClick: () => void;
-  children: React.ReactNode;
+import useStore from '../../../state/useStore'
+
+import BaseItem from '../../../types/BaseItem';
+import CrudService from "../../types/CrudService";
+import CardComponentProps from '../../types/props/CardComponentProps';
+import IconButton from '../button/IconButton'
+
+
+interface CardProps<T extends BaseItem> {
+  item: T;
+  keyField: string,
+  updateItem: (newItem: T) => void,
+  service: CrudService<T>,
+  cardComponent: React.ComponentType<CardComponentProps<T>>;
 };
 
-export default function Card({
-  isEditing,
-  onClick,
-  children,
-}: CardProps) {
+export default function Card<T extends BaseItem>({
+  item,
+  keyField,
+  updateItem,
+  service,
+  cardComponent: CardComponent,
+}: CardProps<T>) {
+
+  const { componentKey, setComponentKey, resetComponentKey } = useStore();
+  const [isEditing, setIsEditing] = useState(false);
+  
+  const [itemBeforeEdit, setItemBeforeEdit] = useState<T | null>(null);
+  
+  useEffect(() => {
+    setIsEditing(componentKey === item.name)
+  }, [componentKey])
+
+  // STARTS EDIT
+  function startEdit() {
+    setItemBeforeEdit(item);
+    setComponentKey(item[keyField]);
+  }
+
+  // SAVES CHANGES
+  async function saveChanges() {
+    try {
+      await service.editItem(item);
+      await service.fetchItems();
+    } catch (error) {
+      console.error(error);
+    }
+    resetComponentKey();
+  }
+
+  // DISCARD CHANGES
+  function undoChanges(prevItem: T) {
+    if (componentKey) {
+      updateItem(prevItem);
+      resetComponentKey();
+      toast.info("Changes reverted");
+    }
+  }
+
+  // DELETES ITEM
+  async function deleteItem(componentKey: string) {
+    if (componentKey === "") {
+      try {
+        await service.deleteItem(componentKey);
+        await service.fetchItems();
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  }
+  
   const backgroundColor = (!isEditing ? '' : 'rgba(255, 229, 217, 1)');
 
   const border = isEditing
@@ -28,11 +90,40 @@ export default function Card({
       }}
       onClick={(e) => {
         e.stopPropagation();
-        onClick();
       }}
     >
       <BootstrapCard.Body className="d-flex m-0 p-0">
-        {children}
+        <CardComponent
+          item={item}
+          isEditing={isEditing}
+          edit={updateItem}
+        />
+        <div className="d-flex flex-column gap-2 p-2">
+          {!isEditing ? (
+            <>
+              <IconButton
+                variant="outline-secondary"
+                iconName="Pencil"
+                color="rgb(219, 123, 33)"
+                borderColor="rgb(223, 226, 230)"
+                title="Edit"
+                onClick={() => startEdit(item.name)}
+              />
+              <IconButton
+                variant="outline-danger"
+                // borderColor="rgb(223, 226, 230)"
+                iconName="Trash"
+                title="Delete"
+                onClick={() => {deleteItem(item.name)}}
+              />
+            </>
+          ) : (
+            <>
+              <IconButton variant="outline-success" iconName="Save" title="Save Changes" onClick={saveChanges} />
+              <IconButton variant="outline-secondary" iconName="RotateCcw" title="Discard Changes" onClick={() => { undoChanges(itemBeforeEdit) }} />
+            </>
+          )}
+        </div>
       </BootstrapCard.Body>
     </BootstrapCard>
   );
