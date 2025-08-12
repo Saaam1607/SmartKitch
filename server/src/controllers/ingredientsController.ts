@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
 import * as ingredientsService from '../services/ingredientsService';
 
+import Ingredient from '../types/IngredientType';
+
 export const getIngredients = async (req: Request, res: Response) => {
   try {
     const ingredients = await ingredientsService.getIngredients();
@@ -47,9 +49,6 @@ export const editIngredient = async (req: Request, res: Response) => {
 export const deleteIngredient = async (req: Request, res: Response) => {
   try {
     const { name } = req.params;
-
-    console.log(name)
-
     if (!name) {
       return res.status(400).json({ message: 'Name is required to delete an ingredient' });
     }

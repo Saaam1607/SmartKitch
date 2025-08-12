@@ -3,25 +3,23 @@ import React, { useState } from 'react';
 import Navbar from 'react-bootstrap/Navbar';
 import Container from 'react-bootstrap/Container';
 
-import { motion } from "motion/react"
 
 import { Search } from 'lucide-react';
 
-import { emitter } from '../../../eventBus/eventBus';
 
 import Form from 'react-bootstrap/Form';
 import IconButton from '../button/IconButton';
 
 type RegistryNavBarProps = {
-  handleSearch: (searchTerm: string) => void;
+  searchTerm: boolean;
+  setSearchTerm: () => void;
   showFilters: boolean;
   setShowFilters: () => void;
   renderCreationModal: (visible: boolean, close: () => void) => React.ReactNode;
 };
 
-export default function RegistryNavBar({ handleSearch, showFilters, setShowFilters, renderCreationModal }: RegistryNavBarProps) {
+export default function RegistryNavBar({ searchTerm, setSearchTerm, showFilters, setShowFilters, renderCreationModal }: RegistryNavBarProps) {
 
-  const [searchTerm, setSearchTerm] = useState("");
   const [showCreationModal, setShowCreationModal] = useState(false);
 
   function handleFiltersClick() {
@@ -30,7 +28,6 @@ export default function RegistryNavBar({ handleSearch, showFilters, setShowFilte
 
   function handleSearchChange(event: React.ChangeEvent<HTMLInputElement>) {
     setSearchTerm(event.target.value);
-    handleSearch(event.target.value)
   }
 
   function handleCreationModalClick() {

@@ -4,12 +4,13 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 
 import ingredientsRoutes from './routes/ingredientsRoutes';
+import drinksRoutes from './routes/drinksRoutes';
 
 const app = express();
 app.use(cors());
 
 app.use(cors({
-  origin: 'http://localhost:3001',
+  origin: 'http://localhost:3000',
 }));
 
 app.use(express.json({ limit: '10mb' })); 
@@ -23,6 +24,7 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 app.use('/ingredients', ingredientsRoutes);
+app.use('/drinks', drinksRoutes);
 
 
 export default app;

@@ -1,54 +1,58 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
-import useStore from '../../state/useStore'
-
-import { toast } from 'sonner';
-
+// Components
 import RegistryNavBar from '../../components/generic/registry/RegistryNavBar';
-
 import Card from '../../components/generic/card/Card'
 import FiltersContainer from '../../components/generic/filters/FiltersContainer'
 
+// Types
 import BaseItem from '../../types/BaseItem';
-import CardComponentProps from '../../types/props/CardComponentProps';
 import CrudService from "../../types/CrudService";
 
-
 interface RegistryProps<T extends BaseItem> {
-  items: T[];
+  filteredItems: T[];
   keyField: string;
   cardComponent: React.ReactNode;
   updateItem: (newItem: T) => void;
   service: CrudService<T>,
-  handleSearch: (searchTerm: string) => void;
   filtersComponent?: React.ReactNode;
   renderCreationModal: (visible: boolean, close: () => void) => React.ReactNode;
 }
 
 export default function Registry<T extends BaseItem>({
-  items,
+  filteredItems,
   keyField,
   cardComponent,
   updateItem,
   service,
-  handleSearch,
   filtersComponent,
   renderCreationModal,
 } : RegistryProps<T>) {
 
-  const { componentKey, resetComponentKey } = useStore();
+  const [itemsToShow, setItemsToShow] = useState<T[]>(filteredItems);
 
+  const [searchTerm, setSearchTerm] = useState("");
   const [showFilters, setShowFilters] = useState<boolean>(true);
+
+  useEffect(() => {
+    let results = filteredItems;
+    if (searchTerm != "") {
+      results = results.filter((item) =>
+        item[keyField].toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+    setItemsToShow(results);  
+  }, [filteredItems, searchTerm])
 
   return (
     <div
       style={{ height: '100%' }}
       className="d-flex flex-column p-3 gap-2"
     >
-
       <div className="">
         <RegistryNavBar
-          handleSearch={handleSearch}
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
           showFilters={showFilters}
           setShowFilters={setShowFilters}
           renderCreationModal={renderCreationModal}
@@ -86,7 +90,7 @@ export default function Registry<T extends BaseItem>({
               overflowY: "auto",
             }}
           >
-            {items.map((item, i) => {
+            {itemsToShow.map((item, i) => {
               return (
                 <div
                   key={i}

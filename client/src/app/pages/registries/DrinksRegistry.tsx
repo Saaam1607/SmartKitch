@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react';
 
 // Components
-import IngredientCard from '../../components/ingredients/IngredientCard';
+import DrinkCard from '../../components/drinks/DrinkCard';
 import IngredientCreationModal from '../../components/ingredients/IngredientCreationModal';
 import Switch from '../../components/generic/form/Switch';
 import Registry from './Registry'
 
 // Types
-import IngredientProp from '../../types/IngredientProp';
+import DrinkProp from '../../types/DrinkProp';
 
 // Utils
 import { useLoading } from '../../loadingProvider/LoadingProvider';
-import ingredientsService from '../../services/ingredientsService';
+import drinksService from '../../services/drinksService';
 import useStore from '../../state/useStore'
 
 interface FiltersProps {
@@ -44,8 +44,8 @@ function Filters({ filterByOutOfStock, setFilterByOutOfStock, filterByDisabled, 
 
 export default function IngredientsRegistry() {
 
-  const { ingredients, updateIngredient, setIngredients } = useStore();
-  const [filteredItems, setFilteredItems] = useState<IngredientProp[]>([]);
+  const { drinks, updateDrink, setDrinks } = useStore();
+  const [filteredItems, setFilteredItems] = useState<DrinkProp[]>([]);
 
   const [filterByOutOfStock, setFilterByOutOfStock] = useState(false);
   const [filterByDisabled, setFilterByDisabled] = useState(false);
@@ -56,8 +56,8 @@ export default function IngredientsRegistry() {
     async function fetchData() {
       setLoading(true);
       try {
-        const data = await ingredientsService.fetchItems();
-        setIngredients(data)
+        const data = await drinksService.fetchItems();
+        setDrinks(data)
       } catch (error) {
         console.error(error);
       } finally {
@@ -69,7 +69,7 @@ export default function IngredientsRegistry() {
 
 
   useEffect(() => {
-    let results = ingredients;
+    let results = drinks;
 
     if (filterByOutOfStock)
       results = results.filter(item => item.outOfStock);
@@ -78,14 +78,14 @@ export default function IngredientsRegistry() {
       results = results.filter(item => item.disabled);
 
     setFilteredItems(results);
-  }, [ingredients, filterByOutOfStock, filterByDisabled]);
+  }, [drinks, filterByOutOfStock, filterByDisabled]);
 
 
-  async function createItem(newItem: IngredientProp) {
+  async function createItem(newItem: DrinkProp) {
     try {
-      await addIngredient(newItem); 
-      const freshData = await fetchIngredients();
-      setIngredients(freshData);
+      await drinksService.addItem(newItem); 
+      const freshData = await drinksService.fetchItems();
+      setDrinks(freshData);
     } catch (error) {
       console.error(error);
     }
@@ -95,9 +95,9 @@ export default function IngredientsRegistry() {
     <Registry
       filteredItems={filteredItems}
       keyField={"name"}
-      cardComponent={IngredientCard}
-      updateItem={updateIngredient}
-      service={ingredientsService}
+      cardComponent={DrinkCard}
+      updateItem={updateDrink}
+      service={drinksService}
       filtersComponent={
         <Filters
           filterByOutOfStock={filterByOutOfStock}

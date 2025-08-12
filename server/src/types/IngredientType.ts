@@ -1,13 +1,6 @@
-interface BaseItem {
-  name: string;
-  description: string;
-  image: string;
-  outOfStock: boolean;
-  disabled: boolean;
-  isAddable: boolean;
-  additionPrice: boolean;
-}
+import BaseItemType from './BaseItemType';
 
-export default interface Ingredient extends BaseItem {
-    readonly __type?: 'ingredient';
+export default interface Ingredient extends BaseItemType {
+  isAddable: boolean;
+  additionPrice: number;
 }

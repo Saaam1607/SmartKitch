@@ -8,14 +8,12 @@ import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import Container from 'react-bootstrap/Container';
 
-import { ChefHat } from 'lucide-react';
-import { Pizza } from 'lucide-react';
-import { HandPlatter } from 'lucide-react';
-import { Utensils } from 'lucide-react';
+import { ChefHat, Pizza, HandPlatter, Utensils, Wine } from 'lucide-react';
 
 import { toast } from 'sonner';
 
 import IngredientsRegistry from './IngredientsRegistry'
+import DrinksRegistry from './DrinksRegistry'
 import DishesRegistry from './DishesRegistry'
 
 export default function Registries() {
@@ -62,6 +60,14 @@ export default function Registries() {
               </Nav.Link>
             </Nav.Item>
             <Nav.Item>
+              <Nav.Link eventKey="drinks" className={isActive('drinks')}>
+                <div className="d-flex align-items-center">
+                  <Wine />
+                  <p>Drinks</p>
+                </div>
+              </Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
               <Nav.Link eventKey="courses" className={isActive('courses')}>
                 <div className="d-flex align-items-center">
                   <HandPlatter />
@@ -88,6 +94,7 @@ export default function Registries() {
         }}
       >
         {selectedRegistry === 'ingredients' && <IngredientsRegistry />}
+        {selectedRegistry === 'drinks' && <DrinksRegistry />}
         {/* {selectedRegistry === 'dishes' && <DishesRegistry />} */}
       </div>
     </div>
