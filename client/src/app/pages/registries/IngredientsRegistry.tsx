@@ -75,7 +75,7 @@ export default function IngredientsRegistry() {
       }
     }
     fetchData();
-  }, [setLoading]);
+  }, []);
 
   useEffect(() => {
     setAllItems(ingredients);

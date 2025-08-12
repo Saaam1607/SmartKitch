@@ -55,8 +55,8 @@ export default function CardImage({ image, updateImage, isEditing }: CardImagePr
           <div
             className="rounded-start"
             style={{
-              width: '150px',
-              height: '150px',
+              width: '175px',
+              height: '175px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -69,8 +69,8 @@ export default function CardImage({ image, updateImage, isEditing }: CardImagePr
               alt={"Card Image"}
               src={image}
               style={{
-                width: '150px',
-                height: '150px',
+                width: '175px',
+                height: '175px',
                 objectFit: 'cover',
                 borderRadius: "15px"
               }}
@@ -80,8 +80,8 @@ export default function CardImage({ image, updateImage, isEditing }: CardImagePr
           <div
             className="faded"
             style={{
-              width: '150px',
-              height: '150px',
+              width: '175px',
+              height: '175px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',

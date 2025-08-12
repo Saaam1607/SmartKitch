@@ -2,7 +2,7 @@ import { CrudService } from "../types/CrudService";
 
 import IngredientProp from '../types/IngredientProp'
 
-const API_URL = 'http://localhost:5000/ingredients';
+const API_URL = 'http://localhost:5001/ingredients';
 
 function blobToBase64(blob: Blob): Promise<string> {
   return new Promise((resolve, reject) => {

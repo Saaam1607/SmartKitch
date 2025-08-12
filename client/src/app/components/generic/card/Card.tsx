@@ -45,6 +45,7 @@ export default function Card<T extends BaseItem>({
   async function saveChanges() {
     try {
       await service.editItem(item);
+      // toast.info("Changes Saved");
       await service.fetchItems();
     } catch (error) {
       console.error(error);
@@ -57,7 +58,7 @@ export default function Card<T extends BaseItem>({
     if (componentKey) {
       updateItem(prevItem);
       resetComponentKey();
-      toast.info("Changes reverted");
+      // toast.info("Changes Reverted");
     }
   }
 
@@ -71,6 +72,28 @@ export default function Card<T extends BaseItem>({
         console.error(error);
       }
     }
+  }
+
+  function handleCheckChange(event: React.ChangeEvent<HTMLInputElement>, fieldName: string) {
+    const { checked } = event.target;
+    const newItem = { ...item, [fieldName]: checked };
+    updateItem(newItem);
+  }
+
+  function handleTextChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, fieldName: string) {
+    const { value } = event.target;
+    const newItem = { ...item, [fieldName]: value };
+    updateItem(newItem);
+  }
+
+  function handleImageChange(newImage: string, fieldName: string) {
+    const newItem = { ...item, [fieldName]: newImage };
+    updateItem(newItem);
+  }
+      
+  function handlePriceChange(event: React.ChangeEvent<HTMLInputElement>, fieldName: string) {
+    const newItem = { ...item, [fieldName]: parseFloat(event.target.value) };
+    updateItem(newItem);
   }
   
   const backgroundColor = (!isEditing ? '' : 'rgba(255, 229, 217, 1)');
@@ -97,6 +120,10 @@ export default function Card<T extends BaseItem>({
           item={item}
           isEditing={isEditing}
           edit={updateItem}
+          handleCheckChange={handleCheckChange}
+          handleTextChange={handleTextChange}
+          handleImageChange={handleImageChange}
+          handlePriceChange={handlePriceChange}
         />
         <div className="d-flex flex-column gap-2 p-2">
           {!isEditing ? (

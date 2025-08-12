@@ -14,41 +14,7 @@ import CardComponentProps from '../../types/props/CardComponentProps';
 
 import '../../styles/card.css';
 
-export default function IngredientCard({ item, isEditing, edit }: CardComponentProps<IngredientProp>) {
-
-  function handelImageChange(newImage: string) {
-    if (!item) return;
-    const newItem = { ...item, image: newImage };
-    edit(newItem);
-  }
-
-  function handleDescriptionChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
-    const newItem = { ...item, description: event.target.value };
-    edit(newItem);
-  }
-
-  function handleIsAddableChange(event: React.ChangeEvent<HTMLInputElement>) {
-    const newItem = { ...item, isAddable: event.target.checked };
-    edit(newItem);
-  }
-
-  function handleAdditionPriceChange(event: React.ChangeEvent<HTMLInputElement>) {
-    const num = event.target.value === '' ? '' : parseFloat(event.target.value);
-    const newItem: DishProp = { ...item, additionPrice: parseFloat(num) };
-    edit(newItem);
-  }
-
-  function handleOutOfStockChange(event: React.ChangeEvent<HTMLInputElement>) {
-    if (!item) return;
-    const newItem = { ...item, outOfStock: event.target.checked };
-    edit(newItem);
-  }
-
-  function handleDisabledChange(event: React.ChangeEvent<HTMLInputElement>) {
-    if (!item) return;
-    const newItem = { ...item, disabled: event.target.checked };
-    edit(newItem);
-  }
+export default function IngredientCard({ item, isEditing, edit, handleCheckChange, handleTextChange, handleImageChange, handlePriceChange }: CardComponentProps<IngredientProp>) {
 
   return (
     <div className="d-flex w-100" >
@@ -60,7 +26,7 @@ export default function IngredientCard({ item, isEditing, edit }: CardComponentP
       >
         <CardImage
           image={item.image}
-          updateImage={handelImageChange}
+          updateImage={(image: string) => handleImageChange(image, 'image')}
           isEditing={isEditing}
         />
       </div>
@@ -83,7 +49,7 @@ export default function IngredientCard({ item, isEditing, edit }: CardComponentP
               value={item.description}
               fieldName="Description"
               isEditing={isEditing}
-              handleChange={handleDescriptionChange}
+              handleChange={(event) => handleTextChange(event, "description")}
             />
 
             <div className="d-flex align-items-center gap-5">
@@ -92,7 +58,7 @@ export default function IngredientCard({ item, isEditing, edit }: CardComponentP
                 value={item.isAddable}
                 fieldName="Is Addable"
                 isEditing={isEditing}
-                handleChange={handleIsAddableChange}
+                handleChange={(event) => handleCheckChange(event, "isAddable")}
               />
 
               <Control
@@ -102,7 +68,7 @@ export default function IngredientCard({ item, isEditing, edit }: CardComponentP
                 value={item.additionPrice}
                 fieldName="Addition Price"
                 isEditing={isEditing}
-                handleChange={handleAdditionPriceChange}
+                handleChange={(event) => handlePriceChange(event as React.ChangeEvent<HTMLInputElement>, "price")}
               />
             </div>
 
@@ -112,14 +78,14 @@ export default function IngredientCard({ item, isEditing, edit }: CardComponentP
                 value={item.outOfStock}
                 fieldName="Out Of Stock"
                 isEditing={isEditing}
-                handleChange={handleOutOfStockChange}
+                handleChange={(event) => handleCheckChange(event, "outOfStock")}
               />
               <Check
                 itemKey={item.name}
                 value={item.disabled}
                 fieldName="Disabled"
                 isEditing={isEditing}
-                handleChange={handleDisabledChange}
+                handleChange={(event) => handleCheckChange(event, "disabled")}
               />
             </div> 
           </Form>
