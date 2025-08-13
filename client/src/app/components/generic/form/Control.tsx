@@ -16,7 +16,7 @@ const commonStyle = {
 
 const getCommonEditingStyle = (isEditing: boolean): React.CSSProperties => ({
   backgroundColor: isEditing ? 'white' : 'transparent',
-  border: isEditing ? '2px solid rgb(30, 109, 206)' : '2px solid transparent',
+  border: isEditing ? '2px solid rgb(219, 123, 33)' : '2px solid transparent',
 });
 
 interface TextAreaProps {
@@ -113,7 +113,7 @@ function PriceInput({ type, step, itemKey, value, fieldName, isEditing, handleCh
             <button
               type="button"
               onClick={handleIncrement}
-              className="btn btn-primary p-0 rounded-0 rounded-top d-flex align-items-center justify-content-center"
+              className="btn btn-secondary p-0 rounded-0 rounded-top d-flex align-items-center justify-content-center"
               style={{
                 height: '1rem',
                 width: '1.5rem',
@@ -124,7 +124,7 @@ function PriceInput({ type, step, itemKey, value, fieldName, isEditing, handleCh
             <button
               type="button"
               onClick={handleDecrement}
-              className="btn btn-primary p-0 rounded-0 rounded-bottom d-flex align-items-center justify-content-center"
+              className="btn btn-secondary p-0 rounded-0 rounded-bottom d-flex align-items-center justify-content-center"
               style={{
                 height: '1rem',
                 width: '1.5rem',

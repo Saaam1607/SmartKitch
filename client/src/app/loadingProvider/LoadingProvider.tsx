@@ -14,7 +14,7 @@ export const LoadingProvider = ({ children }: { children: ReactNode }) => {
   const setLoading = (value: boolean) => {
     if (value) {
       if (timerRef.current) clearTimeout(timerRef.current);
-      timerRef.current = setTimeout(() => setLoadingState(true), 100);
+      timerRef.current = setTimeout(() => setLoadingState(true), 300);
     } else {
       if (timerRef.current) {
         clearTimeout(timerRef.current);

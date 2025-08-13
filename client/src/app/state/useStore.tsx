@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 
 import IngredientProp from '../types/IngredientProp';
+import DishProp from '../types/DishProp';
 import DrinkProp from '../types/DrinkProp';
 
 type Store = {
@@ -12,6 +13,10 @@ type Store = {
   setIngredients: (newIngredients: IngredientProp[]) => void;
   updateIngredient: (newIngredient: IngredientProp) => void;
   
+  dishes: DishProp[];
+  setIngredients: (newItems: IngredientProp[]) => void;
+  updateIngredient: (newItem: IngredientProp) => void;
+
   drinks: DrinkProp[];
   setIngredients: (newItems: DrinkProp[]) => void;
   updateIngredient: (newItem: DrinkProp) => void;
@@ -20,6 +25,7 @@ type Store = {
 const useStore = create<Store>((set, get) => ({
   componentKey: '',
   ingredients: [],
+  dishes: [],
   drinks: [],
   
   setIngredients: (newIngredients: IngredientProp[]) => {
@@ -30,6 +36,18 @@ const useStore = create<Store>((set, get) => ({
     set((state) => ({
       ingredients: state.ingredients.map((ingredient) =>
         ingredient.name === newIngredient.name ? newIngredient : ingredient
+      ),
+    }));
+  },
+
+  setDishes: (newItems: DishProp[]) => {
+    set({ dishes: newItems });
+  },
+
+  updateDish: (newItem: DishProp) => {
+    set((state) => ({
+      dishes: state.dishes.map((item) =>
+        item.name === newItem.name ? newItem : item
       ),
     }));
   },

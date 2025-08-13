@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 import { Card as BootstrapCard } from 'react-bootstrap';
 
@@ -27,18 +27,16 @@ export default function Card<T extends BaseItem>({
 }: CardProps<T>) {
 
   const { componentKey, setComponentKey, resetComponentKey } = useStore();
-  const [isEditing, setIsEditing] = useState(false);
-  
   const [itemBeforeEdit, setItemBeforeEdit] = useState<T | null>(null);
   
-  useEffect(() => {
-    setIsEditing(componentKey === item.name)
-  }, [componentKey])
+  const isEditing = componentKey === item.name;
 
   // STARTS EDIT
   function startEdit() {
-    setItemBeforeEdit(item);
-    setComponentKey(item[keyField]);
+    if (componentKey == "") {
+      setItemBeforeEdit(item);
+      setComponentKey(item[keyField]);
+    }
   }
 
   // SAVES CHANGES
@@ -95,21 +93,41 @@ export default function Card<T extends BaseItem>({
     const newItem = { ...item, [fieldName]: parseFloat(event.target.value) };
     updateItem(newItem);
   }
-  
-  const backgroundColor = (!isEditing ? '' : 'rgba(255, 229, 217, 1)');
+
+  function handleArrayAddition(value: string, fieldName: string) {
+    if (!item[fieldName].includes(value)) {
+
+      const newArray = item[fieldName];
+      newArray.push(value);
+
+      const newItem = { ...item, [fieldName]: newArray };
+      updateItem(newItem);
+    }
+  }
+
+  function handleArrayRemoval(value: string, fieldName: string) {
+    if (item[fieldName].includes(value)) {
+      const newArray = item[fieldName].filter(i => i != value);
+      const newItem = { ...item, [fieldName]: newArray };
+      updateItem(newItem);
+    }
+  }
+
+  const backgroundColor = (!isEditing ? '' : 'rgba(249, 238, 233, 1)');
 
   const border = isEditing
-    ? '2px solid #007bff'
-    : '2px solid white';
+    ? '2px solid rgb(219, 123, 33)'
+    : '2px solid transparent';
 
   return (
     <BootstrapCard
-      className={`m-0 border-0`}
+      className={`m-0`}
       draggable="false"
       style={{
         borderRadius: '15px',
         boxShadow: 'rgba(0, 0, 0, 0.2) 0px 2px 6px',
         backgroundColor,
+        border,
       }}
       onClick={(e) => {
         e.stopPropagation();
@@ -119,11 +137,12 @@ export default function Card<T extends BaseItem>({
         <CardComponent
           item={item}
           isEditing={isEditing}
-          edit={updateItem}
           handleCheckChange={handleCheckChange}
           handleTextChange={handleTextChange}
           handleImageChange={handleImageChange}
           handlePriceChange={handlePriceChange}
+          handleArrayAddition={handleArrayAddition}
+          handleArrayRemoval={handleArrayRemoval}
         />
         <div className="d-flex flex-column gap-2 p-2">
           {!isEditing ? (

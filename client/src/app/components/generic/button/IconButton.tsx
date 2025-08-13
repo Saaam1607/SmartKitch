@@ -9,6 +9,7 @@ type IconButtonProps = {
   color?: string;
   borderColor?: string
   title?: string;
+  canClick?: boolean
   onClick: () => void;
 };
 
@@ -18,6 +19,7 @@ export default function IconButton({
   color,
   borderColor,
   title,
+  canClick,
   onClick,
 }: IconButtonProps) {
 

@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 
 import Navbar from 'react-bootstrap/Navbar';
-import Container from 'react-bootstrap/Container';
-
 
 import { Search } from 'lucide-react';
 
@@ -44,7 +42,7 @@ export default function RegistryNavBar({ searchTerm, setSearchTerm, showFilters,
       {renderCreationModal(showCreationModal, creationModalClose)}
 
       <Navbar bg="transparent" data-bs-theme="light" className="d-flex justify-content-center p-0" > 
-        <Container fluid className="d-flex align-items-center justify-content-between" style={{ width: '100%' }}>
+        <div className="d-flex align-items-center justify-content-between" style={{ width: '100%' }}>
           <div
             className="d-flex align-items-center gap-2 me-2"
             style={{
@@ -52,10 +50,11 @@ export default function RegistryNavBar({ searchTerm, setSearchTerm, showFilters,
             }}
           >
             <IconButton
-              variant="outline-secondary"
+            // {showFilters ? "secondary" : "outline-secondary"}
+              variant={"outline-secondary"}
               iconName="SlidersHorizontal" 
               color="rgb(89, 92, 94)"
-              borderColor="rgb(223, 226, 230)"
+              borderColor="rgb(89, 92, 94)"
               onClick={handleFiltersClick}
             />
             
@@ -110,7 +109,7 @@ export default function RegistryNavBar({ searchTerm, setSearchTerm, showFilters,
             
           <IconButton variant="secondary" iconName="Plus" onClick={handleCreationModalClick} />
 
-        </Container>
+        </div>
       </Navbar>
     </>
   );

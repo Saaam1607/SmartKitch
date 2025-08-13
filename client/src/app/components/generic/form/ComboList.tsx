@@ -44,7 +44,7 @@ export default function ComboList({ valueList, dataList, handleValueAddition, ha
           outline: 'none',
           color: '#212529',
           backgroundColor: isEditing ? 'white' : 'transparent',
-          border: isEditing ? '2px solid rgb(30, 109, 206)' : '2px solid lightgrey',
+          border: isEditing ? '2px solid rgb(219, 123, 33)' : '2px solid lightgrey',
         }}
       >
         <ListGroup className="d-flex flex-row flex-wrap gap-2 rounded-0">

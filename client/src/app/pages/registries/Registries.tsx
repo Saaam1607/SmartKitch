@@ -8,7 +8,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import Container from 'react-bootstrap/Container';
 
-import { ChefHat, Pizza, HandPlatter, Utensils, Wine } from 'lucide-react';
+import { ChefHat, Pizza, Utensils, Wine } from 'lucide-react';
 
 import { toast } from 'sonner';
 
@@ -68,14 +68,6 @@ export default function Registries() {
               </Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link eventKey="courses" className={isActive('courses')}>
-                <div className="d-flex align-items-center">
-                  <HandPlatter />
-                  <p>Courses</p>
-                </div>
-              </Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
               <Nav.Link eventKey="menu" className={isActive('menu')}>
                 <div className="d-flex align-items-center">
                   <Utensils />
@@ -94,8 +86,8 @@ export default function Registries() {
         }}
       >
         {selectedRegistry === 'ingredients' && <IngredientsRegistry />}
+        {selectedRegistry === 'dishes' && <DishesRegistry />}
         {selectedRegistry === 'drinks' && <DrinksRegistry />}
-        {/* {selectedRegistry === 'dishes' && <DishesRegistry />} */}
       </div>
     </div>
   );

@@ -1,11 +1,11 @@
 import { Request, Response } from 'express';
 import * as ingredientsService from '../services/ingredientsService';
 
-import Ingredient from '../types/IngredientType';
+import { Ingredient } from "@my-org/shared";
 
 export const getIngredients = async (req: Request, res: Response) => {
   try {
-    const ingredients = await ingredientsService.getIngredients();
+    const ingredients = await ingredientsService.getItems();
     res.json(ingredients);
   } catch (error) {
     console.error(error);
@@ -16,7 +16,7 @@ export const getIngredients = async (req: Request, res: Response) => {
 export const createIngredient = async (req: Request, res: Response) => {
   try {
     const newIngredient: Ingredient = req.body;
-    const inserted = await ingredientsService.createIngredient(newIngredient);
+    const inserted = await ingredientsService.createItem(newIngredient);
     res.status(201).json(inserted);
   } catch (error) {
     console.error('Error inserting ingredient:', error);
@@ -32,7 +32,7 @@ export const editIngredient = async (req: Request, res: Response) => {
       return res.status(400).json({ message: 'Ingredient name is required' });
     }
 
-    const updatedIngredient = await ingredientsService.editIngredient(newIngredient);
+    const updatedIngredient = await ingredientsService.editItem(newIngredient);
     return res.status(200).json(updatedIngredient);
 
   } catch (error: any) {
@@ -53,7 +53,7 @@ export const deleteIngredient = async (req: Request, res: Response) => {
       return res.status(400).json({ message: 'Name is required to delete an ingredient' });
     }
 
-    const isDeleted = await ingredientsService.deleteIngredient(name);
+    const isDeleted = await ingredientsService.deleteItem(name);
     if (isDeleted) {
       return res.status(200).json({ message: `Ingredient '${name}' deleted successfully.` });
     } else {

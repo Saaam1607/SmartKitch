@@ -1,11 +1,11 @@
 import { Request, Response } from 'express';
-import * as drinksService from '../services/drinksService';
+import * as dishesService from '../services/dishesService';
 
-import { Drink } from "@my-org/shared";
+import { Dish } from "@my-org/shared";
 
-export const getDrinks = async (req: Request, res: Response) => {
+export const getDishes = async (req: Request, res: Response) => {
   try {
-    const items = await drinksService.getItems();
+    const items = await dishesService.getItems();
     res.json(items);
   } catch (error) {
     console.error(error);
@@ -13,10 +13,10 @@ export const getDrinks = async (req: Request, res: Response) => {
   }
 };
 
-export const createDrink = async (req: Request, res: Response) => {
+export const createDish = async (req: Request, res: Response) => {
   try {
-    const newItem: Drink = req.body;
-    const inserted = await drinksService.createItem(newItem);
+    const newItem: Dish = req.body;
+    const inserted = await dishesService.createItem(newItem);
     res.status(201).json(inserted);
   } catch (error) {
     console.error('Error inserting item:', error);
@@ -24,7 +24,7 @@ export const createDrink = async (req: Request, res: Response) => {
   }
 };
 
-export const editDrink = async (req: Request, res: Response) => {
+export const editDish = async (req: Request, res: Response) => {
   try {
     const newItem = req.body;
 
@@ -32,7 +32,7 @@ export const editDrink = async (req: Request, res: Response) => {
       return res.status(400).json({ message: 'Item name is required' });
     }
 
-    const updatedItem = await drinksService.editItem(newItem);
+    const updatedItem = await dishesService.editItem(newItem);
     return res.status(200).json(updatedItem);
 
   } catch (error: any) {
@@ -46,14 +46,14 @@ export const editDrink = async (req: Request, res: Response) => {
   }
 };
 
-export const deleteDrink = async (req: Request, res: Response) => {
+export const deleteDish = async (req: Request, res: Response) => {
   try {
     const { name } = req.params;
     if (!name) {
       return res.status(400).json({ message: 'Name is required to delete an item' });
     }
 
-    const isDeleted = await drinksService.deleteItem(name);
+    const isDeleted = await dishesService.deleteItem(name);
     if (isDeleted) {
       return res.status(200).json({ message: `Item '${name}' deleted successfully.` });
     } else {

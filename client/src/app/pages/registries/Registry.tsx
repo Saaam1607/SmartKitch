@@ -46,7 +46,7 @@ export default function Registry<T extends BaseItem>({
 
   return (
     <div
-      style={{ height: '100%' }}
+      style={{ height: '100%', backgroundColor: 'rgba(207, 207, 210, 1)' }}
       className="d-flex flex-column p-3 gap-2"
     >
       <div className="">
@@ -60,7 +60,7 @@ export default function Registry<T extends BaseItem>({
       </div>
         
       <div
-        className="d-flex flex-row p-2 gap-2"
+        className="d-flex flex-row py-2 gap-3"
         style={{
           flexGrow: 1,
           overflowY: 'hidden',
@@ -71,7 +71,6 @@ export default function Registry<T extends BaseItem>({
             style={{
               overflowX: 'hidden',
               overflowY: 'auto',
-              backgroundColor: 'white'
             }}
           >
             <FiltersContainer showFilters={showFilters}>
@@ -83,7 +82,7 @@ export default function Registry<T extends BaseItem>({
             className="d-flex flex-column gap-3 customScrollbar"
             style={{
               padding: "20px",
-              background: "#f9f9f9",
+              background: "#edececff",
               borderRadius: "15px",
               flexGrow: 1,
               overflowX: "hidden",

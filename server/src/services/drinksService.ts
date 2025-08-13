@@ -1,8 +1,8 @@
 import pool from '../config/database';
 
-import Drink from '../types/DrinkType';
+import { Drink } from "@my-org/shared";
 
-export const getDrinks = async (): Promise<Drink[]> => {
+export const getItems = async (): Promise<Drink[]> => {
   const result = await pool.query('SELECT name, description, image, out_of_stock AS "outOfStock", disabled, price FROM drinks');
   const items = result.rows.map(row => {
     const base64Image = row.image.toString('base64');
@@ -16,7 +16,7 @@ export const getDrinks = async (): Promise<Drink[]> => {
   return items;
 };
 
-export const createDrink = async (newItem: Drink): Promise<Drink> => {
+export const createItem = async (newItem: Drink): Promise<Drink> => {
   const base64Data = newItem.image.replace(/^data:image\/\w+;base64,/, "");
   const buffer = Buffer.from(base64Data, 'base64');
 
@@ -36,7 +36,7 @@ export const createDrink = async (newItem: Drink): Promise<Drink> => {
   return result.rows[0];
 };
 
-export const editDrink = async (newItem: Drink): Promise<Drink> => {
+export const editItem = async (newItem: Drink): Promise<Drink> => {
   const base64Data = newItem.image.replace(/^data:image\/\w+;base64,/, "");
   const buffer = Buffer.from(base64Data, 'base64');
 
@@ -60,14 +60,13 @@ export const editDrink = async (newItem: Drink): Promise<Drink> => {
   );
 
   if (result.rowCount === 0) {
-    throw new Error(`Drink with name "${newItem.name}" not found.`);
+    throw new Error(`Item with name "${newItem.name}" not found.`);
   }
 
   return result.rows[0];
 };
 
-
-export const deleteDrink = async (name: string): Promise<boolean> => {
+export const deleteItem = async (name: string): Promise<boolean> => {
   const result = await pool.query(`
     DELETE FROM drinks
     WHERE name = $1

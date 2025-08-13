@@ -18,10 +18,11 @@ export default function FiltersContainer({ showFilters, children }: FiltersProps
     >
       {showFilters && (
         <div
-          className="p-3 rounded border"
+          className="p-3 border"
           style={{
             height: '100%',
-            backgroundColor: 'rgb(237, 233, 232)'
+            backgroundColor: '#edececff',
+            borderRadius: '15px',
           }}
         >
           <p className="m-0">Filters:</p>

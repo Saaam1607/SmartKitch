@@ -4,6 +4,7 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 
 import ingredientsRoutes from './routes/ingredientsRoutes';
+import dishesRoutes from './routes/dishesRoutes';
 import drinksRoutes from './routes/drinksRoutes';
 
 const app = express();
@@ -24,6 +25,7 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 app.use('/ingredients', ingredientsRoutes);
+app.use('/dishes', dishesRoutes);
 app.use('/drinks', drinksRoutes);
 
 

@@ -15,7 +15,7 @@ export default function Spinner() {
       }}
     >
       <BounceLoader
-        color="#55a2d4"
+        color="rgb(219, 123, 33)"
         size={60}
         speedMultiplier={1.5}
       />

@@ -14,12 +14,12 @@ import CardComponentProps from '../../types/props/CardComponentProps';
 
 import '../../styles/card.css';
 
-export default function IngredientCard({ item, isEditing, edit, handleCheckChange, handleTextChange, handleImageChange, handlePriceChange }: CardComponentProps<IngredientProp>) {
+export default function IngredientCard({ item, isEditing, handleCheckChange, handleTextChange, handleImageChange, handlePriceChange }: CardComponentProps<IngredientProp>) {
 
   return (
     <div className="d-flex w-100" >
       <div
-        className="d-flex align-items-center p-2"
+        className="d-flex align-items-center p-3"
         style={{
           minHeight: '100%'
         }}
