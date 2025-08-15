@@ -98,6 +98,7 @@ export default function IngredientsRegistry() {
       cardComponent={IngredientCard}
       updateItem={updateIngredient}
       service={ingredientsService}
+      showNavbar={true}
       filtersComponent={
         <Filters
           filterByOutOfStock={filterByOutOfStock}

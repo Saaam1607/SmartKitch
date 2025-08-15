@@ -15,6 +15,7 @@ interface RegistryProps<T extends BaseItem> {
   cardComponent: React.ReactNode;
   updateItem: (newItem: T) => void;
   service: CrudService<T>,
+  showNavbar?: boolean;  
   filtersComponent?: React.ReactNode;
   renderCreationModal: (visible: boolean, close: () => void) => React.ReactNode;
 }
@@ -25,6 +26,7 @@ export default function Registry<T extends BaseItem>({
   cardComponent,
   updateItem,
   service,
+  showNavbar = false,
   filtersComponent,
   renderCreationModal,
 } : RegistryProps<T>) {
@@ -46,18 +48,22 @@ export default function Registry<T extends BaseItem>({
 
   return (
     <div
-      style={{ height: '100%', backgroundColor: 'rgba(207, 207, 210, 1)' }}
-      className="d-flex flex-column p-3 gap-2"
+      style={{ height: '100%', width: '100%' }}
+      className="d-flex flex-column gap-2"
     >
-      <div className="">
-        <RegistryNavBar
-          searchTerm={searchTerm}
-          setSearchTerm={setSearchTerm}
-          showFilters={showFilters}
-          setShowFilters={setShowFilters}
-          renderCreationModal={renderCreationModal}
-        />
-      </div>
+      {showNavbar && (
+        <div className="">
+          <RegistryNavBar
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+            {...(filtersComponent && { 
+              showFilters, 
+              setShowFilters 
+            })}
+            renderCreationModal={renderCreationModal}
+          />
+        </div>
+      )}
         
       <div
         className="d-flex flex-row py-2 gap-3"
@@ -66,17 +72,20 @@ export default function Registry<T extends BaseItem>({
           overflowY: 'hidden',
         }}
       >
-          <div
-            className="customScrollbar d-flex flex-column gap-3 rounded"
-            style={{
-              overflowX: 'hidden',
-              overflowY: 'auto',
-            }}
-          >
-            <FiltersContainer showFilters={showFilters}>
-              {filtersComponent}
-            </FiltersContainer>
-          </div>
+          {filtersComponent && (
+            <div
+              className="customScrollbar d-flex flex-column gap-3 rounded"
+              style={{
+                overflowX: 'hidden',
+                overflowY: 'auto',
+              }}
+            >
+              <FiltersContainer showFilters={showFilters}>
+                {filtersComponent}
+              </FiltersContainer>
+            </div>
+          )}
+          
           
           <div
             className="d-flex flex-column gap-3 customScrollbar"

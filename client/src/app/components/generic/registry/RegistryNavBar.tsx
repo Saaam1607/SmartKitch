@@ -11,8 +11,8 @@ import IconButton from '../button/IconButton';
 type RegistryNavBarProps = {
   searchTerm: boolean;
   setSearchTerm: () => void;
-  showFilters: boolean;
-  setShowFilters: () => void;
+  showFilters?: boolean;
+  setShowFilters?: () => void;
   renderCreationModal: (visible: boolean, close: () => void) => React.ReactNode;
 };
 
@@ -49,14 +49,16 @@ export default function RegistryNavBar({ searchTerm, setSearchTerm, showFilters,
               width: '100%',
             }}
           >
-            <IconButton
-            // {showFilters ? "secondary" : "outline-secondary"}
-              variant={"outline-secondary"}
-              iconName="SlidersHorizontal" 
-              color="rgb(89, 92, 94)"
-              borderColor="rgb(89, 92, 94)"
-              onClick={handleFiltersClick}
-            />
+            {showFilters && (
+              <IconButton
+                variant={"outline-secondary"}
+                iconName="SlidersHorizontal" 
+                color="rgb(89, 92, 94)"
+                borderColor="rgb(89, 92, 94)"
+                onClick={handleFiltersClick}
+              />
+            )}
+            
             
             <Form className="d-flex" style={{ width: '100%', maxWidth: '600px' }}>
               <div

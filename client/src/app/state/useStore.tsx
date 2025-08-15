@@ -3,6 +3,7 @@ import { create } from 'zustand';
 import IngredientProp from '../types/IngredientProp';
 import DishProp from '../types/DishProp';
 import DrinkProp from '../types/DrinkProp';
+import { MenuSection } from "@my-org/shared";
 
 type Store = {
   componentKey: string;
@@ -20,6 +21,10 @@ type Store = {
   drinks: DrinkProp[];
   setIngredients: (newItems: DrinkProp[]) => void;
   updateIngredient: (newItem: DrinkProp) => void;
+
+  menuSections: MenuSection[];
+  setMenuSections: (newItems: MenuSection[]) => void;
+  updateMenuSection: (newItem: MenuSection) => void;
 };
 
 const useStore = create<Store>((set, get) => ({
@@ -27,6 +32,7 @@ const useStore = create<Store>((set, get) => ({
   ingredients: [],
   dishes: [],
   drinks: [],
+  menuSections: [],
   
   setIngredients: (newIngredients: IngredientProp[]) => {
     set({ ingredients: newIngredients });
@@ -77,6 +83,19 @@ const useStore = create<Store>((set, get) => ({
       return false;
     }
   },
+
+  setMenuSections: (newItems: MenuSection[]) => {
+    set({ menuSections: newItems });
+  },
+
+  updateMenuSection: (newItem: MenuSection) => {
+    set((state) => ({
+      menuSections: state.menuSections.map((item) =>
+        item.name === newItem.name ? newItem : item
+      ),
+    }));
+  },
+
 }));
 
 export default useStore;

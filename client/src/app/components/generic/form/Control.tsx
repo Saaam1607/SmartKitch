@@ -23,8 +23,8 @@ interface TextAreaProps {
   itemKey: string;
   value: string;
   fieldName: string;
-  isEditing: boolean;
-  handleChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  isEditing?: boolean;
+  handleChange?: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
 }
 
 function TextArea({ itemKey, value, fieldName, isEditing, handleChange }: TextAreaProps) {
@@ -51,8 +51,8 @@ interface PriceInputProps {
   itemKey: string;
   value: number;
   fieldName: string;
-  isEditing: boolean;
-  handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  isEditing?: boolean;
+  handleChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 function PriceInput({ type, step, itemKey, value, fieldName, isEditing, handleChange }: PriceInputProps) {
@@ -144,8 +144,8 @@ interface TextInputProps {
   itemKey: string;
   value: string;
   fieldName: string;
-  isEditing: boolean;
-  handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  isEditing?: boolean;
+  handleChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 function TextInput({ type, itemKey, value, fieldName, isEditing, handleChange }: TextInputProps) {
@@ -170,8 +170,8 @@ interface ControlProps {
   itemKey: string;
   value: string | number;
   fieldName: string;
-  isEditing: boolean;
-  handleChange: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  isEditing?: boolean;
+  handleChange?: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
 }
 
 export default function Control({ type, step, itemKey, value, fieldName, isEditing, handleChange } : ControlProps) {

@@ -7,13 +7,9 @@ export const getItems = async (): Promise<Dish[]> => {
     SELECT d.name, d.description, d.image, 
            d.out_of_stock AS "outOfStock", 
            d.disabled, d.price,
-           COALESCE(
-             array_agg(i.name ORDER BY i.name) FILTER (WHERE i.name IS NOT NULL),
-            '{}'
-          ) AS ingredients
+           COALESCE(array_agg(di.ingredient_name),'{}') AS ingredients
     FROM dishes d
     LEFT JOIN dish_ingredients di ON di.dish_name = d.name
-    LEFT JOIN ingredients i ON i.name = di.ingredient_name
     GROUP BY d.name, d.description, d.image, d.out_of_stock, d.disabled, d.price
   `);
 

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 
 // Components
-import DishCard from '../../components/dishes/DishCard';
+import MenuSectionCard from '../../components/menuSections/MenuSectionCard';
+import MenuSectionDishesCard from '../../components/menuSections/MenuSectionDishesCard';
 import IngredientCreationModal from '../../components/ingredients/IngredientCreationModal';
 import Switch from '../../components/generic/form/Switch';
 import Registry from './Registry'
@@ -11,6 +12,7 @@ import DishProp from '../../types/DishProp';
 
 // Utils
 import { useLoading } from '../../loadingProvider/LoadingProvider';
+import menuSectionsService from '../../services/menuSectionsService';
 import dishesService from '../../services/dishesService';
 import useStore from '../../state/useStore'
 
@@ -44,11 +46,9 @@ function Filters({ filterByOutOfStock, setFilterByOutOfStock, filterByDisabled, 
 
 export default function DishesRegistry() {
 
-  const { dishes, updateDish, setDishes } = useStore();
+  const { menuSections, updateMenuSection, setMenuSections } = useStore();
+  const { setDishes } = useStore();
   const [filteredItems, setFilteredItems] = useState<DishProp[]>([]);
-
-  const [filterByOutOfStock, setFilterByOutOfStock] = useState(false);
-  const [filterByDisabled, setFilterByDisabled] = useState(false);
 
   const { setLoading } = useLoading();
 
@@ -56,8 +56,10 @@ export default function DishesRegistry() {
     async function fetchData() {
       setLoading(true);
       try {
-        const data = await dishesService.fetchItems();
-        setDishes(data)
+        const data = await menuSectionsService.fetchItems();
+        setMenuSections(data)
+        const dishes = await dishesService.fetchItems();
+        setDishes(dishes);
       } catch (error) {
         console.error(error);
       } finally {
@@ -69,51 +71,60 @@ export default function DishesRegistry() {
 
 
   useEffect(() => {
-    let results = dishes;
-
-    if (filterByOutOfStock)
-      results = results.filter(item => item.outOfStock);
-
-    if (filterByDisabled)
-      results = results.filter(item => item.disabled);
-
+    const results = menuSections;
     setFilteredItems(results);
-  }, [dishes, filterByOutOfStock, filterByDisabled]);
+  }, [menuSections]);
 
 
   async function createItem(newItem: DishProp) {
     try {
-      await dishesService.addItem(newItem); 
-      const freshData = await dishesService.fetchItems();
-      setDishes(freshData);
+      await menuSectionsService.addItem(newItem); 
+      const freshData = await menuSectionsService.fetchItems();
+      setMenuSections(freshData);
     } catch (error) {
       console.error(error);
     }
   }
 
   return (
-    <Registry
-      filteredItems={filteredItems}
-      keyField={"name"}
-      cardComponent={DishCard}
-      updateItem={updateDish}
-      service={dishesService}
-      showNavbar={true}
-      filtersComponent={
-        <Filters
-          filterByOutOfStock={filterByOutOfStock}
-          setFilterByOutOfStock={setFilterByOutOfStock}
-          filterByDisabled={filterByDisabled}
-          setFilterByDisabled={setFilterByDisabled}
+    <div  
+      className="d-flex flex-row gap-3"
+      style={{ height: '100%', width: '100%' }}
+    >
+      <div className="d-flex">
+        <Registry
+          filteredItems={filteredItems}
+          keyField={"name"}
+          cardComponent={MenuSectionCard}
+          updateItem={updateMenuSection}
+          service={menuSectionsService}
+          showNavbar={true}
+          renderCreationModal={(visible: boolean, close: () => void) => (
+            <IngredientCreationModal
+              visible={visible}
+              close={close}
+              create={createItem}
+            />
+          )}
         />
-      }
-      renderCreationModal={(visible: boolean, close: () => void) => (
-        <IngredientCreationModal
-          visible={visible}
-          close={close}
-          create={createItem}
+      </div>
+      <div className="d-flex flex-grow-1">
+        <Registry
+          filteredItems={filteredItems}
+          keyField={"name"}
+          cardComponent={MenuSectionDishesCard}
+          updateItem={updateMenuSection}
+          service={menuSectionsService}
+          showNavbar={true}
+          renderCreationModal={(visible: boolean, close: () => void) => (
+            <IngredientCreationModal
+              visible={visible}
+              close={close}
+              create={createItem}
+            />
+          )}
         />
-      )}
-    />
+      </div>
+    </div>
   );
 }

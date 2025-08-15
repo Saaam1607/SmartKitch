@@ -9,11 +9,12 @@ import getCroppedImg from '../../../utils/getCroppedImg';
 
 interface CardImageProps {
   image: string;
-  updateImage: (image: string) => void;
-  isEditing: boolean;
+  size?: number;
+  updateImage?: (image: string) => void;
+  isEditing?: boolean;
 }
 
-export default function CardImage({ image, updateImage, isEditing }: CardImageProps) {
+export default function CardImage({ image, size=175, updateImage, isEditing }: CardImageProps) {
 
   const [showEditModal, setShowEditModal] = useState(false);
   const [newImage, setNewImage] = useState<string | null>(null);
@@ -55,8 +56,8 @@ export default function CardImage({ image, updateImage, isEditing }: CardImagePr
           <div
             className="rounded-start"
             style={{
-              width: '175px',
-              height: '175px',
+              width: `${size}px`,
+              height: `${size}px`,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -69,8 +70,8 @@ export default function CardImage({ image, updateImage, isEditing }: CardImagePr
               alt={"Card Image"}
               src={image}
               style={{
-                width: '175px',
-                height: '175px',
+                width: `${size}px`,
+                height: `${size}px`,
                 objectFit: 'cover',
                 borderRadius: "15px"
               }}
@@ -80,8 +81,8 @@ export default function CardImage({ image, updateImage, isEditing }: CardImagePr
           <div
             className="faded"
             style={{
-              width: '175px',
-              height: '175px',
+              width: `${size}px`,
+              height: `${size}px`,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',

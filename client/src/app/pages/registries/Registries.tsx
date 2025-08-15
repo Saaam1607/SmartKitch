@@ -15,13 +15,14 @@ import { toast } from 'sonner';
 import IngredientsRegistry from './IngredientsRegistry'
 import DrinksRegistry from './DrinksRegistry'
 import DishesRegistry from './DishesRegistry'
+import MenuSectionsRegistry from './MenuSectionsRegistry'
 
 export default function Registries() {
 
   const { isEditing } = useStore();
   const { setComponentKey } = useStore();
 
-  const [selectedRegistry, setSelectedRegistry] = useState('ingredients');
+  const [selectedRegistry, setSelectedRegistry] = useState('menu');
 
   const handleSelect = (eventKey: string | null) => {
     if (!isEditing) {
@@ -79,15 +80,17 @@ export default function Registries() {
         </Container>
       </Navbar>
       <div
-        className=""
+        className="p-3"
         style={{
           flexGrow: 1,
           overflow: 'hidden',
+          backgroundColor: 'rgba(207, 207, 210, 1)',
         }}
       >
         {selectedRegistry === 'ingredients' && <IngredientsRegistry />}
         {selectedRegistry === 'dishes' && <DishesRegistry />}
         {selectedRegistry === 'drinks' && <DrinksRegistry />}
+        {selectedRegistry === 'menu' && <MenuSectionsRegistry />}
       </div>
     </div>
   );
