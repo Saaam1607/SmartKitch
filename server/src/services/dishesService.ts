@@ -4,21 +4,24 @@ import { Dish } from "@my-org/shared";
 
 export const getItems = async (): Promise<Dish[]> => {
   const result = await pool.query(`
-    SELECT d.name, d.description, d.image, 
-           d.out_of_stock AS "outOfStock", 
-           d.disabled, d.price,
-           COALESCE(array_agg(di.ingredient_name),'{}') AS ingredients
+    SELECT
+      d.name,
+      d.description, 
+      d.out_of_stock AS "outOfStock", 
+      d.disabled,
+      d.price,
+      COALESCE(array_agg(DISTINCT di.ingredient_name) FILTER (WHERE di.ingredient_name IS NOT NULL), '{}') AS ingredients
     FROM dishes d
     LEFT JOIN dish_ingredients di ON di.dish_name = d.name
     GROUP BY d.name, d.description, d.image, d.out_of_stock, d.disabled, d.price
   `);
 
   const items = result.rows.map(row => {
-    const base64Image = row.image.toString('base64');
-    const mimeType = 'image/jpeg';
+    // const base64Image = row.image.toString('base64');
+    // const mimeType = 'image/jpeg';
     return {
       ...row,
-      image: `data:${mimeType};base64,${base64Image}`,
+      // image: `data:${mimeType};base64,${base64Image}`,
       ingredients: row.ingredients || []
     };
   });
@@ -27,8 +30,11 @@ export const getItems = async (): Promise<Dish[]> => {
 };
 
 export const createItem = async (newItem: Dish): Promise<Dish> => {
-  const base64Data = newItem.image.replace(/^data:image\/\w+;base64,/, "");
-  const buffer = Buffer.from(base64Data, 'base64');
+  
+  if (newItem?.image) {
+    const base64Data = newItem.image.replace(/^data:image\/\w+;base64,/, "");
+    const buffer = Buffer.from(base64Data, 'base64');
+  }
 
   try {
     await pool.query('BEGIN');

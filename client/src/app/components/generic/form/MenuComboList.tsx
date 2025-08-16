@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Form, Button, ListGroup, InputGroup } from 'react-bootstrap';
 
 import DishMiniCard from '../card/DishMiniCard';
+import DishMicroCard from '../card/DishMicroCard';
 
 import { X } from 'lucide-react';
 
@@ -19,45 +20,32 @@ interface MenuComboListProps {
 export default function MenuComboList({ valueList, dataList, handleValueAddition, handleValueRemoval, fieldName, itemKey, isEditing }: MenuComboListProps) {
 
   const [valueToAdd, setValueToAdd] = useState("");
-  const [availableValues, SetAvailableValues] = useState(dataList.filter(el => !valueList.includes(el)));
+  const [availableValues, SetAvailableValues] = useState(dataList.filter(el => !valueList?.includes(el)));
+
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    SetAvailableValues(dataList.filter(el => !valueList.includes(el)));
+    SetAvailableValues(dataList.filter(el => !valueList?.includes(el)));
   }, [valueList])
 
   return (
     <Form.Group className="mb-1 d-flex flex-column align-items-left">
-      <Form.Label
-        className="m-0 ms-2"
-        htmlFor={`${fieldName}-${itemKey}`}
-        style={{
-          fontSize: '0.85rem',
-          pointerEvents: 'none',
-          userSelect: 'none'
-        }}
-      >
-        {fieldName}
-      </Form.Label>
-      
       <div
         style={{
           width: '100%',
-          padding: '0.2rem 0.5rem',
           outline: 'none',
           color: '#212529',
-          backgroundColor: isEditing ? 'white' : 'transparent',
-          border: isEditing ? '2px solid rgb(219, 123, 33)' : '2px solid lightgrey',
+          backgroundColor: 'transparent',
         }}
       >
         <ListGroup className="d-flex flex-row flex-wrap gap-2 rounded-0">
-          {valueList.map((item, index) => (
+          {valueList?.map((item, index) => (
             <ListGroup.Item
               key={index}
-              className="d-flex justify-content-between align-items-center gap-1 p-0 px-1 rounded-0"
+              className="d-flex justify-content-between align-items-center gap-1 p-0 rounded-0 border-0"
               style={{
                 width: '100%',
-                backgroundColor: isEditing ? 'white' : 'transparent',
-                border: isEditing ? '1px solid lightgrey' : '1px solid transparent'
+                backgroundColor: 'transparent',
               }}
             >
               <div
@@ -71,61 +59,65 @@ export default function MenuComboList({ valueList, dataList, handleValueAddition
                   dishName={item}
                 />
               </div>
-              
-              <div
-                className="py-1"
-                style={{
-                  height: '100%',
-                    minWidth: '14px',
-                    maxWidth: '14px',
-                }}
-              >
-                {isEditing && (
-                  <Button
-                    className="d-flex justify-content-center align-items-center p-0 rounded-circle"
-                    variant="secondary"
-                    onClick={() => handleValueRemoval(item)}
-                    style={{
-                      minWidth: '14px',
-                      minHeight: '14px',
-                      maxWidth: '14px',
-                      maxHeight: '14px',
-                    }}
-                  >
-                    <X size={11} />
-                  </Button>
-                )}
-                
-              </div>
             </ListGroup.Item>
           ))}
         </ListGroup>
 
-        {/* {isEditing && (
+        {isEditing && (
           <InputGroup className="mt-1">
-            <Form.Select
-              value={valueToAdd}
-              className="p-0 px-1 rounded-0"
-              onChange={(e) => setValueToAdd(e.target.value)}
-            >
-              <option value=""></option>
-              {availableValues.map((item, index) => (
-                <option key={index} value={item}>{item}</option>
-              ))}
-            </Form.Select>
-            <Button
-              variant="success"
-              className="p-0 px-2 rounded-0"
-              onClick={() => {
-                handleValueAddition(valueToAdd);
-                setValueToAdd("");
-              }}
-              disabled={!valueToAdd}
-            >
-              Add
-            </Button>
+            <div style={{ position: "relative", width: "100%" }}>
+              <div
+                className="p-0 px-1 rounded-0"
+                style={{
+                  border: "1px solid #ced4da",
+                  padding: "0.375rem 0.75rem",
+                  borderRadius: "0.25rem",
+                  cursor: "pointer",
+                  backgroundColor: "white",
+                }}
+                onClick={() => setOpen(!open)}
+              >
+                {valueToAdd || <span style={{ color: "#6c757d" }}>Seleziona un piatto</span>}
+              </div>
+
+              {/* Dropdown */}
+              {open && (
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "100%",
+                    left: 0,
+                    width: "100%",
+                    maxHeight: "200px",
+                    overflowY: "auto",
+                    border: "1px solid #ced4da",
+                    borderRadius: "0.25rem",
+                    backgroundColor: "white",
+                    zIndex: 100,
+                  }}
+                >
+                  {availableValues.map((item, index) => (
+                    <div
+                      key={index}
+                      onClick={() => {
+                        handleValueAddition(item);
+                        setValueToAdd("");
+                        setOpen(false);
+                      }}
+                      style={{
+                        padding: "0.25rem 0.5rem",
+                        cursor: "pointer",
+                        borderBottom: "1px solid #f1f1f1",
+                      }}
+                    >
+                      <DishMicroCard dishName={item} />
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           </InputGroup>
-        )} */}
+        )}
       </div>
     </Form.Group>
   );

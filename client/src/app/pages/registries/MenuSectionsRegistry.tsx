@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 // Components
 import MenuSectionCard from '../../components/menuSections/MenuSectionCard';
 import MenuSectionDishesCard from '../../components/menuSections/MenuSectionDishesCard';
-import IngredientCreationModal from '../../components/ingredients/IngredientCreationModal';
+import MenuSectionsCreationModal from '../../components/menuSections/MenuSectionsCreationModal';
 import Switch from '../../components/generic/form/Switch';
 import Registry from './Registry'
 
@@ -67,7 +67,7 @@ export default function DishesRegistry() {
       }
     }
     fetchData();
-  }, []);
+  }, [setDishes, setLoading, setMenuSections]);
 
 
   useEffect(() => {
@@ -100,7 +100,7 @@ export default function DishesRegistry() {
           service={menuSectionsService}
           showNavbar={true}
           renderCreationModal={(visible: boolean, close: () => void) => (
-            <IngredientCreationModal
+            <MenuSectionsCreationModal
               visible={visible}
               close={close}
               create={createItem}
@@ -117,7 +117,7 @@ export default function DishesRegistry() {
           service={menuSectionsService}
           showNavbar={true}
           renderCreationModal={(visible: boolean, close: () => void) => (
-            <IngredientCreationModal
+            <MenuSectionsCreationModal
               visible={visible}
               close={close}
               create={createItem}

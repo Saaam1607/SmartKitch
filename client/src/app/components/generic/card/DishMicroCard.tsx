@@ -19,7 +19,7 @@ interface DishMiniCardProps {
   dishName: string;
 }
 
-export default function DishMiniCard({ dishName }: DishMiniCardProps) {
+export default function DishMicroCard({ dishName }: DishMiniCardProps) {
 
   const { dishes } = useStore();
 
@@ -44,14 +44,9 @@ export default function DishMiniCard({ dishName }: DishMiniCardProps) {
         <>
           <div
             className="d-flex align-items-center p-0"
-            style={{
-              minHeight: '100%'
-            }}
+            style={{ minHeight: '100%' }}
           >
-            <CardImage
-              image={dish.image}
-              size={100}
-            />
+            <CardImage image={dish.image} size={60} />
           </div>
 
           <div className="d-flex w-100">
@@ -64,28 +59,15 @@ export default function DishMiniCard({ dishName }: DishMiniCardProps) {
             >
               <div>
 
-                <div className="d-flex align-items-center justify-content-between w-100 gap-5">
-                  <Title title={dish.name} />
-                  
-                  <div className="">
-                    <Control
-                      type="price"
-                      step={0.1}
-                      itemKey={dish.name}
-                      value={dish.price}
-                      fieldName="Price"
-                      showLabel={false}
-                      width={50}
-                    />  
-                  </div>
-                  
+                <div className="d-flex align-items-center justify-content-between">
+                  <h6 className="m-0 p-0">
+                    {dish.name}
+                  </h6>
                 </div>
                 
-                <div
-                  className="d-flex gap-2"
-                >
+                <div className="d-flex gap-1" >
                   {dish.ingredients && dish.ingredients.length > 0 && (
-                    <p className="p-0 m-0" style={{ width: "fit-content" }}>
+                    <p className="p-0 m-0" style={{ width: "fit-content", fontSize: "0.8rem" }}>
                       {dish.ingredients.join(", ")}
                     </p>
                   )}

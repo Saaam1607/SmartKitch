@@ -18,19 +18,20 @@ import '../../styles/card.css';
 export default function MenuSectionDishesCard({ item, isEditing, handleCheckChange, handleTextChange, handleImageChange, handlePriceChange, handleArrayAddition, handleArrayRemoval }: CardComponentProps<DishProp>) {
 
   const { menuSections } = useStore();
+  const { dishes } = useStore();
 
-  const [dishesNames, setDishesNames] = useState(menuSections.map(obj => obj.name));
+  const [dishesNames, setDishesNames] = useState(dishes.map(obj => obj.name));
 
   useEffect(() => {
-    setDishesNames(menuSections.map(obj => obj.name))
+    setDishesNames(dishes.map(obj => obj.name))
   }, [menuSections])
 
-  function handleIngredientAddition(ingredient: string) {
-    handleArrayAddition(ingredient, "ingredients")
+  function handleDishAddition(dish: string) {
+    handleArrayAddition(dish, "dishes")
   }
 
-  function handleIngredientRemoval(ingredient: string) {
-    handleArrayRemoval(ingredient, "ingredients")
+  function handleDishRemoval(dish: string) {
+    handleArrayRemoval(dish, "dishes")
   }
 
   return (
@@ -61,10 +62,10 @@ export default function MenuSectionDishesCard({ item, isEditing, handleCheckChan
             <Title title={item.name} />
             
             <MenuComboList
-              valueList={item.ingredients}
+              valueList={item.dishes}
               dataList={dishesNames}
-              handleValueAddition={handleIngredientAddition}
-              handleValueRemoval={handleIngredientRemoval}
+              handleValueAddition={handleDishAddition}
+              handleValueRemoval={handleDishRemoval}
               fieldName="Dishes"
               itemKey={item.name}
               isEditing={isEditing}

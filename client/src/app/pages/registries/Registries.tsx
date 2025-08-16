@@ -84,7 +84,7 @@ export default function Registries() {
         style={{
           flexGrow: 1,
           overflow: 'hidden',
-          backgroundColor: 'rgba(207, 207, 210, 1)',
+          // backgroundColor: 'rgba(207, 207, 210, 1)',
         }}
       >
         {selectedRegistry === 'ingredients' && <IngredientsRegistry />}

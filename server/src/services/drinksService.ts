@@ -3,13 +3,13 @@ import pool from '../config/database';
 import { Drink } from "@my-org/shared";
 
 export const getItems = async (): Promise<Drink[]> => {
-  const result = await pool.query('SELECT name, description, image, out_of_stock AS "outOfStock", disabled, price FROM drinks');
+  const result = await pool.query('SELECT name, description, out_of_stock AS "outOfStock", disabled, price FROM drinks');
   const items = result.rows.map(row => {
-    const base64Image = row.image.toString('base64');
-    const mimeType = 'image/jpeg';
+    // const base64Image = row.image.toString('base64');
+    // const mimeType = 'image/jpeg';
     return {
       ...row,
-      image: `data:${mimeType};base64,${base64Image}`
+      // image: `data:${mimeType};base64,${base64Image}`
     };
   });
 

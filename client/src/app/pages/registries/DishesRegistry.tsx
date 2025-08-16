@@ -12,6 +12,7 @@ import DishProp from '../../types/DishProp';
 // Utils
 import { useLoading } from '../../loadingProvider/LoadingProvider';
 import dishesService from '../../services/dishesService';
+import ingredientsService from '../../services/ingredientsService';
 import useStore from '../../state/useStore'
 
 interface FiltersProps {
@@ -45,8 +46,9 @@ function Filters({ filterByOutOfStock, setFilterByOutOfStock, filterByDisabled, 
 export default function DishesRegistry() {
 
   const { dishes, updateDish, setDishes } = useStore();
-  const [filteredItems, setFilteredItems] = useState<DishProp[]>([]);
+  const { setIngredients } = useStore();
 
+  const [filteredItems, setFilteredItems] = useState<DishProp[]>([]);
   const [filterByOutOfStock, setFilterByOutOfStock] = useState(false);
   const [filterByDisabled, setFilterByDisabled] = useState(false);
 
@@ -58,6 +60,8 @@ export default function DishesRegistry() {
       try {
         const data = await dishesService.fetchItems();
         setDishes(data)
+        const ingredients = await ingredientsService.fetchItems();
+        setIngredients(ingredients);
       } catch (error) {
         console.error(error);
       } finally {
@@ -65,7 +69,7 @@ export default function DishesRegistry() {
       }
     }
     fetchData();
-  }, []);
+  }, [setDishes, setIngredients, setLoading]);
 
 
   useEffect(() => {

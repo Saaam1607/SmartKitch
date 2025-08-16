@@ -52,7 +52,7 @@ export default function CardImage({ image, size=175, updateImage, isEditing }: C
       </Modal>
 
       <div className="rounded-start position-relative" >
-        {image != "" ? (
+        {image && image != "" ? (
           <div
             className="rounded-start"
             style={{
@@ -79,14 +79,15 @@ export default function CardImage({ image, size=175, updateImage, isEditing }: C
           </div>
         ) : (
           <div
-            className="faded"
+            className=""
             style={{
               width: `${size}px`,
               height: `${size}px`,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              backgroundColor: '#f0f0f0'
+              backgroundColor: '#f0f0f0',
+              borderRadius: "15px",
             }} 
           >
             <Image width={50} height={50} style={{color: "grey"}}/>

@@ -30,8 +30,10 @@ export const dishesService: CrudService<DishProp> = {
   },
 
   async addItem(newItem: DishProp): Promise<DishProp> {
-    const base64Image = await blobToBase64(newItem.image);
-    newItem = { ...newItem, image: base64Image };
+    if (newItem?.image) {
+      const base64Image = await blobToBase64(newItem.image);
+      newItem = { ...newItem, image: base64Image };
+    }
     
     const res = await fetch(API_URL, {
       method: 'POST',
@@ -46,7 +48,7 @@ export const dishesService: CrudService<DishProp> = {
   async editItem(newItem: DishProp): Promise<DishProp> {
     let imageBase64: string = '';
 
-    if (newItem.image instanceof Blob) {
+    if (newItem?.image instanceof Blob) {
       imageBase64 = await blobToBase64(newItem.image);
     } else if (typeof newItem.image === 'string') {
       if (newItem.image.startsWith('data:image')) {

@@ -52,10 +52,11 @@ interface PriceInputProps {
   value: number;
   fieldName: string;
   isEditing?: boolean;
+  width?: number;
   handleChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-function PriceInput({ type, step, itemKey, value, fieldName, isEditing, handleChange }: PriceInputProps) {
+function PriceInput({ type, step, itemKey, value, fieldName, isEditing, width, handleChange }: PriceInputProps) {
 
   const numericValue = typeof value === 'number' ? value : parseFloat(value) || 0;
 
@@ -90,7 +91,7 @@ function PriceInput({ type, step, itemKey, value, fieldName, isEditing, handleCh
         style={{
           ...commonStyle,
           ...getCommonEditingStyle(isEditing),
-          width: '100px'
+          ...width ? { width: `${width}px` } : { width: '100px' },
         }}
       >
         <input
@@ -170,25 +171,31 @@ interface ControlProps {
   itemKey: string;
   value: string | number;
   fieldName: string;
+  showLabel?: boolean;
+  width?: number;
   isEditing?: boolean;
   handleChange?: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
 }
 
-export default function Control({ type, step, itemKey, value, fieldName, isEditing, handleChange } : ControlProps) {
+export default function Control({ type, step, itemKey, value, fieldName, isEditing, showLabel=true, width, handleChange=() => {}}  : ControlProps) {
 
   return (
     <Form.Group className="mb-1 d-flex flex-column align-items-left">
-      <Form.Label
-        className="m-0 ms-2"
-        htmlFor={`${fieldName}-${itemKey}`}
-        style={{
-          fontSize: '0.75rem',
-          pointerEvents: 'none',
-          userSelect: 'none'
-        }}
-      >
-        {fieldName}
-      </Form.Label>
+      {
+        showLabel && (
+          <Form.Label
+            className="m-0"
+            htmlFor={`${fieldName}-${itemKey}`}
+            style={{
+              fontSize: '0.75rem',
+              pointerEvents: 'none',
+              userSelect: 'none'
+            }}
+          >
+            {fieldName}
+          </Form.Label>
+        )
+      }
 
       {type === 'textarea' && (
         <TextArea
@@ -217,6 +224,7 @@ export default function Control({ type, step, itemKey, value, fieldName, isEditi
           value={value as number}
           fieldName={fieldName}
           isEditing={isEditing}
+          width={width}
           handleChange={handleChange}
         />
       )}
