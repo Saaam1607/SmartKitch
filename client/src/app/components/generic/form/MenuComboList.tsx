@@ -26,12 +26,10 @@ export default function MenuComboList({ valueList, dataList, handleArraySet, fie
   useEffect(() => {
     const data = dataList.map(item => ({
       ...item,
-      isSelected: valueList?.includes(item) ?? false
+      isSelected: valueList?.includes(item.item) ?? false
     }));
     setAvailableValues(data);
-    console.log("SETTING")
-    console.log(data)
-  }, [valueList])
+  }, [valueList, dataList]);
 
   function closeModal() {
     setIsModalVisible(false);
@@ -117,7 +115,8 @@ export default function MenuComboList({ valueList, dataList, handleArraySet, fie
                     <div
                       key={index}
                       onClick={() => {
-                        handleSelectionChange(item.item);
+                        if (item.menuSection === "")
+                          handleSelectionChange(item.item);
                       }}
                       style={{
                         cursor: "pointer",

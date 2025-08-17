@@ -39,7 +39,7 @@ export default function DishMicroCard({ dishName, isSelected, menuSection }: Dis
       style={{
         borderRadius: "15px",
         backgroundColor: isSelected ?  'rgba(231, 231, 231, 1)' : 'rgba(231, 231, 231, 1)',        backgroundColor: isSelected ?  'rgba(231, 231, 231, 1)' : 'rgba(215, 215, 215, 1)',
-        opacity: isSelected ?  '1' : '0.6',
+        opacity: menuSection ? '0.4' : '1',
         border: isSelected ? '2px solid rgb(219, 123, 33)' : "2px solid transparent",
         color: isSelected ? 'rgba(165, 89, 18, 1)' : 'black',
       }}
@@ -71,15 +71,15 @@ export default function DishMicroCard({ dishName, isSelected, menuSection }: Dis
                   {menuSection && (
                     <>
                     <p className="m-0 p-0">-</p>
-                    <p
+                    <strong
                       className="m-0 p-0"
                       style={{
-                        fontSize: "0.8rem",
-                        color: "blue",
+                        fontSize: "1rem",
+                        color: "rgba(0, 150, 170, 1)",
                       }}
                     >
                       {menuSection}
-                    </p>
+                    </strong>
                     </>
                   )}
                 </div>

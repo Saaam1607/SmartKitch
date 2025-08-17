@@ -23,10 +23,13 @@ export default function MenuSectionDishesCard({ item, isEditing, handleCheckChan
   const [availableDishes, setAvailableDishes] = useState([]);
 
   useEffect(() => {
-    setAvailableDishes(dishes.map(item => {
+    setAvailableDishes(dishes.map(dish => {
+      
+      const menuSection = menuSections.find(section => section.dishes.includes(dish.name))?.name || ''
+
       return {
-        item: item.name,
-        menuSection: menuSections.find(section => section.dishes.includes(item.name))?.name || ''
+        item: dish.name,
+        menuSection: menuSection !== item.name ? menuSection : '',
       };
     }));
   }, [menuSections])

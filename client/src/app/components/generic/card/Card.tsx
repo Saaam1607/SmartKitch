@@ -9,6 +9,9 @@ import CrudService from "../../types/CrudService";
 import CardComponentProps from '../../types/props/CardComponentProps';
 import IconButton from '../button/IconButton'
 
+import { useLoading } from '../../../loadingProvider/LoadingProvider';
+
+import { toast } from 'sonner';
 
 interface CardProps<T extends BaseItem> {
   item: T;
@@ -31,6 +34,8 @@ export default function Card<T extends BaseItem>({
   const { componentKey, setComponentKey, resetComponentKey } = useStore();
   const [itemBeforeEdit, setItemBeforeEdit] = useState<T | null>(null);
   
+  const { setLoading } = useLoading();
+
   const isEditing = componentKey === item.name;
 
   // STARTS EDIT
@@ -38,15 +43,19 @@ export default function Card<T extends BaseItem>({
     if (componentKey == "") {
       setItemBeforeEdit(item);
       setComponentKey(item[keyField]);
+    } else {
+      toast.warning("You are already editing an item");
     }
   }
 
   // SAVES CHANGES
   async function saveChanges() {
     try {
+      setLoading(true);
       await service.editItem(item);
-      // toast.info("Changes Saved");
+      toast.info("Changes Saved");
       await service.fetchItems();
+      setLoading(false);
     } catch (error) {
       console.error(error);
     }
@@ -58,7 +67,7 @@ export default function Card<T extends BaseItem>({
     if (componentKey) {
       updateItem(prevItem);
       resetComponentKey();
-      // toast.info("Changes Reverted");
+      toast.info("Changes Discarded");
     }
   }
 
