@@ -15,40 +15,24 @@ import useStore from '../../state/useStore'
 
 import '../../styles/card.css';
 
-export default function MenuSectionDishesCard({ item, isEditing, handleCheckChange, handleTextChange, handleImageChange, handlePriceChange, handleArrayAddition, handleArrayRemoval }: CardComponentProps<DishProp>) {
+export default function MenuSectionDishesCard({ item, isEditing, handleCheckChange, handleTextChange, handleImageChange, handlePriceChange, handleArraySet }: CardComponentProps<DishProp>) {
 
   const { menuSections } = useStore();
   const { dishes } = useStore();
 
-  const [dishesNames, setDishesNames] = useState(dishes.map(obj => obj.name));
+  const [availableDishes, setAvailableDishes] = useState([]);
 
   useEffect(() => {
-    setDishesNames(dishes.map(obj => obj.name))
+    setAvailableDishes(dishes.map(item => {
+      return {
+        item: item.name,
+        menuSection: menuSections.find(section => section.dishes.includes(item.name))?.name || ''
+      };
+    }));
   }, [menuSections])
-
-  function handleDishAddition(dish: string) {
-    handleArrayAddition(dish, "dishes")
-  }
-
-  function handleDishRemoval(dish: string) {
-    handleArrayRemoval(dish, "dishes")
-  }
 
   return (
     <div className="d-flex w-100" >
-      {/* <div
-        className="d-flex align-items-center p-3"
-        style={{
-          minHeight: '100%'
-        }}
-      >
-        <CardImage
-          image={item.image}
-          updateImage={(image: string) => handleImageChange(image, 'image')}
-          isEditing={isEditing}
-        />
-      </div> */}
-
       <div className="d-flex w-100">
         <div
           className="w-100 p-2 ps-3 flex-grow-1"
@@ -58,19 +42,15 @@ export default function MenuSectionDishesCard({ item, isEditing, handleCheckChan
           }}
         >
           <Form isEditing={isEditing}>
-
             <Title title={item.name} />
-            
             <MenuComboList
               valueList={item.dishes}
-              dataList={dishesNames}
-              handleValueAddition={handleDishAddition}
-              handleValueRemoval={handleDishRemoval}
-              fieldName="Dishes"
+              dataList={availableDishes}
+              handleArraySet={handleArraySet}
+              fieldName="dishes"
               itemKey={item.name}
               isEditing={isEditing}
             />
-
           </Form>
         </div>
       </div>

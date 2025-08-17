@@ -2,31 +2,56 @@ import React, { useEffect, useState } from 'react';
 
 import { Form, Button, ListGroup, InputGroup } from 'react-bootstrap';
 
+import Modal from '../modal/Modal';
+
 import DishMiniCard from '../card/DishMiniCard';
 import DishMicroCard from '../card/DishMicroCard';
 
-import { X } from 'lucide-react';
+import { X, SquarePlus } from 'lucide-react';
 
 interface MenuComboListProps {
   valueList: string[];
-  dataList: string[];
-  handleValueAddition: (value: string) => void;
-  handleValueRemoval: (value: string) => void;
+  dataList: {dish: string, menuSection: string}[];
+  handleArraySet: (newArray: string[], fieldName: string) => void;
   fieldName: string;
   itemKey: string;
   isEditing: boolean;
 }
 
-export default function MenuComboList({ valueList, dataList, handleValueAddition, handleValueRemoval, fieldName, itemKey, isEditing }: MenuComboListProps) {
+export default function MenuComboList({ valueList, dataList, handleArraySet, fieldName, itemKey, isEditing }: MenuComboListProps) {
 
-  const [valueToAdd, setValueToAdd] = useState("");
-  const [availableValues, SetAvailableValues] = useState(dataList.filter(el => !valueList?.includes(el)));
-
-  const [open, setOpen] = useState(false);
+  const [availableValues, setAvailableValues] = useState([]);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   useEffect(() => {
-    SetAvailableValues(dataList.filter(el => !valueList?.includes(el)));
+    const data = dataList.map(item => ({
+      ...item,
+      isSelected: valueList?.includes(item) ?? false
+    }));
+    setAvailableValues(data);
+    console.log("SETTING")
+    console.log(data)
   }, [valueList])
+
+  function closeModal() {
+    setIsModalVisible(false);
+  }
+
+  function handleSelectionChange(item: string) {
+    setAvailableValues(prev =>
+      prev.map(el =>
+        el.item === item ? { ...el, isSelected: !el.isSelected } : el
+      )
+    );
+  }
+
+  function saveChangesFromModal() {
+    handleArraySet(
+      availableValues.filter(el => el.isSelected).map(el => el.item),
+      fieldName
+    );
+    closeModal();
+  }
 
   return (
     <Form.Group className="mb-1 d-flex flex-column align-items-left">
@@ -66,55 +91,48 @@ export default function MenuComboList({ valueList, dataList, handleValueAddition
         {isEditing && (
           <InputGroup className="mt-1">
             <div style={{ position: "relative", width: "100%" }}>
-              <div
-                className="p-0 px-1 rounded-0"
+              <Button
+                className="d-flex align-items-center p-1 px-2 m-0"
+                onClick={() => setIsModalVisible(true)}
                 style={{
-                  border: "1px solid #ced4da",
-                  padding: "0.375rem 0.75rem",
-                  borderRadius: "0.25rem",
-                  cursor: "pointer",
-                  backgroundColor: "white",
+                  borderColor: "rgb(219, 123, 33)",
+                  backgroundColor: "transparent",
+                  color: "rgb(219, 123, 33)",
                 }}
-                onClick={() => setOpen(!open)}
               >
-                {valueToAdd || <span style={{ color: "#6c757d" }}>Seleziona un piatto</span>}
-              </div>
+                <SquarePlus size={22} className="me-2" />
+                <p className="m-0 p-0">
+                  Add new
+                </p>
+              </Button>
 
-              {/* Dropdown */}
-              {open && (
-                <div
-                  style={{
-                    position: "absolute",
-                    top: "100%",
-                    left: 0,
-                    width: "100%",
-                    maxHeight: "200px",
-                    overflowY: "auto",
-                    border: "1px solid #ced4da",
-                    borderRadius: "0.25rem",
-                    backgroundColor: "white",
-                    zIndex: 100,
-                  }}
-                >
+              <Modal
+                title="Add or Remove Dishes"
+                show={isModalVisible}
+                close={closeModal}
+                saveItem={saveChangesFromModal}
+              >
+                <div className="d-flex flex-column gap-1">
                   {availableValues.map((item, index) => (
                     <div
                       key={index}
                       onClick={() => {
-                        handleValueAddition(item);
-                        setValueToAdd("");
-                        setOpen(false);
+                        handleSelectionChange(item.item);
                       }}
                       style={{
-                        padding: "0.25rem 0.5rem",
                         cursor: "pointer",
-                        borderBottom: "1px solid #f1f1f1",
                       }}
                     >
-                      <DishMicroCard dishName={item} />
+                      <DishMicroCard
+                        dishName={item.item}
+                        isSelected={item.isSelected}
+                        menuSection={item.menuSection}
+                      />
                     </div>
                   ))}
                 </div>
-              )}
+              </Modal>
+              
             </div>
           </InputGroup>
         )}

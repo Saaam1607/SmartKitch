@@ -13,6 +13,7 @@ import IconButton from '../button/IconButton'
 interface CardProps<T extends BaseItem> {
   item: T;
   keyField: string,
+  canDelete?: boolean,
   updateItem: (newItem: T) => void,
   service: CrudService<T>,
   cardComponent: React.ComponentType<CardComponentProps<T>>;
@@ -21,6 +22,7 @@ interface CardProps<T extends BaseItem> {
 export default function Card<T extends BaseItem>({
   item,
   keyField,
+  canDelete=true,
   updateItem,
   service,
   cardComponent: CardComponent,
@@ -113,6 +115,11 @@ export default function Card<T extends BaseItem>({
     }
   }
 
+  function handleArraySet(newArray: string[], fieldName: string) {
+    const newItem = { ...item, [fieldName]: newArray };
+    updateItem(newItem);
+  }
+
   const backgroundColor = (!isEditing ? '' : 'rgba(249, 238, 233, 1)');
 
   const border = isEditing
@@ -143,6 +150,7 @@ export default function Card<T extends BaseItem>({
           handlePriceChange={handlePriceChange}
           handleArrayAddition={handleArrayAddition}
           handleArrayRemoval={handleArrayRemoval}
+          handleArraySet={handleArraySet}
         />
         <div className="d-flex flex-column gap-2 p-2">
           {!isEditing ? (
@@ -155,13 +163,15 @@ export default function Card<T extends BaseItem>({
                 title="Edit"
                 onClick={() => startEdit(item.name)}
               />
-              <IconButton
-                variant="outline-danger"
-                // borderColor="rgb(223, 226, 230)"
-                iconName="Trash"
-                title="Delete"
-                onClick={() => {deleteItem(item.name)}}
-              />
+              {canDelete && (
+                <IconButton
+                  variant="outline-danger"
+                  // borderColor="rgb(223, 226, 230)"
+                  iconName="Trash"
+                  title="Delete"
+                  onClick={() => {deleteItem(item.name)}}
+                />
+              )}
             </>
           ) : (
             <>

@@ -13,7 +13,7 @@ import getCroppedImg from '../../utils/getCroppedImg';
 
 import '../../styles/creationModal.css';
 
-interface IngredientCreationModalProps {
+interface Props {
   visible: boolean;
   close: () => void;
   create: (ingredient: IngredientProp) => void;

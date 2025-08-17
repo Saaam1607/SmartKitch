@@ -113,6 +113,7 @@ export default function DishesRegistry() {
           filteredItems={filteredItems}
           keyField={"name"}
           cardComponent={MenuSectionDishesCard}
+          canDelete={false}
           updateItem={updateMenuSection}
           service={menuSectionsService}
           showNavbar={true}

@@ -17,9 +17,11 @@ import '../../../styles/card.css';
 
 interface DishMiniCardProps {
   dishName: string;
+  isSelected: boolean;
+  menuSection: string;
 }
 
-export default function DishMicroCard({ dishName }: DishMiniCardProps) {
+export default function DishMicroCard({ dishName, isSelected, menuSection }: DishMiniCardProps) {
 
   const { dishes } = useStore();
 
@@ -35,8 +37,11 @@ export default function DishMicroCard({ dishName }: DishMiniCardProps) {
     <div
       className="d-flex w-100"
       style={{
-        backgroundColor: 'rgba(231, 231, 231, 1)',
-        borderRadius: '15px',
+        borderRadius: "15px",
+        backgroundColor: isSelected ?  'rgba(231, 231, 231, 1)' : 'rgba(231, 231, 231, 1)',        backgroundColor: isSelected ?  'rgba(231, 231, 231, 1)' : 'rgba(215, 215, 215, 1)',
+        opacity: isSelected ?  '1' : '0.6',
+        border: isSelected ? '2px solid rgb(219, 123, 33)' : "2px solid transparent",
+        color: isSelected ? 'rgba(165, 89, 18, 1)' : 'black',
       }}
     >
       
@@ -59,10 +64,24 @@ export default function DishMicroCard({ dishName }: DishMiniCardProps) {
             >
               <div>
 
-                <div className="d-flex align-items-center justify-content-between">
+                <div className="d-flex align-items-center gap-2">
                   <h6 className="m-0 p-0">
                     {dish.name}
                   </h6>
+                  {menuSection && (
+                    <>
+                    <p className="m-0 p-0">-</p>
+                    <p
+                      className="m-0 p-0"
+                      style={{
+                        fontSize: "0.8rem",
+                        color: "blue",
+                      }}
+                    >
+                      {menuSection}
+                    </p>
+                    </>
+                  )}
                 </div>
                 
                 <div className="d-flex gap-1" >
