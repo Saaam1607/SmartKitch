@@ -100,7 +100,7 @@ export default function MenuComboList({ valueList, dataList, handleArraySet, fie
               >
                 <SquarePlus size={22} className="me-2" />
                 <p className="m-0 p-0">
-                  Add new
+                  Edit Items
                 </p>
               </Button>
 

@@ -9,7 +9,6 @@ import '../../../styles/control.css';
 
 const commonStyle = {
   width: '100%',
-  padding: '0.2rem 0.5rem',
   outline: 'none',
   color: '#212529',
 }
@@ -109,7 +108,7 @@ function PriceInput({ type, step, itemKey, value, fieldName, isEditing, width, h
             color: '#212529',
           }}
         />
-        { isEditing && (
+        {/* { isEditing && (
           <div className="d-flex flex-column" style={{ height: '2rem' }}>
             <button
               type="button"
@@ -134,7 +133,7 @@ function PriceInput({ type, step, itemKey, value, fieldName, isEditing, width, h
               <Minus size={10}/>
             </button>
           </div>
-        )}
+        )} */}
       </div>
     </div>
   );
@@ -180,22 +179,20 @@ interface ControlProps {
 export default function Control({ type, step, itemKey, value, fieldName, isEditing, showLabel=true, width, handleChange=() => {}}  : ControlProps) {
 
   return (
-    <Form.Group className="mb-1 d-flex flex-column align-items-left">
-      {
-        showLabel && (
-          <Form.Label
-            className="m-0"
-            htmlFor={`${fieldName}-${itemKey}`}
-            style={{
-              fontSize: '0.75rem',
-              pointerEvents: 'none',
-              userSelect: 'none'
-            }}
-          >
-            {fieldName}
-          </Form.Label>
-        )
-      }
+    <Form.Group className="d-flex flex-column align-items-left">
+      {showLabel && (
+        <Form.Label
+          className="m-0"
+          htmlFor={`${fieldName}-${itemKey}`}
+          style={{
+            fontSize: '0.75rem',
+            pointerEvents: 'none',
+            userSelect: 'none'
+          }}
+        >
+          {fieldName}
+        </Form.Label>
+      )}
 
       {type === 'textarea' && (
         <TextArea

@@ -21,7 +21,7 @@ export default function FiltersContainer({ showFilters, children }: FiltersProps
           className="p-3 border"
           style={{
             height: '100%',
-            backgroundColor: '#edececff',
+            backgroundColor: 'rgba(209, 212, 219, 1)',
             borderRadius: '15px',
           }}
         >

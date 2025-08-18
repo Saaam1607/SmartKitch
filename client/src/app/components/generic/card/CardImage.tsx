@@ -10,11 +10,12 @@ import getCroppedImg from '../../../utils/getCroppedImg';
 interface CardImageProps {
   image: string;
   size?: number;
+  borderRadius?: number;
   updateImage?: (image: string) => void;
   isEditing?: boolean;
 }
 
-export default function CardImage({ image, size=175, updateImage, isEditing }: CardImageProps) {
+export default function CardImage({ image, size=175, borderRadius=15, updateImage, isEditing }: CardImageProps) {
 
   const [showEditModal, setShowEditModal] = useState(false);
   const [newImage, setNewImage] = useState<string | null>(null);
@@ -73,7 +74,7 @@ export default function CardImage({ image, size=175, updateImage, isEditing }: C
                 width: `${size}px`,
                 height: `${size}px`,
                 objectFit: 'cover',
-                borderRadius: "15px"
+                borderRadius: `${borderRadius}px`,
               }}
             /> 
           </div>
@@ -87,7 +88,7 @@ export default function CardImage({ image, size=175, updateImage, isEditing }: C
               alignItems: 'center',
               justifyContent: 'center',
               backgroundColor: '#f0f0f0',
-              borderRadius: "15px",
+              borderRadius: `${borderRadius}px`
             }} 
           >
             <Image width={50} height={50} style={{color: "grey"}}/>

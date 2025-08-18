@@ -35,8 +35,9 @@ export default function DishMiniCard({ dishName }: DishMiniCardProps) {
     <div
       className="d-flex w-100"
       style={{
-        backgroundColor: 'rgba(231, 231, 231, 1)',
-        borderRadius: '15px',
+        border: '1px solid lightgrey',
+        // backgroundColor: 'rgba(231, 231, 231, 1)',
+        borderRadius: '10px',
       }}
     >
       
@@ -51,6 +52,7 @@ export default function DishMiniCard({ dishName }: DishMiniCardProps) {
             <CardImage
               image={dish.image}
               size={100}
+              borderRadius={10}
             />
           </div>
 
@@ -65,9 +67,11 @@ export default function DishMiniCard({ dishName }: DishMiniCardProps) {
               <div>
 
                 <div className="d-flex align-items-center justify-content-between w-100 gap-5">
-                  <Title title={dish.name} />
                   
-                  <div className="">
+                  <h5 className="m-0 p-0">{dish.name}</h5>
+
+
+                  <div className="" style={{ fontSize: '1.3rem' }}>
                     <Control
                       type="price"
                       step={0.1}
@@ -81,9 +85,7 @@ export default function DishMiniCard({ dishName }: DishMiniCardProps) {
                   
                 </div>
                 
-                <div
-                  className="d-flex gap-2"
-                >
+                <div className="d-flex gap-2" style={{ fontSize: '0.9rem' }}>
                   {dish.ingredients && dish.ingredients.length > 0 && (
                     <p className="p-0 m-0" style={{ width: "fit-content" }}>
                       {dish.ingredients.join(", ")}

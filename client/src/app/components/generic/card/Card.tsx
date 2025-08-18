@@ -165,10 +165,12 @@ export default function Card<T extends BaseItem>({
           {!isEditing ? (
             <>
               <IconButton
-                variant="outline-secondary"
+                variant="outline-orange"
                 iconName="Pencil"
-                color="rgb(219, 123, 33)"
-                borderColor="rgb(223, 226, 230)"
+                primaryColor="rgb(219, 123, 33)"
+                secondaryColor="white"
+                // color="rgb(219, 123, 33)"
+                // borderColor="rgb(223, 226, 230)"
                 title="Edit"
                 onClick={() => startEdit(item.name)}
               />

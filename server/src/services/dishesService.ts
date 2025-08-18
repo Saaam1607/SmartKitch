@@ -6,7 +6,8 @@ export const getItems = async (): Promise<Dish[]> => {
   const result = await pool.query(`
     SELECT
       d.name,
-      d.description, 
+      d.description,
+      d.image,
       d.out_of_stock AS "outOfStock", 
       d.disabled,
       d.price,
@@ -17,11 +18,11 @@ export const getItems = async (): Promise<Dish[]> => {
   `);
 
   const items = result.rows.map(row => {
-    // const base64Image = row.image.toString('base64');
-    // const mimeType = 'image/jpeg';
+    const base64Image = row.image.toString('base64');
+    const mimeType = 'image/jpeg';
     return {
       ...row,
-      // image: `data:${mimeType};base64,${base64Image}`,
+      image: `data:${mimeType};base64,${base64Image}`,
       ingredients: row.ingredients || []
     };
   });

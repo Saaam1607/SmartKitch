@@ -54,7 +54,6 @@ export default function RegistryNavBar({ searchTerm, setSearchTerm, showFilters,
                 variant={"outline-secondary"}
                 iconName="SlidersHorizontal" 
                 color="rgb(89, 92, 94)"
-                borderColor="rgb(89, 92, 94)"
                 onClick={handleFiltersClick}
               />
             )}
