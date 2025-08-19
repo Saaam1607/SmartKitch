@@ -147,7 +147,7 @@ export default function Card<T extends BaseItem>({
         borderRadius: '15px',
         boxShadow: 'rgba(0, 0, 0, 0.2) 0px 2px 6px',
         backgroundColor,
-        border,
+        // border,
         // backgroundColor: "red"
       }}
       onClick={(e) => {

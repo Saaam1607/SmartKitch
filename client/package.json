@@ -22,6 +22,7 @@
     "react-router-dom": "^7.7.1",
     "react-spinners": "^0.17.0",
     "react-switch": "^7.1.0",
+    "react-textarea-autosize": "^8.5.9",
     "sonner": "^2.0.6",
     "zustand": "^5.0.7"
   },

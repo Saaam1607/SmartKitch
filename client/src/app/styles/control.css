@@ -9,3 +9,16 @@ input[type="number"]::-webkit-outer-spin-button {
 input[type="number"] {
   -moz-appearance: textfield;
 }
+
+.customTextarea {
+  display: grid;
+  /* Creiamo un’area unica chiamata 'stack' */
+  grid-template-areas: "stack";
+
+  /* Tutti i figli e l’after occupano la stessa area */
+}
+
+.customTextarea > *,
+.customTextarea::after {
+  grid-area: stack;
+}

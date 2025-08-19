@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
+import { motion } from "motion/react"
+
 import DishProp from '../../types/DishProp';
 
 import Form from '../generic/form/Form';
@@ -26,7 +28,7 @@ export default function DishCard({ item, isHovered, isEditing, handleCheckChange
 
   const [ingredientsNames, setIngredientsNames] = useState(ingredients.map(obj => obj.name));
 
-  const [mainColor, setMainColor] = useState([255, 255, 255]); // default bianco
+  const [mainColor, setMainColor] = useState([]); // default bianco
 
   useEffect(() => {
     const img = new Image();
@@ -53,12 +55,21 @@ export default function DishCard({ item, isHovered, isEditing, handleCheckChange
   }
 
   return (
-    <div className="d-flex w-100" >
+    <motion.div
+      layout="position"
+      initial={false}
+      transition={{ duration: 0.3, ease: "easeInOut" }}
+      className="d-flex w-100"
+    >
       <div
         className="d-flex align-items-center p-3"
         style={{
           minHeight: '100%',
-          background: `linear-gradient(to right, rgb(${mainColor[0]}, ${mainColor[1]}, ${mainColor[2]}) 75%, #ffffff 25%)`,
+          background: mainColor.length > 0
+            ? `linear-gradient(to right, rgb(${mainColor[0]}, ${mainColor[1]}, ${mainColor[2]}) 75%, transparent 25%)`
+            : "#ffffff",
+          transition: "opacity 0.5s ease",
+          opacity: mainColor.length > 0 ? 1 : 0,
           borderTopLeftRadius: "15px",
           borderBottomLeftRadius: "15px",
         }}
@@ -67,7 +78,7 @@ export default function DishCard({ item, isHovered, isEditing, handleCheckChange
           <CardImage
             image={item.image}
             size={175}
-            isHovered={isHovered}
+            // isHovered={isHovered}
             updateImage={(image: string) => handleImageChange(image, 'image')}
             isEditing={isEditing}
           />
@@ -137,6 +148,6 @@ export default function DishCard({ item, isHovered, isEditing, handleCheckChange
           </Form>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

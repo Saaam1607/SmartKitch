@@ -10,8 +10,8 @@ export default function Form({ isEditing, children }: FormProps) {
     <BootstrapForm
       className="flex-grow-1"
       style={{
-        pointerEvents: isEditing ? 'auto' : 'none',
-        userSelect: isEditing ? 'auto' : 'none'
+        // pointerEvents: isEditing ? 'auto' : 'none',
+        // userSelect: isEditing ? 'auto' : 'none'
       }}
     >
       {children}

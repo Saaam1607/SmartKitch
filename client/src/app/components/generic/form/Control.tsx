@@ -4,6 +4,8 @@ import { Form } from 'react-bootstrap';
 
 import { Plus, Minus } from 'lucide-react';
 
+import TextareaAutosize from 'react-textarea-autosize';
+
 import '../../../styles/scrollbar.css';
 import '../../../styles/control.css';
 
@@ -28,19 +30,36 @@ interface TextAreaProps {
 
 function TextArea({ itemKey, value, fieldName, isEditing, handleChange }: TextAreaProps) {
   return (
-    <textarea
-      className="ps-2 rounded customScrollbar"
-      value={value}
-      id={`${fieldName}-${itemKey}`}
-      onChange={handleChange}
-      style={{
-        ...commonStyle,
-        ...getCommonEditingStyle(isEditing),
-        lineHeight: '1',
-        height: '60px',
-        resize: 'none',
-      }}
-    />
+  <TextareaAutosize
+    className="customScrollbar"
+    minRows={1}
+    maxRows={4}
+    value={value}
+    onChange={handleChange}
+    style={{
+      ...commonStyle,
+      ...getCommonEditingStyle(isEditing),
+      resize: 'none',
+      width: '100%',
+      borderRadius: '0.25rem',
+    }}
+  />
+
+    // <textarea
+    //   className="ps-2 rounded customScrollbar customTextarea"
+    //   value={value}
+    //   id={`${fieldName}-${itemKey}`}
+    //   onChange={handleChange}
+    //   style={{
+    //     ...commonStyle,
+    //     ...getCommonEditingStyle(isEditing),
+    //     // lineHeight: '1',
+    //     // height: 'auto',
+    //     // maxHeight: '100px',
+    //     // fieldSizing: 'normal',
+    //     // resize: 'none',
+    //   }}
+    // />
   );
 }
 

@@ -76,8 +76,8 @@ export default function CardImage({ image, size=175, isHovered, borderRadius=15,
                 height: `${size}px`,
                 objectFit: 'cover',
                 borderRadius: `${borderRadius}px`,
-        transition: 'transform 0.3s ease',
-        transform: isHovered ? 'scale(1.091)' : 'scale(1)',
+                transition: 'transform 0.3s ease',
+                transform: isHovered ? 'scale(1.05)' : 'scale(1)',
               }}
             /> 
           </div>
