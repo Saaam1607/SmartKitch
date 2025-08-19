@@ -34,6 +34,8 @@ export default function Card<T extends BaseItem>({
   const { componentKey, setComponentKey, resetComponentKey } = useStore();
   const [itemBeforeEdit, setItemBeforeEdit] = useState<T | null>(null);
   
+  const [isHovered, setIsHovered] = useState(false);
+
   const { setLoading } = useLoading();
 
   const isEditing = componentKey === item.name;
@@ -137,6 +139,8 @@ export default function Card<T extends BaseItem>({
 
   return (
     <BootstrapCard
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
       className={`m-0`}
       draggable="false"
       style={{
@@ -144,6 +148,7 @@ export default function Card<T extends BaseItem>({
         boxShadow: 'rgba(0, 0, 0, 0.2) 0px 2px 6px',
         backgroundColor,
         border,
+        // backgroundColor: "red"
       }}
       onClick={(e) => {
         e.stopPropagation();
@@ -152,6 +157,7 @@ export default function Card<T extends BaseItem>({
       <BootstrapCard.Body className="d-flex m-0 p-0">
         <CardComponent
           item={item}
+          isHovered={isHovered}
           isEditing={isEditing}
           handleCheckChange={handleCheckChange}
           handleTextChange={handleTextChange}
@@ -165,12 +171,10 @@ export default function Card<T extends BaseItem>({
           {!isEditing ? (
             <>
               <IconButton
-                variant="outline-orange"
+                variant="outline-secondary"
                 iconName="Pencil"
-                primaryColor="rgb(219, 123, 33)"
-                secondaryColor="white"
-                // color="rgb(219, 123, 33)"
-                // borderColor="rgb(223, 226, 230)"
+                color="rgb(219, 123, 33)"
+                borderColor="rgb(223, 226, 230)"
                 title="Edit"
                 onClick={() => startEdit(item.name)}
               />

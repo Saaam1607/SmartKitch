@@ -69,7 +69,7 @@ export default function DishesRegistry() {
       }
     }
     fetchData();
-  }, [setDishes, setIngredients, setLoading]);
+  }, [setDishes, setIngredients]);
 
 
   useEffect(() => {

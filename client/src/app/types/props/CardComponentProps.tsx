@@ -2,6 +2,7 @@ import BaseItem from '../BaseItem';
 
 export default interface CardComponentProps<T extends BaseItem> {
   item: T;
+  isHovered: boolean;
   isEditing: boolean;
   edit: (newItem: T) => void;
   handleCheckChange: (event: React.ChangeEvent<HTMLInputElement>, fieldName: string) => void;

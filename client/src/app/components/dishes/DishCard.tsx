@@ -15,11 +15,30 @@ import useStore from '../../state/useStore'
 
 import '../../styles/card.css';
 
-export default function DishCard({ item, isEditing, handleCheckChange, handleTextChange, handleImageChange, handlePriceChange, handleArrayAddition, handleArrayRemoval }: CardComponentProps<DishProp>) {
+import ColorThief from 'colorthief';
+
+
+export default function DishCard({ item, isHovered, isEditing, handleCheckChange, handleTextChange, handleImageChange, handlePriceChange, handleArrayAddition, handleArrayRemoval }: CardComponentProps<DishProp>) {
+
+
 
   const { ingredients } = useStore();
 
   const [ingredientsNames, setIngredientsNames] = useState(ingredients.map(obj => obj.name));
+
+  const [mainColor, setMainColor] = useState([255, 255, 255]); // default bianco
+
+  useEffect(() => {
+    const img = new Image();
+    img.crossOrigin = 'Anonymous'; // serve se l'immagine viene da un dominio esterno
+    img.src = item.image;
+
+    img.onload = () => {
+      const colorThief = new ColorThief();
+      const color = colorThief.getColor(img); // ritorna [R,G,B]
+      setMainColor(color);
+    };
+  }, [item]);
 
   useEffect(() => {
     setIngredientsNames(ingredients.map(obj => obj.name))
@@ -38,14 +57,22 @@ export default function DishCard({ item, isEditing, handleCheckChange, handleTex
       <div
         className="d-flex align-items-center p-3"
         style={{
-          minHeight: '100%'
+          minHeight: '100%',
+          background: `linear-gradient(to right, rgb(${mainColor[0]}, ${mainColor[1]}, ${mainColor[2]}) 75%, #ffffff 25%)`,
+          borderTopLeftRadius: "15px",
+          borderBottomLeftRadius: "15px",
         }}
       >
-        <CardImage
-          image={item.image}
-          updateImage={(image: string) => handleImageChange(image, 'image')}
-          isEditing={isEditing}
-        />
+        <div style={{border: "8px solid white", borderRadius: "15px"}}>
+          <CardImage
+            image={item.image}
+            size={175}
+            isHovered={isHovered}
+            updateImage={(image: string) => handleImageChange(image, 'image')}
+            isEditing={isEditing}
+          />
+        </div> 
+        
       </div>
 
       <div className="d-flex w-100">

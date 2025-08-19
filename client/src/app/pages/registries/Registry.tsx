@@ -95,7 +95,7 @@ export default function Registry<T extends BaseItem>({
               padding: "20px",
               background: "linear-gradient(to bottom, #f8f9fa, #e2e7f0ff)",
               // border: "2px solid #e2e7f0ff",
-  boxShadow: 'rgba(0, 0, 0, 0.15) 2.4px 2.4px 3.2px',
+              boxShadow: 'rgba(0, 0, 0, 0.15) 2.4px 2.4px 3.2px',
               borderRadius: "15px",
               flexGrow: 1,
               overflowX: "hidden",

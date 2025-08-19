@@ -67,7 +67,7 @@ export default function DishesRegistry() {
       }
     }
     fetchData();
-  }, [setDishes, setLoading, setMenuSections]);
+  }, [setDishes, setMenuSections]);
 
 
   useEffect(() => {

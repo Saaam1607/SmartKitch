@@ -22,7 +22,7 @@ export default function Registries() {
   const { isEditing } = useStore();
   const { setComponentKey } = useStore();
 
-  const [selectedRegistry, setSelectedRegistry] = useState('menu');
+  const [selectedRegistry, setSelectedRegistry] = useState('dishes');
 
   const handleSelect = (eventKey: string | null) => {
     if (!isEditing) {

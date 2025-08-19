@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "bootstrap": "^5.3.7",
+    "colorthief": "^2.6.0",
     "lucide-react": "^0.528.0",
     "mitt": "^3.0.1",
     "motion": "^12.23.12",
