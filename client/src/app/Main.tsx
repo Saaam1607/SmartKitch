@@ -11,7 +11,10 @@ import { CircleUserRound, Settings } from 'lucide-react';
 import Logo from '../assets/images/logo.png';
 
 import { LoadingProvider, useLoading } from './loadingProvider/LoadingProvider';
+import { ThemeProvider } from "./themes/ThemeProvider";
 import Spinner from './LoadingProvider/Spinner';
+
+import { useThemeStyles } from "./hooks/useThemeStyles";
 
 
 import './styles/fonts.css';
@@ -32,24 +35,33 @@ function RegistriesContent() {
 }
 
 export default function Main() {
+
+  const { bgColor, textColor, toolbarBg } = useThemeStyles();
+
   return (
     <div style={{ height: '100vh' }} className="d-flex flex-column">
       
       <div>
-        <Navbar bg="dark" data-bs-theme="dark" className="p-0" >
+        <Navbar
+          className="p-0" 
+          style={{
+            backgroundColor: toolbarBg,
+            color: "white",
+          }}
+        >
           <Container fluid>
             <NavbarBrand>
-              <h4 className="logo">SmartKitch</h4>
+              <h4 className="logo" style={{ color: "white" }}>SmartKitch</h4>
             </NavbarBrand>
             <Nav className="ms-auto">
               <Link href="/settings">
                 <div className="nav-link d-flex align-items-center">
-                  <Settings size={25} />
+                  <Settings size={25} color="lightgrey" />
                 </div>
               </Link>
               <Link href="/profile">
                 <div className="nav-link d-flex align-items-center">
-                  <CircleUserRound size={25} />
+                  <CircleUserRound size={25} color="lightgrey" />
                 </div>
               </Link>
             </Nav>
@@ -59,7 +71,9 @@ export default function Main() {
 
       <div className="d-flex flex-column" style={{ flexGrow: 1, overflow: 'hidden' }}>
         <LoadingProvider>
-          <RegistriesContent />
+          <ThemeProvider>
+            <RegistriesContent />
+          </ThemeProvider>
         </LoadingProvider>
       </div>
     </div>

@@ -31,7 +31,7 @@ interface TextAreaProps {
 function TextArea({ itemKey, value, fieldName, isEditing, handleChange }: TextAreaProps) {
   return (
   <TextareaAutosize
-    className="customScrollbar"
+    className="p-1 customScrollbar"
     minRows={1}
     maxRows={4}
     value={value}
@@ -42,6 +42,9 @@ function TextArea({ itemKey, value, fieldName, isEditing, handleChange }: TextAr
       resize: 'none',
       width: '100%',
       borderRadius: '0.25rem',
+      overflowY: 'auto',
+
+
     }}
   />
 

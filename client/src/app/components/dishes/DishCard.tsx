@@ -55,10 +55,8 @@ export default function DishCard({ item, isHovered, isEditing, handleCheckChange
   }
 
   return (
-    <motion.div
-      layout="position"
-      initial={false}
-      transition={{ duration: 0.3, ease: "easeInOut" }}
+    <div
+
       className="d-flex w-100"
     >
       <div
@@ -148,6 +146,6 @@ export default function DishCard({ item, isHovered, isEditing, handleCheckChange
           </Form>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }

@@ -9,6 +9,9 @@ import FiltersContainer from '../../components/generic/filters/FiltersContainer'
 import BaseItem from '../../types/BaseItem';
 import CrudService from "../../types/CrudService";
 
+import { LayoutGroup, motion } from "framer-motion";
+
+
 interface RegistryProps<T extends BaseItem> {
   filteredItems: T[];
   keyField: string;
@@ -88,41 +91,47 @@ export default function Registry<T extends BaseItem>({
             </div>
           )}
           
-          
-          <div
-            className="d-flex flex-column gap-3 customScrollbar"
-            style={{
-              padding: "20px",
-              background: "linear-gradient(to bottom, #f8f9fa, #e2e7f0ff)",
-              // border: "2px solid #e2e7f0ff",
-              boxShadow: 'rgba(0, 0, 0, 0.15) 2.4px 2.4px 3.2px',
-              borderRadius: "15px",
-              flexGrow: 1,
-              overflowX: "hidden",
-              overflowY: "auto",
-            }}
-          >
-            {itemsToShow.map((item, i) => {
-              return (
-                <div
-                  key={i}
-                  style={{
-                    borderRadius: "12px",
-                    boxShadow: "0 4px 15px rgba(0,0,0,0.08)"
-                  }}
-                >
-                  <Card
-                    item={item}
-                    keyField={keyField}
-                    canDelete={canDelete}
-                    updateItem={updateItem}
-                    service={service}
-                    cardComponent={cardComponent}
-                  />
-                </div>
-              );
-            })}
-          </div>
+          <LayoutGroup>
+            <div
+              className="d-flex flex-column gap-3 customScrollbar"
+              style={{
+                padding: "20px",
+                background: "linear-gradient(to bottom, #f8f9fa, #e2e7f0ff)",
+                // border: "2px solid #e2e7f0ff",
+                boxShadow: 'rgba(0, 0, 0, 0.15) 2.4px 2.4px 3.2px',
+                borderRadius: "15px",
+                flexGrow: 1,
+                overflowX: "hidden",
+                overflowY: "auto",
+              }}
+            >
+              {itemsToShow.map((item, i) => {
+                return (
+                  <motion.div
+                    layout="position"
+                    initial={true}
+                    transition={{ duration: 0.5, ease: "easeInOut" }}
+
+                    className=""
+                    key={i}
+                    style={{
+                      borderRadius: "12px",
+                      boxShadow: "0 4px 15px rgba(0,0,0,0.08)"
+                    }}
+                  >
+                    <Card
+                      item={item}
+                      keyField={keyField}
+                      canDelete={canDelete}
+                      updateItem={updateItem}
+                      service={service}
+                      cardComponent={cardComponent}
+                    />
+                  </motion.div>
+                );
+              })}
+            </div>
+          </LayoutGroup>
  
       </div>
     </div>
