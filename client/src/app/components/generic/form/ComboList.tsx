@@ -42,7 +42,6 @@ export default function ComboList({ valueList, dataList, handleValueAddition, ha
           width: '100%',
           padding: '0.2rem 0.5rem',
           outline: 'none',
-          color: '#212529',
           backgroundColor: isEditing ? 'white' : 'transparent',
           border: isEditing ? '2px solid rgb(219, 123, 33)' : '2px solid lightgrey',
         }}
@@ -55,7 +54,8 @@ export default function ComboList({ valueList, dataList, handleValueAddition, ha
               style={{
                 width: 'fit-content',
                 backgroundColor: isEditing ? 'white' : 'transparent',
-                border: isEditing ? '1px solid lightgrey' : '1px solid transparent'
+                border: isEditing ? '1px solid lightgrey' : '1px solid transparent',
+                color: "inherit",
               }}
             >
               <p

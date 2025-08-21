@@ -4,9 +4,6 @@ import DishProp from '../../types/DishProp';
 
 import Form from '../generic/form/Form';
 import Title from '../generic/form/Title';
-import CardImage from '../generic/card/CardImage';
-import Control from '../generic/form/Control';
-import Check from '../generic/form/Check';
 import MenuComboList from '../generic/form/MenuComboList';
 
 import CardComponentProps from '../../types/props/CardComponentProps';

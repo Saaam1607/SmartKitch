@@ -11,6 +11,8 @@ import CrudService from "../../types/CrudService";
 
 import { LayoutGroup, motion } from "framer-motion";
 
+import { useThemeStyles } from '../../hooks/useThemeStyles';
+
 
 interface RegistryProps<T extends BaseItem> {
   filteredItems: T[];
@@ -40,6 +42,11 @@ export default function Registry<T extends BaseItem>({
 
   const [searchTerm, setSearchTerm] = useState("");
   const [showFilters, setShowFilters] = useState<boolean>(true);
+
+  const {
+    cardsContainerBg,
+    filtersContainerBg,
+  } = useThemeStyles();
 
   useEffect(() => {
     let results = filteredItems;
@@ -79,10 +86,12 @@ export default function Registry<T extends BaseItem>({
       >
           {filtersComponent && (
             <div
-              className="customScrollbar d-flex flex-column gap-3 rounded"
+              className="customScrollbar d-flex flex-column gap-3"
               style={{
                 overflowX: 'hidden',
                 overflowY: 'auto',
+                borderRadius: '15px',
+                backgroundColor: filtersContainerBg,
               }}
             >
               <FiltersContainer showFilters={showFilters}>
@@ -96,7 +105,8 @@ export default function Registry<T extends BaseItem>({
               className="d-flex flex-column gap-3 customScrollbar"
               style={{
                 padding: "20px",
-                background: "linear-gradient(to bottom, #f8f9fa, #e2e7f0ff)",
+                backgroundColor: cardsContainerBg,
+                // background: "linear-gradient(to bottom, #f8f9fa, #e2e7f0ff)",
                 // border: "2px solid #e2e7f0ff",
                 boxShadow: 'rgba(0, 0, 0, 0.15) 2.4px 2.4px 3.2px',
                 borderRadius: "15px",

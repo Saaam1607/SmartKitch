@@ -5,20 +5,18 @@ import * as LucideIcons from "lucide-react";
 import '../../../styles/iconButton.css';
 
 type IconButtonProps = {
-  variant: string;
   iconName: string;
-  primaryColor?: string;
-  secondaryColor?: string;
-  title?: string;
+  color: string;
+  outline: boolean;
+  title: string;
   canClick?: boolean;
   onClick: () => void;
 };
 
 export default function IconButton({
-  variant,
   iconName,
-  primaryColor,
-  secondaryColor,
+  color,
+  outline,
   title,
   canClick = true,
   onClick,
@@ -27,18 +25,24 @@ export default function IconButton({
   const LucideIcon = LucideIcons[iconName as keyof typeof LucideIcons] as React.ElementType | undefined;
   const [isHovered, setIsHovered] = useState(false);
 
+  const stylesByState = {
+    normal: {
+      background: outline ? "transparent" : color,
+      text: outline ? color : "white",
+    },
+    hover: {
+      background: outline ? color : "transparent",
+      text: outline ? "white" : color,
+    },
+  };
+
+  const currentStyle = isHovered ? stylesByState.hover : stylesByState.normal;
+
   const buttonStyle: React.CSSProperties = {
     borderRadius: '10px',
-    color: isHovered
-      ? secondaryColor ?? undefined
-      : primaryColor ?? undefined,
-    backgroundColor: isHovered
-      ? primaryColor ?? undefined
-      : secondaryColor ?? undefined,
-    // imposta il bordo solo se c'è primaryColor o secondaryColor
-    ...(primaryColor || secondaryColor
-      ? { border: `1px solid ${isHovered ? (secondaryColor ?? primaryColor) : (primaryColor ?? secondaryColor)}` }
-      : {}),
+    color: currentStyle.text,
+    backgroundColor: currentStyle.background,
+    border: `1px solid ${color}`,
     cursor: canClick ? "pointer" : "not-allowed",
     display: "flex",
     alignItems: "center",
@@ -47,7 +51,6 @@ export default function IconButton({
 
   return (
     <Button
-      variant={variant}
       className="icon-button d-flex align-items-center"
       style={buttonStyle}
       onMouseEnter={() => setIsHovered(true)}

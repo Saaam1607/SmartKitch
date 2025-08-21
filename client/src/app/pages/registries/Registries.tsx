@@ -12,6 +12,8 @@ import { ChefHat, Pizza, Utensils, Wine } from 'lucide-react';
 
 import { toast } from 'sonner';
 
+import { useThemeStyles } from '../../hooks/useThemeStyles';
+
 import IngredientsRegistry from './IngredientsRegistry'
 import DrinksRegistry from './DrinksRegistry'
 import DishesRegistry from './DishesRegistry'
@@ -23,6 +25,9 @@ export default function Registries() {
   const { setComponentKey } = useStore();
 
   const [selectedRegistry, setSelectedRegistry] = useState('dishes');
+
+  const { cardsContainerBg, toolbarBg } = useThemeStyles();
+
 
   const handleSelect = (eventKey: string | null) => {
     if (!isEditing) {
@@ -41,38 +46,43 @@ export default function Registries() {
 
   return (
     <div style={{ height: '100%' }} className="d-flex flex-column">
-      <Navbar bg="dark" data-bs-theme="dark" className="p-0" >
+      <Navbar
+        style={{
+          backgroundColor: toolbarBg,
+        }}
+        className="p-0"
+      >
         <Container>
           <Nav onSelect={handleSelect} className="m-auto menu-button">
             <Nav.Item>
               <Nav.Link eventKey="ingredients" className={isActive('ingredients')}>
                 <div className="d-flex align-items-center">
-                  <ChefHat />
-                  <p>Ingredients</p>
+                  <ChefHat color="lightgrey" />
+                  <p style={{ color: "lightgrey" }}>Ingredients</p>
                 </div>
               </Nav.Link>
             </Nav.Item>
             <Nav.Item>
               <Nav.Link eventKey="dishes" className={isActive('dishes')}>
                 <div className="d-flex align-items-center">
-                  <Pizza />
-                  <p>Dishes</p>
+                  <Pizza color="lightgrey" />
+                  <p style={{ color: "lightgrey" }}>Dishes</p>
                 </div>
               </Nav.Link>
             </Nav.Item>
             <Nav.Item>
               <Nav.Link eventKey="drinks" className={isActive('drinks')}>
                 <div className="d-flex align-items-center">
-                  <Wine />
-                  <p>Drinks</p>
+                  <Wine color="lightgrey" />
+                  <p style={{ color: "lightgrey" }}>Drinks</p>
                 </div>
               </Nav.Link>
             </Nav.Item>
             <Nav.Item>
               <Nav.Link eventKey="menu" className={isActive('menu')}>
                 <div className="d-flex align-items-center">
-                  <Utensils />
-                  <p>Menu</p>
+                  <Utensils color="lightgrey" />
+                  <p style={{ color: "lightgrey" }}>Menu</p>
                 </div>
               </Nav.Link>
             </Nav.Item>

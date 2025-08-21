@@ -13,6 +13,9 @@ import { useLoading } from '../../../loadingProvider/LoadingProvider';
 
 import { toast } from 'sonner';
 
+import { useThemeStyles } from '../../../hooks/useThemeStyles';
+
+
 interface CardProps<T extends BaseItem> {
   item: T;
   keyField: string,
@@ -40,6 +43,16 @@ export default function Card<T extends BaseItem>({
 
   const isEditing = componentKey === item.name;
 
+  const {
+    mainCardBg,
+    mainCardEditingBg,
+    textColor,
+    editColor,
+    deleteColor,
+    saveColor,
+    undoColor
+  } = useThemeStyles();
+
   // STARTS EDIT
   function startEdit() {
     if (componentKey == "") {
@@ -55,7 +68,7 @@ export default function Card<T extends BaseItem>({
     try {
       setLoading(true);
       await service.editItem(item);
-      toast.info("Changes Saved");
+      toast.success("Changes Saved");
       await service.fetchItems();
       setLoading(false);
     } catch (error) {
@@ -131,7 +144,7 @@ export default function Card<T extends BaseItem>({
     updateItem(newItem);
   }
 
-  const backgroundColor = (!isEditing ? '' : 'rgba(249, 238, 233, 1)');
+  const backgroundColor = (!isEditing ? mainCardBg : mainCardEditingBg);
 
   const border = isEditing
     ? '2px solid rgb(219, 123, 33)'
@@ -147,6 +160,7 @@ export default function Card<T extends BaseItem>({
         borderRadius: '15px',
         boxShadow: 'rgba(0, 0, 0, 0.2) 0px 2px 6px',
         backgroundColor,
+        color: textColor,
         // border,
         // backgroundColor: "red"
       }}
@@ -171,18 +185,17 @@ export default function Card<T extends BaseItem>({
           {!isEditing ? (
             <>
               <IconButton
-                variant="outline-secondary"
                 iconName="Pencil"
-                color="rgb(219, 123, 33)"
-                borderColor="rgb(223, 226, 230)"
+                color={editColor}
+                outline={true}
                 title="Edit"
                 onClick={() => startEdit(item.name)}
               />
               {canDelete && (
                 <IconButton
-                  variant="outline-danger"
-                  // borderColor="rgb(223, 226, 230)"
                   iconName="Trash"
+                  color={deleteColor}
+                  outline={true}
                   title="Delete"
                   onClick={() => {deleteItem(item.name)}}
                 />
@@ -190,8 +203,20 @@ export default function Card<T extends BaseItem>({
             </>
           ) : (
             <>
-              <IconButton variant="outline-success" iconName="Save" title="Save Changes" onClick={saveChanges} />
-              <IconButton variant="outline-secondary" iconName="RotateCcw" title="Discard Changes" onClick={() => { undoChanges(itemBeforeEdit) }} />
+              <IconButton
+                iconName="Save"
+                color={saveColor}
+                outline={true}
+                title="Save Changes"
+                onClick={saveChanges}
+                />
+              <IconButton
+                iconName="RotateCcw"
+                color={undoColor}
+                outline={true}
+                title="Discard Changes"
+                onClick={() => { undoChanges(itemBeforeEdit) }}
+              />
             </>
           )}
         </div>

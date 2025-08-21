@@ -12,7 +12,7 @@ import '../../../styles/control.css';
 const commonStyle = {
   width: '100%',
   outline: 'none',
-  color: '#212529',
+  color: 'inherit',
 }
 
 const getCommonEditingStyle = (isEditing: boolean): React.CSSProperties => ({
@@ -30,39 +30,21 @@ interface TextAreaProps {
 
 function TextArea({ itemKey, value, fieldName, isEditing, handleChange }: TextAreaProps) {
   return (
-  <TextareaAutosize
-    className="p-1 customScrollbar"
-    minRows={1}
-    maxRows={4}
-    value={value}
-    onChange={handleChange}
-    style={{
-      ...commonStyle,
-      ...getCommonEditingStyle(isEditing),
-      resize: 'none',
-      width: '100%',
-      borderRadius: '0.25rem',
-      overflowY: 'auto',
-
-
-    }}
-  />
-
-    // <textarea
-    //   className="ps-2 rounded customScrollbar customTextarea"
-    //   value={value}
-    //   id={`${fieldName}-${itemKey}`}
-    //   onChange={handleChange}
-    //   style={{
-    //     ...commonStyle,
-    //     ...getCommonEditingStyle(isEditing),
-    //     // lineHeight: '1',
-    //     // height: 'auto',
-    //     // maxHeight: '100px',
-    //     // fieldSizing: 'normal',
-    //     // resize: 'none',
-    //   }}
-    // />
+    <TextareaAutosize
+      className="p-1 customScrollbar"
+      minRows={1}
+      maxRows={4}
+      value={value}
+      onChange={handleChange}
+      style={{
+        ...commonStyle,
+        ...getCommonEditingStyle(isEditing),
+        resize: 'none',
+        width: '100%',
+        borderRadius: '0.25rem',
+        overflowY: 'auto',
+      }}
+    />
   );
 }
 
@@ -127,35 +109,8 @@ function PriceInput({ type, step, itemKey, value, fieldName, isEditing, width, h
             border: 0,
             backgroundColor: 'transparent',
             outline: 'none',
-            color: '#212529',
           }}
         />
-        {/* { isEditing && (
-          <div className="d-flex flex-column" style={{ height: '2rem' }}>
-            <button
-              type="button"
-              onClick={handleIncrement}
-              className="btn btn-secondary p-0 rounded-0 rounded-top d-flex align-items-center justify-content-center"
-              style={{
-                height: '1rem',
-                width: '1.5rem',
-              }}
-            >
-              <Plus size={10}/>
-            </button>
-            <button
-              type="button"
-              onClick={handleDecrement}
-              className="btn btn-secondary p-0 rounded-0 rounded-bottom d-flex align-items-center justify-content-center"
-              style={{
-                height: '1rem',
-                width: '1.5rem',
-              }}
-            >
-              <Minus size={10}/>
-            </button>
-          </div>
-        )} */}
       </div>
     </div>
   );

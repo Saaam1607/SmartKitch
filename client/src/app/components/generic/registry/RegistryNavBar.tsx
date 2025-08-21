@@ -51,13 +51,12 @@ export default function RegistryNavBar({ searchTerm, setSearchTerm, showFilters,
           >
             {showFilters && (
               <IconButton
-                variant={"outline-secondary"}
                 iconName="SlidersHorizontal" 
-                color="rgb(89, 92, 94)"
+                color="grey"
+                outline={false}                
                 onClick={handleFiltersClick}
               />
             )}
-            
             
             <Form className="d-flex" style={{ width: '100%', maxWidth: '600px' }}>
               <div
@@ -108,7 +107,12 @@ export default function RegistryNavBar({ searchTerm, setSearchTerm, showFilters,
 
           </div>
             
-          <IconButton variant="secondary" iconName="Plus" onClick={handleCreationModalClick} />
+          <IconButton
+            iconName="Plus"
+            color="lightblue"
+            outline={false}
+            onClick={handleCreationModalClick}
+          />
 
         </div>
       </Navbar>

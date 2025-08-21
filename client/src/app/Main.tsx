@@ -39,7 +39,14 @@ export default function Main() {
   const { bgColor, textColor, toolbarBg } = useThemeStyles();
 
   return (
-    <div style={{ height: '100vh' }} className="d-flex flex-column">
+    <div 
+      className="d-flex flex-column"
+      style={{  
+        height: '100vh',
+        backgroundColor: bgColor,
+        color: textColor,
+      }}
+    >
       
       <div>
         <Navbar

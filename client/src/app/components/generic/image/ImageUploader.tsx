@@ -120,7 +120,13 @@ export default function ImageUploader({ uploadedImage, setUploadedImage, setCrop
           )}
       </div> 
 
-      <IconButton variant="danger" iconName="Trash" title="Drop Image" onClick={handleDeleteImage} />
+      <IconButton
+        iconName="Trash"
+        color="red"
+        outline={false}
+        title="Drop Image"
+        onClick={handleDeleteImage}
+      />
 
     </div>
   );
