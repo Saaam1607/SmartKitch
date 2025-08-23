@@ -22,8 +22,6 @@ import ColorThief from 'colorthief';
 
 export default function DishCard({ item, isHovered, isEditing, handleCheckChange, handleTextChange, handleImageChange, handlePriceChange, handleArrayAddition, handleArrayRemoval }: CardComponentProps<DishProp>) {
 
-
-
   const { ingredients } = useStore();
 
   const [ingredientsNames, setIngredientsNames] = useState(ingredients.map(obj => obj.name));
@@ -72,10 +70,11 @@ export default function DishCard({ item, isHovered, isEditing, handleCheckChange
           borderBottomLeftRadius: "15px",
         }}
       >
-        <div style={{border: "8px solid white", borderRadius: "15px"}}>
+        <div style={{borderRadius: "15px"}}>
           <CardImage
             image={item.image}
             size={175}
+            borderSize={8}
             // isHovered={isHovered}
             updateImage={(image: string) => handleImageChange(image, 'image')}
             isEditing={isEditing}

@@ -4,17 +4,22 @@ import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import NavbarBrand from 'react-bootstrap/NavbarBrand';
 import Container from 'react-bootstrap/Container';
+import Dropdown from 'react-bootstrap/Dropdown';
 
 import Registries from './pages/registries/Registries';
-import { CircleUserRound, Settings } from 'lucide-react';
+import { CircleUserRound, Settings, Palette } from 'lucide-react';
 
 import Logo from '../assets/images/logo.png';
 
 import { LoadingProvider, useLoading } from './loadingProvider/LoadingProvider';
-import { ThemeProvider } from "./themes/ThemeProvider";
 import Spinner from './LoadingProvider/Spinner';
 
+import InitialLogo from './components/logo/InitialLogo';
+
 import { useThemeStyles } from "./hooks/useThemeStyles";
+import { useTheme } from "./themes/ThemeProvider";
+
+import ThemeDropdown from './themes/ThemeDropDown';
 
 
 import './styles/fonts.css';
@@ -36,7 +41,14 @@ function RegistriesContent() {
 
 export default function Main() {
 
-  const { bgColor, textColor, toolbarBg } = useThemeStyles();
+  const {setThemeName } = useTheme();
+
+  const { bgColor, textColor, toolbarBg, toolbarTextColor } = useThemeStyles();
+
+  function setTheme(theme: string) {
+    setThemeName(theme);
+  };
+
 
   return (
     <div 
@@ -46,29 +58,30 @@ export default function Main() {
         backgroundColor: bgColor,
         color: textColor,
       }}
-    >
-      
+    >      
       <div>
         <Navbar
           className="p-0" 
           style={{
             backgroundColor: toolbarBg,
-            color: "white",
+            color: toolbarTextColor,
           }}
         >
           <Container fluid>
             <NavbarBrand>
-              <h4 className="logo" style={{ color: "white" }}>SmartKitch</h4>
+              <h4 className="logo" style={{ color: toolbarTextColor }}>SmartKitch</h4>
             </NavbarBrand>
+
             <Nav className="ms-auto">
+              <ThemeDropdown />
               <Link href="/settings">
                 <div className="nav-link d-flex align-items-center">
-                  <Settings size={25} color="lightgrey" />
+                  <Settings size={25} color={toolbarTextColor} />
                 </div>
               </Link>
               <Link href="/profile">
                 <div className="nav-link d-flex align-items-center">
-                  <CircleUserRound size={25} color="lightgrey" />
+                  <CircleUserRound size={25} color={toolbarTextColor} />
                 </div>
               </Link>
             </Nav>
@@ -78,9 +91,7 @@ export default function Main() {
 
       <div className="d-flex flex-column" style={{ flexGrow: 1, overflow: 'hidden' }}>
         <LoadingProvider>
-          <ThemeProvider>
-            <RegistriesContent />
-          </ThemeProvider>
+          <RegistriesContent />
         </LoadingProvider>
       </div>
     </div>

@@ -7,20 +7,28 @@ import ImageUploader from '../../generic/image/ImageUploader';
 
 import getCroppedImg from '../../../utils/getCroppedImg';
 
+import { useThemeStyles } from '../../../hooks/useThemeStyles';
+
 interface CardImageProps {
   image: string;
   size?: number;
   isHovered?: boolean;
+  borderSize?: number;
   borderRadius?: number;
   updateImage?: (image: string) => void;
   isEditing?: boolean;
 }
 
-export default function CardImage({ image, size=175, isHovered, borderRadius=15, updateImage, isEditing }: CardImageProps) {
+export default function CardImage({ image, size=175, isHovered, borderSize=0, borderRadius=15, updateImage, isEditing }: CardImageProps) {
 
   const [showEditModal, setShowEditModal] = useState(false);
   const [newImage, setNewImage] = useState<string | null>(null);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<null | { x: number; y: number; width: number; height: number }>(null);
+
+  const {
+    mainCardBg,
+    mainCardEditingBg,
+  } = useThemeStyles();
 
   async function saveChanges() {
     if (newImage) {
@@ -53,7 +61,13 @@ export default function CardImage({ image, size=175, isHovered, borderRadius=15,
         />
       </Modal>
 
-      <div className="rounded-start position-relative" >
+      <div
+        className="position-relative"
+        style={{
+          border: `${borderSize}px solid ${!isEditing ? mainCardBg : mainCardEditingBg}`, 
+          borderRadius: `${borderRadius + borderSize}px`,
+        }}
+      >
         {image && image != "" ? (
           <div
             className="rounded-start"

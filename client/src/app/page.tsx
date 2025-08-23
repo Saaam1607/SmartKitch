@@ -1,12 +1,10 @@
-import Main from './Main';
-
-import 'bootstrap/dist/css/bootstrap.min.css';
-import "./globals.css";
+import MainContainer from './MainContainer';
 
 export default function Home() {
+
   return (
     <div>
-      <Main />
+      <MainContainer />
     </div>
   );
 }

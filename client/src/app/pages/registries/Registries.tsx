@@ -19,6 +19,10 @@ import DrinksRegistry from './DrinksRegistry'
 import DishesRegistry from './DishesRegistry'
 import MenuSectionsRegistry from './MenuSectionsRegistry'
 
+import { AnimatePresence, motion } from "framer-motion";
+
+import RegistryContainer from './RegistryContainer';
+
 export default function Registries() {
 
   const { isEditing } = useStore();
@@ -26,8 +30,7 @@ export default function Registries() {
 
   const [selectedRegistry, setSelectedRegistry] = useState('dishes');
 
-  const { cardsContainerBg, toolbarBg } = useThemeStyles();
-
+  const { cardsContainerBg, toolbarBg, toolbarTextColor } = useThemeStyles();
 
   const handleSelect = (eventKey: string | null) => {
     if (!isEditing) {
@@ -57,32 +60,32 @@ export default function Registries() {
             <Nav.Item>
               <Nav.Link eventKey="ingredients" className={isActive('ingredients')}>
                 <div className="d-flex align-items-center">
-                  <ChefHat color="lightgrey" />
-                  <p style={{ color: "lightgrey" }}>Ingredients</p>
+                  <ChefHat color={toolbarTextColor} />
+                  <p style={{ color: toolbarTextColor }}>Ingredients</p>
                 </div>
               </Nav.Link>
             </Nav.Item>
             <Nav.Item>
               <Nav.Link eventKey="dishes" className={isActive('dishes')}>
                 <div className="d-flex align-items-center">
-                  <Pizza color="lightgrey" />
-                  <p style={{ color: "lightgrey" }}>Dishes</p>
+                  <Pizza color={toolbarTextColor} />
+                  <p style={{ color: toolbarTextColor }}>Dishes</p>
                 </div>
               </Nav.Link>
             </Nav.Item>
             <Nav.Item>
               <Nav.Link eventKey="drinks" className={isActive('drinks')}>
                 <div className="d-flex align-items-center">
-                  <Wine color="lightgrey" />
-                  <p style={{ color: "lightgrey" }}>Drinks</p>
+                  <Wine color={toolbarTextColor} />
+                  <p style={{ color: toolbarTextColor }}>Drinks</p>
                 </div>
               </Nav.Link>
             </Nav.Item>
             <Nav.Item>
               <Nav.Link eventKey="menu" className={isActive('menu')}>
                 <div className="d-flex align-items-center">
-                  <Utensils color="lightgrey" />
-                  <p style={{ color: "lightgrey" }}>Menu</p>
+                  <Utensils color={toolbarTextColor} />
+                  <p style={{ color: toolbarTextColor }}>Menu</p>
                 </div>
               </Nav.Link>
             </Nav.Item>
@@ -94,13 +97,30 @@ export default function Registries() {
         style={{
           flexGrow: 1,
           overflow: 'hidden',
-          // backgroundColor: 'rgba(207, 207, 210, 1)',
         }}
       >
-        {selectedRegistry === 'ingredients' && <IngredientsRegistry />}
-        {selectedRegistry === 'dishes' && <DishesRegistry />}
-        {selectedRegistry === 'drinks' && <DrinksRegistry />}
-        {selectedRegistry === 'menu' && <MenuSectionsRegistry />}
+        <AnimatePresence mode="wait">
+          <RegistryContainer
+            key='ingredients'
+            showRegistry={selectedRegistry === 'ingredients'}
+            registryComponent={<IngredientsRegistry />}
+          />
+          <RegistryContainer
+            key='dishes'
+            showRegistry={selectedRegistry === 'dishes'}
+            registryComponent={<DishesRegistry />}
+          />
+          <RegistryContainer
+            key='drinks'
+            showRegistry={selectedRegistry === 'drinks'}
+            registryComponent={<DrinksRegistry />}
+          />
+          <RegistryContainer
+            key='menu'
+            showRegistry={selectedRegistry === 'menu'}
+            registryComponent={<MenuSectionsRegistry />}
+          />
+        </AnimatePresence>
       </div>
     </div>
   );

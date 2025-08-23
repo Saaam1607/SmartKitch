@@ -18,7 +18,7 @@ export default function FiltersContainer({ showFilters, children }: FiltersProps
     >
       {showFilters && (
         <div
-          className="p-3 border"
+          className="p-3"
           style={{
             height: '100%',
           }}

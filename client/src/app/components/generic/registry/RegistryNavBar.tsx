@@ -8,6 +8,8 @@ import { Search } from 'lucide-react';
 import Form from 'react-bootstrap/Form';
 import IconButton from '../button/IconButton';
 
+import { useThemeStyles } from '../../../hooks/useThemeStyles';
+
 type RegistryNavBarProps = {
   searchTerm: boolean;
   setSearchTerm: () => void;
@@ -19,6 +21,10 @@ type RegistryNavBarProps = {
 export default function RegistryNavBar({ searchTerm, setSearchTerm, showFilters, setShowFilters, renderCreationModal }: RegistryNavBarProps) {
 
   const [showCreationModal, setShowCreationModal] = useState(false);
+
+  const {
+    newColor,
+  } = useThemeStyles();
 
   function handleFiltersClick() {
     setShowFilters(!showFilters)
@@ -109,7 +115,7 @@ export default function RegistryNavBar({ searchTerm, setSearchTerm, showFilters,
             
           <IconButton
             iconName="Plus"
-            color="lightblue"
+            color={newColor}
             outline={false}
             onClick={handleCreationModalClick}
           />

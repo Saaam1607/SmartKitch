@@ -51,7 +51,7 @@ export default function IconButton({
 
   return (
     <Button
-      className="icon-button d-flex align-items-center"
+      className="icon-button d-flex align-items-center justify-content-center"
       style={buttonStyle}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}

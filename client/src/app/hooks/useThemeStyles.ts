@@ -9,6 +9,8 @@ export function useThemeStyles() {
     bgColor: currentTheme["--bg-color"],
     textColor: currentTheme["--text-color"],
     toolbarBg: currentTheme["--toolbar-bg"],
+    toolbarTextColor: currentTheme["--toolbar-text-color"],
+    newColor: currentTheme["--new-color"],
     editColor: currentTheme["--edit-color"],
     deleteColor: currentTheme["--delete-color"],
     saveColor: currentTheme["--save-color"],
