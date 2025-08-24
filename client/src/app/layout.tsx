@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
@@ -6,6 +6,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { Toaster } from 'sonner';
 
 import { ThemeProvider } from "./themes/ThemeProvider";
+import { LoadingProvider } from './loadingProvider/LoadingProvider';
+
 
 import "./globals.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -30,12 +32,15 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <ThemeProvider>
-          <Toaster richColors position="bottom-center" />
-          {children}
+          <LoadingProvider>
+            <Toaster richColors position="bottom-center" />
+            {children}
+          </LoadingProvider>
         </ThemeProvider>
       </body>
     </html>

@@ -78,10 +78,11 @@ export default function Registry<T extends BaseItem>({
       )}
         
       <div
-        className="d-flex flex-row py-2 gap-3"
+        className="d-flex flex-row my-2 gap-3"
         style={{
           flexGrow: 1,
           overflowY: 'hidden',
+          height: '100%',
         }}
       >
           {filtersComponent && (

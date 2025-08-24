@@ -1,3 +1,8 @@
+"use client";
+
+import Spinner from './Spinner';
+
+
 import React, { createContext, useContext, useState, ReactNode, useRef } from 'react';
 
 interface LoadingContextType {
@@ -14,7 +19,9 @@ export const LoadingProvider = ({ children }: { children: ReactNode }) => {
   const setLoading = (value: boolean) => {
     if (value) {
       if (timerRef.current) clearTimeout(timerRef.current);
-      timerRef.current = setTimeout(() => setLoadingState(true), 300);
+      timerRef.current = setTimeout(() => {
+        setLoadingState(true)
+      }, 300);
     } else {
       if (timerRef.current) {
         clearTimeout(timerRef.current);
@@ -27,6 +34,7 @@ export const LoadingProvider = ({ children }: { children: ReactNode }) => {
   return (
     <LoadingContext.Provider value={{ loading, setLoading }}>
       {children}
+      {loading && <Spinner />}
     </LoadingContext.Provider>
   );
 };

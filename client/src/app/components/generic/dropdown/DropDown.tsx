@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef  } from "react";
+import { useState, useEffect, useRef } from "react";
 
 import { motion, AnimatePresence } from "framer-motion";
 import { useThemeStyles } from "../../../hooks/useThemeStyles";
@@ -18,6 +18,21 @@ export default function DropDown({ dataList, onItemClick, iconComponent } : Drop
   const { toolbarBg, toolbarTextColor } = useThemeStyles();
 
   const toggleRef = useRef<HTMLButtonElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <div
@@ -39,6 +54,7 @@ export default function DropDown({ dataList, onItemClick, iconComponent } : Drop
      <AnimatePresence>
         {isOpen && toggleRef.current && (
           <motion.div
+            ref={dropdownRef}
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
