@@ -3,6 +3,9 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 
+import usersRoutes from './routes/usersRoutes';
+
+
 import ingredientsRoutes from './routes/ingredientsRoutes';
 import dishesRoutes from './routes/dishesRoutes';
 import drinksRoutes from './routes/drinksRoutes';
@@ -24,6 +27,9 @@ app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
 app.get('/', (req: Request, res: Response) => {
   res.send('Hello World!');
 });
+
+
+app.use('/user', usersRoutes);
 
 app.use('/ingredients', ingredientsRoutes);
 app.use('/dishes', dishesRoutes);

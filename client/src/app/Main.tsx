@@ -4,7 +4,6 @@ import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import NavbarBrand from 'react-bootstrap/NavbarBrand';
 import Container from 'react-bootstrap/Container';
-import Dropdown from 'react-bootstrap/Dropdown';
 
 import Registries from './pages/registries/Registries';
 import { CircleUserRound, Settings, Palette } from 'lucide-react';
@@ -14,11 +13,10 @@ import Logo from '../assets/images/logo.png';
 import { LoadingProvider, useLoading } from './loadingProvider/LoadingProvider';
 import Spinner from './LoadingProvider/Spinner';
 
-import InitialLogo from './components/logo/InitialLogo';
+import UserDropDown from './components/generic/dropdown/UserDropDown';
 
 import { useThemeStyles } from "./hooks/useThemeStyles";
 import { useTheme } from "./themes/ThemeProvider";
-
 import ThemeDropdown from './themes/ThemeDropDown';
 
 
@@ -79,11 +77,9 @@ export default function Main() {
                   <Settings size={25} color={toolbarTextColor} />
                 </div>
               </Link>
-              <Link href="/profile">
                 <div className="nav-link d-flex align-items-center">
-                  <CircleUserRound size={25} color={toolbarTextColor} />
+                  <UserDropDown iconComponent={<CircleUserRound size={25} color={toolbarTextColor} />} />
                 </div>
-              </Link>
             </Nav>
           </Container>
         </Navbar>

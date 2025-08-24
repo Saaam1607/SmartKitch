@@ -20,12 +20,16 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const [name, setName] = useState("");
+  const [surname, setSurname] = useState("");
+
   const router = useRouter();
 
-  async function login() {
+  async function register() {
     try {
-      await usersService.login(email, password);
-      router.push('/');
+      const newUser = { email, password, name, surname };
+      await usersService.register(newUser);
+      router.push('/login');
     } catch (error) {
       console.error(error);
     }
@@ -33,7 +37,7 @@ export default function LoginPage() {
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    login();
+    register();
   };
   
   return (
@@ -76,6 +80,30 @@ export default function LoginPage() {
               />
             </Form.Group>
 
+            <br/>
+
+            <Form.Group className="mb-3" controlId="formName">
+              <Form.Control
+                type="text"
+                placeholder="Name"
+                className="auth-input p-2 px-3"
+                value={name}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
+                required
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-3" controlId="formSurname">
+              <Form.Control
+                type="text"
+                placeholder="Surname"
+                className="auth-input p-2 px-3"
+                value={surname}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSurname(e.target.value)}
+                required
+              />
+            </Form.Group>
+
           </div>
 
           <div className="d-flex justify-content-center py-4 pb-2">
@@ -83,7 +111,7 @@ export default function LoginPage() {
               type="submit"
               className="auth-button"
             >
-              LOGIN
+              REGISTER
             </Button>
           </div>
 
@@ -91,10 +119,10 @@ export default function LoginPage() {
       </Card.Body>
       <div className="auth-footer">
         <p>
-          Do not have an account?
+          Already have an account?
         </p>
-        <a href="/register" >
-          Register
+        <a href="/login" >
+          Login
         </a>
       </div>
     </Card>
