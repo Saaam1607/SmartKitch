@@ -1,22 +1,42 @@
 "use client";
 
+import { useState, useRef  } from "react";
+
 import { motion, AnimatePresence } from "framer-motion";
 import { useThemeStyles } from "../../../hooks/useThemeStyles";
 
-interface CustomDropDownProps {
-  isOpen: boolean,
-  setIsOpen: () => void,
-  toggleRef: RefObject<HTMLElement>;
+interface DropDownProps {
+  iconComponent: React.ReactNode,
   dataList: string[],
   onItemClick: (item: string) => void,
 }
 
-export default function CustomDropDown({isOpen, setIsOpen, toggleRef, dataList, onItemClick} : CustomDropDownProps) {
+export default function DropDown({ dataList, onItemClick, iconComponent } : DropDownProps) {
+
+  const [isOpen, setIsOpen] = useState(false);
 
   const { toolbarBg, toolbarTextColor } = useThemeStyles();
 
+  const toggleRef = useRef<HTMLButtonElement>(null);
+
   return (
-      <AnimatePresence>
+    <div
+      style={{ position: 'relative'}}
+    >
+      <button
+        ref={toggleRef}
+        onClick={() => setIsOpen(!isOpen)}
+        style={{
+          color: toolbarTextColor,
+          background: "unset",
+          border: "none",
+          cursor: "pointer",
+        }}
+      >
+        {iconComponent}
+      </button>
+
+     <AnimatePresence>
         {isOpen && toggleRef.current && (
           <motion.div
             initial={{ opacity: 0, y: -10 }}
@@ -40,7 +60,10 @@ export default function CustomDropDown({isOpen, setIsOpen, toggleRef, dataList, 
             {dataList.map((item) => (
               <div
                 key={item}
-                onClick={() => onItemClick(item)}
+                onClick={() => {
+                  onItemClick(item);
+                  setIsOpen(false);
+                }}
                 style={{
                   padding: "0.5rem 1rem",
                   cursor: "pointer",
@@ -53,5 +76,6 @@ export default function CustomDropDown({isOpen, setIsOpen, toggleRef, dataList, 
           </motion.div>
         )}
       </AnimatePresence>
+    </div> 
   );
 }

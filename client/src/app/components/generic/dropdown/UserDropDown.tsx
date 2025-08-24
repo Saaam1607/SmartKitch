@@ -1,10 +1,6 @@
 "use client";
 
-import { useState, useRef  } from "react";
-
-import CustomDropDown from "./Dropdown";
-
-import { useThemeStyles } from "../../../hooks/useThemeStyles";
+import Dropdown from "./Dropdown";
 
 import { useRouter } from 'next/navigation';
 
@@ -13,12 +9,6 @@ interface UserDropDownProps {
 }
 
 export default function UserDropDown({ iconComponent } : UserDropDownProps) {
-
-  const [isOpen, setIsOpen] = useState(false);
-
-  const toggleRef = useRef<HTMLButtonElement>(null);
-
-  const { toolbarBg, toolbarTextColor } = useThemeStyles();
 
   const router = useRouter();
 
@@ -41,30 +31,12 @@ export default function UserDropDown({ iconComponent } : UserDropDownProps) {
   }
 
   return (
-    <div
-      style={{ position: 'relative'}}
-    >
-      <button
-        ref={toggleRef}
-        onClick={() => setIsOpen(!isOpen)}
-        style={{
-          color: toolbarTextColor,
-          background: "unset",
-          border: "none",
-          cursor: "pointer",
-        }}
-      >
-        {iconComponent}
-      </button>
-
-      <CustomDropDown
-        isOpen={isOpen}
-        setIsOpen={setIsOpen}
-        toggleRef={toggleRef}
+    <div style={{ position: 'relative'}} >
+      <Dropdown
+        iconComponent={iconComponent}
         dataList={dataList}
         onItemClick={handleClick}
       />
-      
     </div>
   );
 }

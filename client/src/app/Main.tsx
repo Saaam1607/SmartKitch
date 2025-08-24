@@ -14,10 +14,10 @@ import { LoadingProvider, useLoading } from './loadingProvider/LoadingProvider';
 import Spinner from './LoadingProvider/Spinner';
 
 import UserDropDown from './components/generic/dropdown/UserDropDown';
+import ThemeDropDown from './components/generic/dropdown/ThemeDropDown';
 
 import { useThemeStyles } from "./hooks/useThemeStyles";
 import { useTheme } from "./themes/ThemeProvider";
-import ThemeDropdown from './themes/ThemeDropDown';
 
 
 import './styles/fonts.css';
@@ -71,15 +71,17 @@ export default function Main() {
             </NavbarBrand>
 
             <Nav className="ms-auto">
-              <ThemeDropdown />
+              <div className="nav-link d-flex align-items-center">
+                <ThemeDropDown iconComponent={<Palette size={25} color={toolbarTextColor} />} />
+              </div>
               <Link href="/settings">
                 <div className="nav-link d-flex align-items-center">
                   <Settings size={25} color={toolbarTextColor} />
                 </div>
               </Link>
-                <div className="nav-link d-flex align-items-center">
-                  <UserDropDown iconComponent={<CircleUserRound size={25} color={toolbarTextColor} />} />
-                </div>
+              <div className="nav-link d-flex align-items-center">
+                <UserDropDown iconComponent={<CircleUserRound size={25} color={toolbarTextColor} />} />
+              </div>
             </Nav>
           </Container>
         </Navbar>
