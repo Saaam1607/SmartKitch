@@ -71,5 +71,10 @@ export const deleteItem = async (name: string): Promise<boolean> => {
     DELETE FROM drinks
     WHERE name = $1
   `, [name]);
-  return result.rowCount > 0;
+  
+  if (result.rowCount) {
+    return result.rowCount > 0;
+  } else {
+    return false;
+  }
 };

@@ -48,8 +48,6 @@ export const createItem = async (item: MenuSection): Promise<MenuSection> => {
   } catch (err) {
     await pool.query('ROLLBACK');
     throw err;
-  } finally {
-    pool.release();
   }
 };
 

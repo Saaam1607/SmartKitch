@@ -31,10 +31,12 @@ export const getItems = async (): Promise<Dish[]> => {
 };
 
 export const createItem = async (newItem: Dish): Promise<Dish> => {
-  
+
+  let buffer: Buffer | undefined;
+
   if (newItem?.image) {
     const base64Data = newItem.image.replace(/^data:image\/\w+;base64,/, "");
-    const buffer = Buffer.from(base64Data, 'base64');
+    buffer = Buffer.from(base64Data, 'base64');
   }
 
   try {
@@ -62,15 +64,20 @@ export const createItem = async (newItem: Dish): Promise<Dish> => {
 
     await pool.query('COMMIT');
 
-    return {
-      ...newItem,
-      image: `data:image/jpeg;base64,${buffer.toString('base64')}`,
-    };
+    if (buffer) {
+      return {
+        ...newItem,
+        image: `data:image/jpeg;base64,${buffer.toString('base64')}`,
+      };
+    } else {
+      return {
+        ...newItem
+      };
+    }
+
   } catch (err) {
     await pool.query('ROLLBACK');
     throw err;
-  } finally {
-    pool.release();
   }
 };
 
@@ -134,5 +141,10 @@ export const deleteItem = async (name: string): Promise<boolean> => {
     DELETE FROM dishes
     WHERE name = $1
   `, [name]);
-  return result.rowCount > 0;
+  
+  if (result.rowCount) {
+    return result.rowCount > 0;
+  } else {
+    return false;
+  }
 };

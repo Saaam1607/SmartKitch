@@ -16,9 +16,7 @@ export const registerUser = async (req: Request, res: Response) => {
       return res.status(400).json({ message: 'Missing required fields' });
     }
 
-    const newUser = { email, password, name, surname };
-
-    const user = await usersService.register(newUser);
+    const user = await usersService.register(email, password, name, surname);
     res.status(201).json(user);
   } catch (error) {
     console.error(error);

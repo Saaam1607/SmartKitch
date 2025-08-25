@@ -15,19 +15,19 @@ async function verifyPassword(password: string, hash: string): Promise<boolean> 
   return await bcrypt.compare(password, hash);
 }
 
-export const register = async (newUser: User): Promise<User> => {
+export const register = async (email: string, password: string, name: string, surname: string): Promise<User> => {
 
-  const hashedPassword = await hashPassword(newUser.password);
+  const hashedPassword = await hashPassword(password);
 
   const result = await pool.query(`
     INSERT INTO users (email, password_hash, name, surname)
     VALUES ($1, $2, $3, $4)
     RETURNING email, name, surname
   `, [
-      newUser.email,
+      email,
       hashedPassword,
-      newUser.name,
-      newUser.surname,
+      name,
+      surname,
     ]
   );
   return result.rows[0];
