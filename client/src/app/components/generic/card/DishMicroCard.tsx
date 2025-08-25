@@ -1,15 +1,8 @@
 import React, { useState, useEffect } from 'react';
 
-import DishProp from '../../types/DishProp';
+import { Dish } from "@my-org/shared";
 
-import Form from '../form/Form';
-import Title from '../form/Title';
 import CardImage from '../card/CardImage';
-import Control from '../form/Control';
-import Check from '../form/Check';
-import ComboList from '../form/ComboList';
-
-import CardComponentProps from '../../types/props/CardComponentProps';
 
 import useStore from '../../../state/useStore'
 
@@ -25,7 +18,7 @@ export default function DishMicroCard({ dishName, isSelected, menuSection }: Dis
 
   const { dishes } = useStore();
 
-  const [dish, setDish] = useState<DishProp | null>(null);
+  const [dish, setDish] = useState<Dish | null>(null);
 
   useEffect(() => {
     const foundDish = dishes.find(d => d.name === dishName);
@@ -38,7 +31,7 @@ export default function DishMicroCard({ dishName, isSelected, menuSection }: Dis
       className="d-flex w-100"
       style={{
         borderRadius: "15px",
-        backgroundColor: isSelected ?  'rgba(231, 231, 231, 1)' : 'rgba(231, 231, 231, 1)',        backgroundColor: isSelected ?  'rgba(231, 231, 231, 1)' : 'rgba(215, 215, 215, 1)',
+        backgroundColor: isSelected ?  'rgba(231, 231, 231, 1)' : 'rgba(231, 231, 231, 1)',        
         opacity: menuSection ? '0.4' : '1',
         border: isSelected ? '2px solid rgb(219, 123, 33)' : "2px solid transparent",
         color: isSelected ? 'rgba(165, 89, 18, 1)' : 'black',

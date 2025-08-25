@@ -11,10 +11,10 @@ import IconButton from '../button/IconButton';
 import { useThemeStyles } from '../../../hooks/useThemeStyles';
 
 type RegistryNavBarProps = {
-  searchTerm: boolean;
-  setSearchTerm: () => void;
+  searchTerm: string;
+  setSearchTerm: (value: string) => void;
   showFilters?: boolean;
-  setShowFilters?: () => void;
+  setShowFilters?: (value: boolean) => void;
   renderCreationModal: (visible: boolean, close: () => void) => React.ReactNode;
 };
 
@@ -27,7 +27,8 @@ export default function RegistryNavBar({ searchTerm, setSearchTerm, showFilters,
   } = useThemeStyles();
 
   function handleFiltersClick() {
-    setShowFilters(!showFilters)
+    if (setShowFilters)
+      setShowFilters(!showFilters)
   }
 
   function handleSearchChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -59,7 +60,8 @@ export default function RegistryNavBar({ searchTerm, setSearchTerm, showFilters,
               <IconButton
                 iconName="SlidersHorizontal" 
                 color="grey"
-                outline={false}                
+                outline={false}
+                title="Filters"
                 onClick={handleFiltersClick}
               />
             )}
@@ -117,6 +119,7 @@ export default function RegistryNavBar({ searchTerm, setSearchTerm, showFilters,
             iconName="Plus"
             color={newColor}
             outline={false}
+            title='New Item'
             onClick={handleCreationModalClick}
           />
 

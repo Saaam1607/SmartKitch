@@ -1,38 +1,20 @@
-import { CrudService } from "../types/CrudService";
+import CrudService from "../types/CrudService";
 
-import IngredientProp from '../types/IngredientProp'
+import { Ingredient } from "@my-org/shared";
+
+import { blobToBase64, blobUrlToBlob } from "../utils/blobToBase64";
 
 const API_URL = 'http://localhost:5001/ingredients';
 
-function blobToBase64(blob: Blob): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      resolve(reader.result as string);
-    };
-    reader.onerror = reject;
-    reader.readAsDataURL(blob);
-  });
-}
-
-async function blobUrlToBlob(blobUrl: string): Promise<Blob> {
-  const response = await fetch(blobUrl);
-  const blob = await response.blob();
-  return blob;
-}
-
-export const ingredientsService: CrudService<IngredientProp> = {
+export const ingredientsService: CrudService<Ingredient> = {
   
-  async fetchItems(): Promise<IngredientProp[]> {
+  async fetchItems(): Promise<Ingredient[]> {
     const res = await fetch(API_URL);
     if (!res.ok) throw new Error('Failed to fetch ingredients');
     return res.json();
   },
 
-  async addItem(newIngredient: IngredientProp): Promise<IngredientProp> {
-    const base64Image = await blobToBase64(newIngredient.image);
-    newIngredient = { ...newIngredient, image: base64Image };
-    
+  async addItem(newIngredient: Ingredient): Promise<Ingredient> {
     const res = await fetch(API_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -43,18 +25,14 @@ export const ingredientsService: CrudService<IngredientProp> = {
     return res.json();
   },
 
-  async editItem(newIngredient: IngredientProp): Promise<IngredientProp> {
+  async editItem(newIngredient: Ingredient): Promise<Ingredient> {
     let imageBase64: string = '';
 
-    if (newIngredient.image instanceof Blob) {
-      imageBase64 = await blobToBase64(newIngredient.image);
-    } else if (typeof newIngredient.image === 'string') {
-      if (newIngredient.image.startsWith('data:image')) {
-        imageBase64 = newIngredient.image;
-      } else if (newIngredient.image.startsWith('blob:')) {
-        const blob = await blobUrlToBlob(newIngredient.image);
-        imageBase64 = await blobToBase64(blob);
-      }
+    if (newIngredient.image.startsWith('data:image')) {
+      imageBase64 = newIngredient.image;
+    } else if (newIngredient.image.startsWith('blob:')) {
+      const blob = await blobUrlToBlob(newIngredient.image);
+      imageBase64 = await blobToBase64(blob);
     }
 
     const ingredientToSend = { ...newIngredient, image: imageBase64 };

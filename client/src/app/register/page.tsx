@@ -16,6 +16,8 @@ import usersService from '../services/usersService'
 
 import { useLoading } from '../loadingProvider/LoadingProvider';
 
+import { User } from "@my-org/shared";
+
 import '../styles/auth.css'
 
 export default function LoginPage() {
@@ -33,8 +35,7 @@ export default function LoginPage() {
   async function register() {
     setLoading(true);
     try {
-      const newUser = { email, password, name, surname };
-      await usersService.register(newUser);
+      await usersService.register(email, password, name, surname);
       router.push('/login');
     } catch (error) {
       console.error(error);

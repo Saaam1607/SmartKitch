@@ -25,7 +25,6 @@ import RegistryContainer from './RegistryContainer';
 
 export default function Registries() {
 
-  const { isEditing } = useStore();
   const { setComponentKey } = useStore();
 
   const [selectedRegistry, setSelectedRegistry] = useState('dishes');
@@ -33,13 +32,9 @@ export default function Registries() {
   const { cardsContainerBg, toolbarBg, toolbarTextColor } = useThemeStyles();
 
   const handleSelect = (eventKey: string | null) => {
-    if (!isEditing) {
-      setComponentKey("");
-      if (eventKey) {
-        setSelectedRegistry(eventKey);
-      }
-    } else {
-      toast.warning("Finish editing before changing section");
+    setComponentKey("");
+    if (eventKey) {
+      setSelectedRegistry(eventKey);
     }
   }
 

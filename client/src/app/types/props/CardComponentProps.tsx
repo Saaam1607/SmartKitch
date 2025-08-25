@@ -1,14 +1,14 @@
-import BaseItem from '../BaseItem';
+import { BaseItem } from "@my-org/shared";
 
 export default interface CardComponentProps<T extends BaseItem> {
   item: T;
   isHovered: boolean;
   isEditing: boolean;
-  edit: (newItem: T) => void;
   handleCheckChange: (event: React.ChangeEvent<HTMLInputElement>, fieldName: string) => void;
   handleTextChange: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, fieldName: string) => void;
   handleImageChange: (newImage: string, fieldName: string) => void;
   handlePriceChange: (event: React.ChangeEvent<HTMLInputElement>, fieldName: string) => void;
-  handleArrayAddition?: (string: value, fieldName: string) => void;
-  handleArrayRemoval?: (string: value, fieldName: string) => void;
+  handleArrayAddition?: (value: string, fieldName: string) => void;
+  handleArrayRemoval?: (value: string, fieldName: string) => void;
+  handleArraySet?: (newArray: string[], fieldName: string) => void;
 }

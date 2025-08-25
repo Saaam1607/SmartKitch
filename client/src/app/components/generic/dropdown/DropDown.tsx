@@ -5,13 +5,14 @@ import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useThemeStyles } from "../../../hooks/useThemeStyles";
 
-interface DropDownProps {
+
+interface DropDownProps<T> {
   iconComponent: React.ReactNode,
-  dataList: string[],
-  onItemClick: (item: string) => void,
+  dataList: T[],
+  onItemClick: (item: T) => void,
 }
 
-export default function DropDown({ dataList, onItemClick, iconComponent } : DropDownProps) {
+export default function Dropdown<T>({ dataList, onItemClick, iconComponent } : DropDownProps<T>) {
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -73,9 +74,9 @@ export default function DropDown({ dataList, onItemClick, iconComponent } : Drop
               zIndex: 1000,
             }}
           >
-            {dataList.map((item) => (
+            {dataList.map((item, idx) => (
               <div
-                key={item}
+                key={typeof item === "string" ? item : idx}
                 onClick={() => {
                   onItemClick(item);
                   setIsOpen(false);
@@ -86,7 +87,9 @@ export default function DropDown({ dataList, onItemClick, iconComponent } : Drop
                   borderBottom: "1px solid rgba(0,0,0,0.05)",
                 }}
               >
-                {item.charAt(0).toUpperCase() + item.slice(1)}
+                {typeof item === "string"
+                  ? item.charAt(0).toUpperCase() + item.slice(1)
+                  : String(item)}
               </div>
             ))}
           </motion.div>

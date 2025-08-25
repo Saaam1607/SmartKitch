@@ -6,18 +6,19 @@ import Card from '../../components/generic/card/Card'
 import FiltersContainer from '../../components/generic/filters/FiltersContainer'
 
 // Types
-import BaseItem from '../../types/BaseItem';
+import { BaseItem } from "@my-org/shared";
 import CrudService from "../../types/CrudService";
 
 import { LayoutGroup, motion } from "framer-motion";
 
 import { useThemeStyles } from '../../hooks/useThemeStyles';
 
+import CardComponentProps from '../../types/props/CardComponentProps';
 
 interface RegistryProps<T extends BaseItem> {
   filteredItems: T[];
   keyField: string;
-  cardComponent: React.ReactNode;
+  cardComponent: React.ComponentType<CardComponentProps<T>>;
   canDelete?: boolean;
   updateItem: (newItem: T) => void;
   service: CrudService<T>,
@@ -40,7 +41,7 @@ export default function Registry<T extends BaseItem>({
 
   const [itemsToShow, setItemsToShow] = useState<T[]>(filteredItems);
 
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState<string>("");
   const [showFilters, setShowFilters] = useState<boolean>(true);
 
   const {
@@ -52,7 +53,11 @@ export default function Registry<T extends BaseItem>({
     let results = filteredItems;
     if (searchTerm != "") {
       results = results.filter((item) =>
-        item[keyField].toLowerCase().includes(searchTerm.toLowerCase())
+        {
+          const _keyField = keyField as keyof T;
+          const value = String(item[_keyField]);
+          return value.toLowerCase().includes(searchTerm.toLowerCase())
+        }
       );
     }
     setItemsToShow(results);  

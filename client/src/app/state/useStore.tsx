@@ -1,8 +1,6 @@
 import { create } from 'zustand';
 
-import IngredientProp from '../types/IngredientProp';
-import DishProp from '../types/DishProp';
-import DrinkProp from '../types/DrinkProp';
+import { Ingredient, Dish, Drink } from "@my-org/shared";
 import { MenuSection } from "@my-org/shared";
 
 type Store = {
@@ -10,17 +8,17 @@ type Store = {
   resetComponentKey: () => void;
   setComponentKey: (newComponentKey: string) => boolean;
 
-  ingredients: IngredientProp[];
-  setIngredients: (newIngredients: IngredientProp[]) => void;
-  updateIngredient: (newIngredient: IngredientProp) => void;
-  
-  dishes: DishProp[];
-  setIngredients: (newItems: IngredientProp[]) => void;
-  updateIngredient: (newItem: IngredientProp) => void;
+  ingredients: Ingredient[];
+  setIngredients: (newIngredients: Ingredient[]) => void;
+  updateIngredient: (newIngredient: Ingredient) => void;
 
-  drinks: DrinkProp[];
-  setIngredients: (newItems: DrinkProp[]) => void;
-  updateIngredient: (newItem: DrinkProp) => void;
+  dishes: Dish[];
+  setDishes: (newItems: Dish[]) => void;
+  updateDish: (newItem: Dish) => void;
+
+  drinks: Drink[];
+  setDrinks: (newItems: Drink[]) => void;
+  updateDrink: (newItem: Drink) => void;
 
   menuSections: MenuSection[];
   setMenuSections: (newItems: MenuSection[]) => void;
@@ -34,11 +32,11 @@ const useStore = create<Store>((set, get) => ({
   drinks: [],
   menuSections: [],
   
-  setIngredients: (newIngredients: IngredientProp[]) => {
+  setIngredients: (newIngredients: Ingredient[]) => {
     set({ ingredients: newIngredients });
   },
 
-  updateIngredient: (newIngredient: IngredientProp) => {
+  updateIngredient: (newIngredient: Ingredient) => {
     set((state) => ({
       ingredients: state.ingredients.map((ingredient) =>
         ingredient.name === newIngredient.name ? newIngredient : ingredient
@@ -46,11 +44,11 @@ const useStore = create<Store>((set, get) => ({
     }));
   },
 
-  setDishes: (newItems: DishProp[]) => {
+  setDishes: (newItems: Dish[]) => {
     set({ dishes: newItems });
   },
 
-  updateDish: (newItem: DishProp) => {
+  updateDish: (newItem: Dish) => {
     set((state) => ({
       dishes: state.dishes.map((item) =>
         item.name === newItem.name ? newItem : item
@@ -58,11 +56,11 @@ const useStore = create<Store>((set, get) => ({
     }));
   },
 
-  setDrinks: (newItems: DrinkProp[]) => {
+  setDrinks: (newItems: Drink[]) => {
     set({ drinks: newItems });
   },
 
-  updateDrink: (newItem: DrinkProp) => {
+  updateDrink: (newItem: Drink) => {
     set((state) => ({
       drinks: state.drinks.map((item) =>
         item.name === newItem.name ? newItem : item

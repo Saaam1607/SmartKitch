@@ -4,11 +4,10 @@ import React, { useEffect, useState } from 'react';
 import MenuSectionCard from '../../components/menuSections/MenuSectionCard';
 import MenuSectionDishesCard from '../../components/menuSections/MenuSectionDishesCard';
 import MenuSectionsCreationModal from '../../components/menuSections/MenuSectionsCreationModal';
-import Switch from '../../components/generic/form/Switch';
 import Registry from './Registry'
 
 // Types
-import DishProp from '../../types/DishProp';
+import MenuSection from '@my-org/shared/src/MenuSection';
 
 // Utils
 import { useLoading } from '../../loadingProvider/LoadingProvider';
@@ -23,32 +22,11 @@ interface FiltersProps {
   setFilterByDisabled: (value: boolean) => void;
 }
 
-function Filters({ filterByOutOfStock, setFilterByOutOfStock, filterByDisabled, setFilterByDisabled } : FiltersProps ) {
-  return (
-    <div className="d-flex flex-column">
-      <Switch
-        itemKey={ 'Out of Stock Filter' }
-        value={filterByOutOfStock}
-        fieldName="Out of Stock"
-        isEditing={true}
-        handleChange={() => setFilterByOutOfStock(!filterByOutOfStock)}
-      />
-      <Switch
-        itemKey={ 'Disabled Filter' }
-        value={filterByDisabled}
-        fieldName="Disabled"
-        isEditing={true}
-        handleChange={() => setFilterByDisabled(!filterByDisabled)}
-      />
-    </div>
-  );
-}
-
-export default function DishesRegistry() {
+export default function MenuSectionRegistry() {
 
   const { menuSections, updateMenuSection, setMenuSections } = useStore();
   const { setDishes } = useStore();
-  const [filteredItems, setFilteredItems] = useState<DishProp[]>([]);
+  const [filteredItems, setFilteredItems] = useState<MenuSection[]>([]);
 
   const { setLoading } = useLoading();
 
@@ -76,7 +54,7 @@ export default function DishesRegistry() {
   }, [menuSections]);
 
 
-  async function createItem(newItem: DishProp) {
+  async function createItem(newItem: MenuSection) {
     try {
       await menuSectionsService.addItem(newItem); 
       const freshData = await menuSectionsService.fetchItems();

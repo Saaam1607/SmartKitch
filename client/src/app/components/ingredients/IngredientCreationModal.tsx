@@ -7,16 +7,18 @@ import Check from '../generic/form/Check';
 
 import { Area } from 'react-easy-crop';
 
-import IngredientProp from '../../types/IngredientProp';
+import { Ingredient } from "@my-org/shared";
 
 import getCroppedImg from '../../utils/getCroppedImg';
 
+import { blobToBase64, blobUrlToBlob } from '../../utils/blobToBase64';
+
 import '../../styles/creationModal.css';
 
-interface Props {
+interface IngredientCreationModalProps {
   visible: boolean;
   close: () => void;
-  create: (ingredient: IngredientProp) => void;
+  create: (ingredient: Ingredient) => void;
 }
 
 export default function IngredientCreationModal({ visible, close, create }: IngredientCreationModalProps) {
@@ -39,19 +41,21 @@ export default function IngredientCreationModal({ visible, close, create }: Ingr
   }, [visible])
 
   async function createItem() {
-    let newIngredient: IngredientProp = {
+    let newIngredient: Ingredient = {
       name: name,
       description: description,
       image: '',
       outOfStock: outOfStock,
       disabled: disabled,
+      isAddable: false,
+      additionPrice: 0,
     }
 
     if (uploadedImage && croppedAreaPixels) {
       const croppedBlob = await getCroppedImg(uploadedImage, croppedAreaPixels) as Blob;
       newIngredient = {
         ...newIngredient,
-        image: croppedBlob,
+        image: await blobToBase64(croppedBlob),
       };
     } else {
       newIngredient = { ...newIngredient };

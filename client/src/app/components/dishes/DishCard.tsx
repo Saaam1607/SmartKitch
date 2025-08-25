@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { motion } from "motion/react"
-
-import DishProp from '../../types/DishProp';
+import { Dish } from "@my-org/shared";
 
 import Form from '../generic/form/Form';
 import Title from '../generic/form/Title';
@@ -20,13 +18,13 @@ import '../../styles/card.css';
 import ColorThief from 'colorthief';
 
 
-export default function DishCard({ item, isHovered, isEditing, handleCheckChange, handleTextChange, handleImageChange, handlePriceChange, handleArrayAddition, handleArrayRemoval }: CardComponentProps<DishProp>) {
+export default function DishCard({ item, isHovered, isEditing, handleCheckChange, handleTextChange, handleImageChange, handlePriceChange, handleArrayAddition, handleArrayRemoval }: CardComponentProps<Dish>) {
 
   const { ingredients } = useStore();
 
   const [ingredientsNames, setIngredientsNames] = useState(ingredients.map(obj => obj.name));
 
-  const [mainColor, setMainColor] = useState([]); // default bianco
+  const [mainColor, setMainColor] = useState<[number, number, number] | null>(null); // default bianco
 
   useEffect(() => {
     const img = new Image();
@@ -35,7 +33,7 @@ export default function DishCard({ item, isHovered, isEditing, handleCheckChange
 
     img.onload = () => {
       const colorThief = new ColorThief();
-      const color = colorThief.getColor(img); // ritorna [R,G,B]
+      const color: [number, number, number] = colorThief.getColor(img); // ritorna [R,G,B]
       setMainColor(color);
     };
   }, [item]);
@@ -45,11 +43,15 @@ export default function DishCard({ item, isHovered, isEditing, handleCheckChange
   }, [ingredients])
 
   function handleIngredientAddition(ingredient: string) {
-    handleArrayAddition(ingredient, "ingredients")
+    if (handleArrayAddition) {
+      handleArrayAddition(ingredient, "ingredients")
+    }
   }
 
   function handleIngredientRemoval(ingredient: string) {
-    handleArrayRemoval(ingredient, "ingredients")
+    if (handleArrayRemoval) {
+      handleArrayRemoval(ingredient, "ingredients")
+    }
   }
 
   return (
@@ -61,11 +63,11 @@ export default function DishCard({ item, isHovered, isEditing, handleCheckChange
         className="d-flex align-items-center p-3"
         style={{
           minHeight: '100%',
-          background: mainColor.length > 0
+          background: mainColor && mainColor.length > 0
             ? `linear-gradient(to right, rgb(${mainColor[0]}, ${mainColor[1]}, ${mainColor[2]}) 75%, transparent 25%)`
             : "#ffffff",
           transition: "opacity 0.5s ease",
-          opacity: mainColor.length > 0 ? 1 : 0,
+          opacity: mainColor && mainColor.length > 0 ? 1 : 0,
           borderTopLeftRadius: "15px",
           borderBottomLeftRadius: "15px",
         }}

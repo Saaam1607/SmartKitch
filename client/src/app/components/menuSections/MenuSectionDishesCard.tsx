@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import DishProp from '../../types/DishProp';
+import { MenuSection } from "@my-org/shared";
 
 import Form from '../generic/form/Form';
 import Title from '../generic/form/Title';
@@ -12,17 +12,17 @@ import useStore from '../../state/useStore'
 
 import '../../styles/card.css';
 
-export default function MenuSectionDishesCard({ item, isEditing, handleCheckChange, handleTextChange, handleImageChange, handlePriceChange, handleArraySet }: CardComponentProps<DishProp>) {
+export default function MenuSectionDishesCard({ item, isEditing, handleCheckChange, handleTextChange, handleImageChange, handlePriceChange, handleArraySet }: CardComponentProps<MenuSection>) {
 
   const { menuSections } = useStore();
   const { dishes } = useStore();
 
-  const [availableDishes, setAvailableDishes] = useState([]);
+  const [availableDishes, setAvailableDishes] = useState<{ item: string; menuSection: string }[]>([]);
 
   useEffect(() => {
-    setAvailableDishes(dishes.map(dish => {
-      
-      const menuSection = menuSections.find(section => section.dishes.includes(dish.name))?.name || ''
+    return setAvailableDishes(dishes.map(dish => {
+
+      const menuSection = menuSections.find(section => section.dishes.includes(dish.name))?.name || '';
 
       return {
         item: dish.name,

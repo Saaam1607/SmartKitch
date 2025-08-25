@@ -1,40 +1,20 @@
-import { CrudService } from "../types/CrudService";
+import CrudService from "../types/CrudService";
 
-import DishProp from '../types/DishProp'
+import { Dish } from "@my-org/shared";
+
+import { blobToBase64, blobUrlToBlob } from "../utils/blobToBase64";
 
 const API_URL = 'http://localhost:5001/dishes';
 
-function blobToBase64(blob: Blob): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      resolve(reader.result as string);
-    };
-    reader.onerror = reject;
-    reader.readAsDataURL(blob);
-  });
-}
-
-async function blobUrlToBlob(blobUrl: string): Promise<Blob> {
-  const response = await fetch(blobUrl);
-  const blob = await response.blob();
-  return blob;
-}
-
-export const dishesService: CrudService<DishProp> = {
+export const dishesService: CrudService<Dish> = {
   
-  async fetchItems(): Promise<DishProp[]> {
+  async fetchItems(): Promise<Dish[]> {
     const res = await fetch(API_URL);
     if (!res.ok) throw new Error('Failed to fetch items');
     return res.json();
   },
 
-  async addItem(newItem: DishProp): Promise<DishProp> {
-    if (newItem?.image) {
-      const base64Image = await blobToBase64(newItem.image);
-      newItem = { ...newItem, image: base64Image };
-    }
-    
+  async addItem(newItem: Dish): Promise<Dish> {
     const res = await fetch(API_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -45,18 +25,14 @@ export const dishesService: CrudService<DishProp> = {
     return res.json();
   },
 
-  async editItem(newItem: DishProp): Promise<DishProp> {
+  async editItem(newItem: Dish): Promise<Dish> {
     let imageBase64: string = '';
 
-    if (newItem?.image instanceof Blob) {
-      imageBase64 = await blobToBase64(newItem.image);
-    } else if (typeof newItem.image === 'string') {
-      if (newItem.image.startsWith('data:image')) {
-        imageBase64 = newItem.image;
-      } else if (newItem.image.startsWith('blob:')) {
-        const blob = await blobUrlToBlob(newItem.image);
-        imageBase64 = await blobToBase64(blob);
-      }
+    if (newItem.image.startsWith('data:image')) {
+      imageBase64 = newItem.image;
+    } else if (newItem.image.startsWith('blob:')) {
+      const blob = await blobUrlToBlob(newItem.image);
+      imageBase64 = await blobToBase64(blob);
     }
 
     const itemToSend = { ...newItem, image: imageBase64 };

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import DishProp from '../../types/DishProp';
+import { MenuSection } from "@my-org/shared";
 
 import Form from '../generic/form/Form';
 import Title from '../generic/form/Title';
@@ -13,7 +13,7 @@ import useStore from '../../state/useStore'
 
 import '../../styles/card.css';
 
-export default function MenuSectionCard({ item, isEditing, handleCheckChange, handleTextChange, handleImageChange, handlePriceChange, handleArrayAddition, handleArrayRemoval }: CardComponentProps<DishProp>) {
+export default function MenuSectionCard({ item, isEditing, handleCheckChange, handleTextChange, handleImageChange, handlePriceChange, handleArrayAddition, handleArrayRemoval }: CardComponentProps<MenuSection>) {
 
   const { menuSections } = useStore();
 
@@ -24,11 +24,15 @@ export default function MenuSectionCard({ item, isEditing, handleCheckChange, ha
   }, [menuSections])
 
   function handleIngredientAddition(ingredient: string) {
-    handleArrayAddition(ingredient, "ingredients")
+    if (handleArrayAddition) {
+      handleArrayAddition(ingredient, "ingredients")
+    }
   }
 
   function handleIngredientRemoval(ingredient: string) {
-    handleArrayRemoval(ingredient, "ingredients")
+    if (handleArrayRemoval) {
+      handleArrayRemoval(ingredient, "ingredients")
+    }
   }
 
   return (

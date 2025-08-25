@@ -2,8 +2,6 @@ import React from 'react';
 
 import { Form } from 'react-bootstrap';
 
-import { Plus, Minus } from 'lucide-react';
-
 import TextareaAutosize from 'react-textarea-autosize';
 
 import '../../../styles/scrollbar.css';
@@ -29,6 +27,16 @@ interface TextAreaProps {
 }
 
 function TextArea({ itemKey, value, fieldName, isEditing, handleChange }: TextAreaProps) {
+  
+  const textAreaStyle: React.CSSProperties = {
+    ...commonStyle,
+    ...getCommonEditingStyle(isEditing || false),
+    resize: 'none',
+    width: '100%',
+    borderRadius: '0.25rem',
+    overflowY: 'auto',
+  };
+
   return (
     <TextareaAutosize
       className="p-1 customScrollbar"
@@ -36,14 +44,8 @@ function TextArea({ itemKey, value, fieldName, isEditing, handleChange }: TextAr
       maxRows={4}
       value={value}
       onChange={handleChange}
-      style={{
-        ...commonStyle,
-        ...getCommonEditingStyle(isEditing),
-        resize: 'none',
-        width: '100%',
-        borderRadius: '0.25rem',
-        overflowY: 'auto',
-      }}
+      // style={textAreaStyle}
+
     />
   );
 }
@@ -82,7 +84,9 @@ function PriceInput({ type, step, itemKey, value, fieldName, isEditing, width, h
         value: fixedValue,
       },
     } as React.ChangeEvent<HTMLInputElement>;
-    handleChange(fakeEvent);
+    if (handleChange) {
+      handleChange(fakeEvent);
+    }
   };
 
   return (
@@ -93,7 +97,7 @@ function PriceInput({ type, step, itemKey, value, fieldName, isEditing, width, h
         className="d-flex rounded"
         style={{
           ...commonStyle,
-          ...getCommonEditingStyle(isEditing),
+          ...getCommonEditingStyle(isEditing || false),
           ...width ? { width: `${width}px` } : { width: '100px' },
         }}
       >
@@ -135,7 +139,7 @@ function TextInput({ type, itemKey, value, fieldName, isEditing, handleChange }:
       onChange={handleChange}
       style={{
         ...commonStyle,
-        ...getCommonEditingStyle(isEditing),
+        ...getCommonEditingStyle(isEditing || false),
       }}
     />
   );

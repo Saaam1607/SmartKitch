@@ -1,15 +1,9 @@
 import React, { useState, useEffect } from 'react';
 
-import DishProp from '../../types/DishProp';
+import { Dish } from "@my-org/shared";
 
-import Form from '../form/Form';
-import Title from '../form/Title';
 import CardImage from '../card/CardImage';
 import Control from '../form/Control';
-import Check from '../form/Check';
-import ComboList from '../form/ComboList';
-
-import CardComponentProps from '../../types/props/CardComponentProps';
 
 import useStore from '../../../state/useStore'
 
@@ -23,7 +17,7 @@ export default function DishMiniCard({ dishName }: DishMiniCardProps) {
 
   const { dishes } = useStore();
 
-  const [dish, setDish] = useState<DishProp | null>(null);
+  const [dish, setDish] = useState<Dish | null>(null);
 
   useEffect(() => {
     const foundDish = dishes.find(d => d.name === dishName);

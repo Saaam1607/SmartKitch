@@ -7,7 +7,7 @@ import Switch from '../../components/generic/form/Switch';
 import Registry from './Registry'
 
 // Types
-import IngredientProp from '../../types/IngredientProp';
+import { Ingredient } from "@my-org/shared";
 
 // Utils
 import { useLoading } from '../../loadingProvider/LoadingProvider';
@@ -45,7 +45,7 @@ function Filters({ filterByOutOfStock, setFilterByOutOfStock, filterByDisabled, 
 export default function IngredientsRegistry() {
 
   const { ingredients, updateIngredient, setIngredients } = useStore();
-  const [filteredItems, setFilteredItems] = useState<IngredientProp[]>([]);
+  const [filteredItems, setFilteredItems] = useState<Ingredient[]>([]);
 
   const [filterByOutOfStock, setFilterByOutOfStock] = useState(false);
   const [filterByDisabled, setFilterByDisabled] = useState(false);
@@ -80,11 +80,10 @@ export default function IngredientsRegistry() {
     setFilteredItems(results);
   }, [ingredients, filterByOutOfStock, filterByDisabled]);
 
-
-  async function createItem(newItem: IngredientProp) {
+  async function createItem(newItem: Ingredient) {
     try {
-      await addIngredient(newItem); 
-      const freshData = await fetchIngredients();
+      await ingredientsService.addItem(newItem);
+      const freshData = await ingredientsService.fetchItems();
       setIngredients(freshData);
     } catch (error) {
       console.error(error);

@@ -34,9 +34,10 @@ export default function CardImage({ image, size=175, isHovered, borderSize=0, bo
     if (newImage) {
       const croppedBlob = await getCroppedImg(newImage, croppedAreaPixels) as Blob;
       const imageUrl = URL.createObjectURL(croppedBlob);
-      updateImage(imageUrl);
+      if (imageUrl && updateImage)
+        updateImage(imageUrl as string);
     } else {
-      updateImage("");
+      if (updateImage) updateImage("");
     }
     setShowEditModal(false);
     setCroppedAreaPixels(null);

@@ -3,6 +3,9 @@
 import Dropdown from "./Dropdown";
 
 import { useTheme } from "../../../themes/ThemeProvider";
+import { themes } from "../../../themes/themes";
+
+type ThemeName = keyof typeof themes;
 
 interface ThemeDropDownProps {
   iconComponent: React.ReactNode,
@@ -12,7 +15,7 @@ export default function ThemeDropDown({ iconComponent } : ThemeDropDownProps) {
 
   const { themeName, setThemeName } = useTheme();
 
-  const dataList: string[] = [
+  const dataList: ThemeName[] = [
     "light",
     "dark",
     "solarized",
@@ -20,10 +23,8 @@ export default function ThemeDropDown({ iconComponent } : ThemeDropDownProps) {
     "twilight"
   ];
 
-  function handleClick(item: string) {
-    if (dataList.includes(item)) {
-      setThemeName(item);
-    }
+  function handleClick(item: ThemeName) {
+    setThemeName(item);
   }
 
   return (

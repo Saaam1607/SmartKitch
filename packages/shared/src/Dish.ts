@@ -1,6 +1,8 @@
-import BaseItemType from './BaseItemType';
+import BaseItem from './BaseItem';
 
-export default interface Dish extends BaseItemType {
+export default interface Dish extends BaseItem {
   price: number;
   ingredients: string[];
+  image: string;
+  outOfStock: boolean;
 }

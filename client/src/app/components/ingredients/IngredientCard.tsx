@@ -1,6 +1,6 @@
 import React from 'react';
 
-import IngredientProp from '../../types/IngredientProp';
+import { Ingredient } from "@my-org/shared";
 
 import Form from '../generic/form/Form';
 import Title from '../generic/form/Title';
@@ -14,7 +14,7 @@ import CardComponentProps from '../../types/props/CardComponentProps';
 
 import '../../styles/card.css';
 
-export default function IngredientCard({ item, isEditing, handleCheckChange, handleTextChange, handleImageChange, handlePriceChange }: CardComponentProps<IngredientProp>) {
+export default function IngredientCard({ item, isEditing, handleCheckChange, handleTextChange, handleImageChange, handlePriceChange }: CardComponentProps<Ingredient>) {
 
   return (
     <div className="d-flex w-100" >

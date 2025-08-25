@@ -7,7 +7,7 @@ import Switch from '../../components/generic/form/Switch';
 import Registry from './Registry'
 
 // Types
-import DishProp from '../../types/DishProp';
+import { Dish } from "@my-org/shared";
 
 // Utils
 import { useLoading } from '../../loadingProvider/LoadingProvider';
@@ -48,7 +48,7 @@ export default function DishesRegistry() {
   const { dishes, updateDish, setDishes } = useStore();
   const { setIngredients } = useStore();
 
-  const [filteredItems, setFilteredItems] = useState<DishProp[]>([]);
+  const [filteredItems, setFilteredItems] = useState<Dish[]>([]);
   const [filterByOutOfStock, setFilterByOutOfStock] = useState(false);
   const [filterByDisabled, setFilterByDisabled] = useState(false);
 
@@ -85,7 +85,7 @@ export default function DishesRegistry() {
   }, [dishes, filterByOutOfStock, filterByDisabled]);
 
 
-  async function createItem(newItem: DishProp) {
+  async function createItem(newItem: Dish) {
     try {
       await dishesService.addItem(newItem); 
       const freshData = await dishesService.fetchItems();
@@ -112,11 +112,12 @@ export default function DishesRegistry() {
         />
       }
       renderCreationModal={(visible: boolean, close: () => void) => (
-        <IngredientCreationModal
-          visible={visible}
-          close={close}
-          create={createItem}
-        />
+       <></> 
+        // <IngredientCreationModal
+        //   visible={visible}
+        //   close={close}
+        //   create={createItem}
+        // />
       )}
     />
   );

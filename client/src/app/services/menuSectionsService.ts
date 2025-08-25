@@ -1,6 +1,8 @@
-import { CrudService } from "../types/CrudService";
+import CrudService from "../types/CrudService";
 
 import { MenuSection } from "@my-org/shared";
+
+import { blobToBase64, blobUrlToBlob } from "../utils/blobToBase64";
 
 const API_URL = 'http://localhost:5001/menuSections';
 
@@ -24,20 +26,7 @@ export const menuSectionsService: CrudService<MenuSection> = {
   },
 
   async editItem(newItem: MenuSection): Promise<MenuSection> {
-    let imageBase64: string = '';
-
-    if (newItem?.image instanceof Blob) {
-      imageBase64 = await blobToBase64(newItem.image);
-    } else if (typeof newItem.image === 'string') {
-      if (newItem.image.startsWith('data:image')) {
-        imageBase64 = newItem.image;
-      } else if (newItem.image.startsWith('blob:')) {
-        const blob = await blobUrlToBlob(newItem.image);
-        imageBase64 = await blobToBase64(blob);
-      }
-    }
-
-    const itemToSend = { ...newItem, image: imageBase64 };
+    const itemToSend = newItem
 
     const res = await fetch(`${API_URL}/${encodeURIComponent(newItem.name)}`, {
       method: 'PUT',
@@ -47,6 +36,10 @@ export const menuSectionsService: CrudService<MenuSection> = {
 
     if (!res.ok) throw new Error('Failed to edit item');
     return res.json();
+  },
+
+  async deleteItem(componentKey: string): Promise<void> {
+    return;
   },
 
 };

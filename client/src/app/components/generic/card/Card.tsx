@@ -4,9 +4,10 @@ import { Card as BootstrapCard } from 'react-bootstrap';
 
 import useStore from '../../../state/useStore'
 
-import BaseItem from '../../../types/BaseItem';
-import CrudService from "../../types/CrudService";
-import CardComponentProps from '../../types/props/CardComponentProps';
+import { BaseItem } from "@my-org/shared";
+
+import CrudService from "../../../types/CrudService";
+import CardComponentProps from '../../../types/props/CardComponentProps';
 import IconButton from '../button/IconButton'
 
 import { useLoading } from '../../../loadingProvider/LoadingProvider';
@@ -57,7 +58,7 @@ export default function Card<T extends BaseItem>({
   function startEdit() {
     if (componentKey == "") {
       setItemBeforeEdit(item);
-      setComponentKey(item[keyField]);
+      setComponentKey(item[keyField as keyof T] as string);
     } else {
       toast.warning("You are already editing an item");
     }
@@ -121,9 +122,10 @@ export default function Card<T extends BaseItem>({
   }
 
   function handleArrayAddition(value: string, fieldName: string) {
-    if (!item[fieldName].includes(value)) {
 
-      const newArray = item[fieldName];
+    if (!(item[fieldName as keyof T] as Array<string>).includes(value)) {
+
+      const newArray = item[fieldName as keyof T] as Array<string>;
       newArray.push(value);
 
       const newItem = { ...item, [fieldName]: newArray };
@@ -132,8 +134,8 @@ export default function Card<T extends BaseItem>({
   }
 
   function handleArrayRemoval(value: string, fieldName: string) {
-    if (item[fieldName].includes(value)) {
-      const newArray = item[fieldName].filter(i => i != value);
+    if ((item[fieldName as keyof T] as Array<string>).includes(value)) {
+      const newArray = (item[fieldName as keyof T] as Array<string>).filter(i => i != value);
       const newItem = { ...item, [fieldName]: newArray };
       updateItem(newItem);
     }
@@ -189,7 +191,7 @@ export default function Card<T extends BaseItem>({
                 color={editColor}
                 outline={true}
                 title="Edit"
-                onClick={() => startEdit(item.name)}
+                onClick={() => startEdit()}
               />
               {canDelete && (
                 <IconButton
@@ -215,7 +217,11 @@ export default function Card<T extends BaseItem>({
                 color={undoColor}
                 outline={true}
                 title="Discard Changes"
-                onClick={() => { undoChanges(itemBeforeEdit) }}
+                onClick={() => {
+                  if (itemBeforeEdit)
+                    undoChanges(itemBeforeEdit)
+                  }
+                }
               />
             </>
           )}

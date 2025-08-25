@@ -11,8 +11,8 @@ import { X, SquarePlus } from 'lucide-react';
 
 interface MenuComboListProps {
   valueList: string[];
-  dataList: {dish: string, menuSection: string}[];
-  handleArraySet: (newArray: string[], fieldName: string) => void;
+  dataList: {item: string, menuSection: string}[];
+  handleArraySet?: (newArray: string[], fieldName: string) => void;
   fieldName: string;
   itemKey: string;
   isEditing: boolean;
@@ -20,12 +20,13 @@ interface MenuComboListProps {
 
 export default function MenuComboList({ valueList, dataList, handleArraySet, fieldName, itemKey, isEditing }: MenuComboListProps) {
 
-  const [availableValues, setAvailableValues] = useState([]);
+  const [availableValues, setAvailableValues] = useState<{ dish: string, menuSection: string, isSelected: boolean }[]>([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   useEffect(() => {
     const data = dataList.map(item => ({
-      ...item,
+      dish: item.item,
+      menuSection: item.menuSection,
       isSelected: valueList?.includes(item.item) ?? false
     }));
     setAvailableValues(data);
@@ -38,16 +39,18 @@ export default function MenuComboList({ valueList, dataList, handleArraySet, fie
   function handleSelectionChange(item: string) {
     setAvailableValues(prev =>
       prev.map(el =>
-        el.item === item ? { ...el, isSelected: !el.isSelected } : el
+        el.dish === item ? { ...el, isSelected: !el.isSelected } : el
       )
     );
   }
 
   function saveChangesFromModal() {
-    handleArraySet(
-      availableValues.filter(el => el.isSelected).map(el => el.item),
-      fieldName
-    );
+    if (handleArraySet) {
+      handleArraySet(
+        availableValues.filter(el => el.isSelected).map(el => el.dish),
+        fieldName
+      );
+    }
     closeModal();
   }
 
@@ -116,14 +119,14 @@ export default function MenuComboList({ valueList, dataList, handleArraySet, fie
                       key={index}
                       onClick={() => {
                         if (item.menuSection === "")
-                          handleSelectionChange(item.item);
+                          handleSelectionChange(item.dish);
                       }}
                       style={{
                         cursor: "pointer",
                       }}
                     >
                       <DishMicroCard
-                        dishName={item.item}
+                        dishName={item.dish}
                         isSelected={item.isSelected}
                         menuSection={item.menuSection}
                       />

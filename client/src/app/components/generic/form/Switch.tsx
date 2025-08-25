@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { Form } from 'react-bootstrap';
-import Switch from "react-switch";
 
 import '../../../styles/switch.css';
 

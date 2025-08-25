@@ -7,7 +7,7 @@ import Switch from '../../components/generic/form/Switch';
 import Registry from './Registry'
 
 // Types
-import DrinkProp from '../../types/DrinkProp';
+import { Drink } from "@my-org/shared";
 
 // Utils
 import { useLoading } from '../../loadingProvider/LoadingProvider';
@@ -45,7 +45,7 @@ function Filters({ filterByOutOfStock, setFilterByOutOfStock, filterByDisabled, 
 export default function IngredientsRegistry() {
 
   const { drinks, updateDrink, setDrinks } = useStore();
-  const [filteredItems, setFilteredItems] = useState<DrinkProp[]>([]);
+  const [filteredItems, setFilteredItems] = useState<Drink[]>([]);
 
   const [filterByOutOfStock, setFilterByOutOfStock] = useState(false);
   const [filterByDisabled, setFilterByDisabled] = useState(false);
@@ -81,7 +81,7 @@ export default function IngredientsRegistry() {
   }, [drinks, filterByOutOfStock, filterByDisabled]);
 
 
-  async function createItem(newItem: DrinkProp) {
+  async function createItem(newItem: Drink) {
     try {
       await drinksService.addItem(newItem); 
       const freshData = await drinksService.fetchItems();
@@ -108,11 +108,12 @@ export default function IngredientsRegistry() {
         />
       }
       renderCreationModal={(visible: boolean, close: () => void) => (
-        <IngredientCreationModal
-          visible={visible}
-          close={close}
-          create={createItem}
-        />
+        <></>
+        // <IngredientCreationModal
+        //   visible={visible}
+        //   close={close}
+        //   create={createItem}
+        // />
       )}
     />
   );
