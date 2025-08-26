@@ -4,7 +4,7 @@ import { Drink } from '@models/Drink';
 
 import { blobToBase64, blobUrlToBlob } from "../utils/blobToBase64";
 
-const API_URL = 'http://localhost:5001/drinks';
+const API_URL = (process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5001") + '/drinks';
 
 
 

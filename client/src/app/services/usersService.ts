@@ -2,7 +2,7 @@ import UserService from "../types/UserService";
 
 import { User } from '@models/User';
 
-const API_URL = 'http://localhost:5001/user';
+const API_URL = (process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5001") + '/user';
 
 
 export const usersService: UserService = {

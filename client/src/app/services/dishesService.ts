@@ -4,7 +4,9 @@ import { Dish } from '@models/Dish';
 
 import { blobToBase64, blobUrlToBlob } from "../utils/blobToBase64";
 
-const API_URL = 'http://localhost:5001/dishes';
+const API_URL = (process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5001") + '/dishes';
+
+console.log(process.env.BACKEND_URL)
 
 export const dishesService: CrudService<Dish> = {
   
