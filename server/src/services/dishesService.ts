@@ -1,6 +1,6 @@
 import pool from '../config/database';
 
-import { Dish } from '@models/Dish';
+import { Dish } from '../models/Dish';
 
 export const getItems = async (): Promise<Dish[]> => {
   const result = await pool.query(`

@@ -2,8 +2,8 @@
   "compilerOptions": {
     "target": "ES2020",
     "module": "commonjs",
+    "rootDir": "./src",
     "outDir": "./dist",
-    "rootDir": "..",
     "noEmit": true,
     "strict": true,
     "esModuleInterop": true,
@@ -12,7 +12,6 @@
     "baseUrl": "..",
     "paths": {
       "@/*": ["server/src/*"],
-      "@models/*": ["types/*"]
     }
   },
   "include": ["src/**/*.ts"],

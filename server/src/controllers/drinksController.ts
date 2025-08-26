@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import * as drinksService from '../services/drinksService';
 
-import { Drink } from '@models/Drink';
+import { Drink } from '../models/Drink';
 
 export const getDrinks = async (req: Request, res: Response) => {
   try {

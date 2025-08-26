@@ -1,6 +1,6 @@
 import pool from '../config/database';
 
-import { User } from '@models/User';
+import { User } from '../models/User';
 
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');

@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import * as usersService from '../services/usersService';
 
-import { User } from '@models/User';
+import { User } from '../models/User';
 
 export const registerUser = async (req: Request, res: Response) => {
   

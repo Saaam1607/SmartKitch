@@ -1,6 +1,6 @@
 import pool from '../config/database';
 
-import { Ingredient } from '@models/Ingredient';
+import { Ingredient } from '../models/Ingredient';
 
 export const getItems = async (): Promise<Ingredient[]> => {
   const result = await pool.query('SELECT name, description, out_of_stock AS "outOfStock", disabled, is_addable AS "isAddable", addition_price AS "additionPrice" FROM ingredients');

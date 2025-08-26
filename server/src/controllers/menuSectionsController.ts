@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import * as menuSectionsService from '../services/menuSectionsService';
 
-import { MenuSection } from '@models/MenuSection';
+import { MenuSection } from '../models/MenuSection';
 
 export const getMenuSections = async (req: Request, res: Response) => {
   try {

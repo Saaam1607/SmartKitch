@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import * as ingredientsService from '../services/ingredientsService';
 
-import { Ingredient } from '@models/Ingredient';
+import { Ingredient } from '../models/Ingredient';
 
 export const getIngredients = async (req: Request, res: Response) => {
   try {

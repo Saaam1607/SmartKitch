@@ -1,6 +1,6 @@
 import pool from '../config/database';
 
-import { MenuSection } from '@models/MenuSection';
+import { MenuSection } from '../models/MenuSection';
 
 export const getItems = async (): Promise<MenuSection[]> => {
 const result = await pool.query(`
