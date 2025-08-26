@@ -1,6 +1,6 @@
-import BaseItem from './BaseItem';
+import { BaseItem } from './BaseItem';
 
-export default interface Dish extends BaseItem {
+export interface Dish extends BaseItem {
   price: number;
   ingredients: string[];
   image: string;

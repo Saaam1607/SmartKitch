@@ -1,6 +1,5 @@
-export default interface MenuSection {
+export interface BaseItem {
   name: string;
   description: string;
   disabled: boolean;
-  dishes: string[];
 }

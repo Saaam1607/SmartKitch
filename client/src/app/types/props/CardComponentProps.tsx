@@ -1,4 +1,4 @@
-import { BaseItem } from "@my-org/shared";
+import { BaseItem } from '@models/BaseItem';
 
 export default interface CardComponentProps<T extends BaseItem> {
   item: T;

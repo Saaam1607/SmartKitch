@@ -16,7 +16,7 @@ import usersService from '../services/usersService'
 
 import { useLoading } from '../loadingProvider/LoadingProvider';
 
-import { User } from "@my-org/shared";
+import { User } from '@models/User';
 
 import '../styles/auth.css'
 

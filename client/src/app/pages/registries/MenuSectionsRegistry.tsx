@@ -7,8 +7,7 @@ import MenuSectionsCreationModal from '../../components/menuSections/MenuSection
 import Registry from './Registry'
 
 // Types
-import MenuSection from '@my-org/shared/src/MenuSection';
-
+import { MenuSection } from '@models/MenuSection';
 // Utils
 import { useLoading } from '../../loadingProvider/LoadingProvider';
 import menuSectionsService from '../../services/menuSectionsService';

@@ -4,7 +4,7 @@ import { Card as BootstrapCard } from 'react-bootstrap';
 
 import useStore from '../../../state/useStore'
 
-import { BaseItem } from "@my-org/shared";
+import { BaseItem } from '@models/BaseItem';
 
 import CrudService from "../../../types/CrudService";
 import CardComponentProps from '../../../types/props/CardComponentProps';

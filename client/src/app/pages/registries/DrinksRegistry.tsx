@@ -7,8 +7,7 @@ import Switch from '../../components/generic/form/Switch';
 import Registry from './Registry'
 
 // Types
-import { Drink } from "@my-org/shared";
-
+import { Drink } from '@models/Drink';
 // Utils
 import { useLoading } from '../../loadingProvider/LoadingProvider';
 import drinksService from '../../services/drinksService';

@@ -1,6 +1,6 @@
 import CrudService from "../types/CrudService";
 
-import { Ingredient } from "@my-org/shared";
+import { Ingredient } from '@models/Ingredient';
 
 import { blobToBase64, blobUrlToBlob } from "../utils/blobToBase64";
 

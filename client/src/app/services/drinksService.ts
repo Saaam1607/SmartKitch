@@ -1,6 +1,6 @@
 import CrudService from "../types/CrudService";
 
-import { Drink } from "@my-org/shared";
+import { Drink } from '@models/Drink';
 
 import { blobToBase64, blobUrlToBlob } from "../utils/blobToBase64";
 

@@ -1,6 +1,6 @@
 import CrudService from "../types/CrudService";
 
-import { Dish } from "@my-org/shared";
+import { Dish } from '@models/Dish';
 
 import { blobToBase64, blobUrlToBlob } from "../utils/blobToBase64";
 

@@ -1,7 +1,9 @@
 import { create } from 'zustand';
 
-import { Ingredient, Dish, Drink } from "@my-org/shared";
-import { MenuSection } from "@my-org/shared";
+import { Ingredient } from '@models/Ingredient';
+import type { Dish } from '@models/Dish';
+import { Drink } from '@models/Drink';
+import { MenuSection } from '@models/MenuSection';
 
 type Store = {
   componentKey: string;

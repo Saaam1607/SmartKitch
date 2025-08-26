@@ -1,6 +1,6 @@
 import UserService from "../types/UserService";
 
-import { User } from "@my-org/shared";
+import { User } from '@models/User';
 
 const API_URL = 'http://localhost:5001/user';
 

@@ -6,7 +6,7 @@ import Card from '../../components/generic/card/Card'
 import FiltersContainer from '../../components/generic/filters/FiltersContainer'
 
 // Types
-import { BaseItem } from "@my-org/shared";
+import { BaseItem } from '@models/BaseItem';
 import CrudService from "../../types/CrudService";
 
 import { LayoutGroup, motion } from "framer-motion";

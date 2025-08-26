@@ -7,7 +7,7 @@ import Check from '../generic/form/Check';
 
 import { Area } from 'react-easy-crop';
 
-import { Ingredient } from "@my-org/shared";
+import { Ingredient } from '@models/Ingredient';
 
 import getCroppedImg from '../../utils/getCroppedImg';
 

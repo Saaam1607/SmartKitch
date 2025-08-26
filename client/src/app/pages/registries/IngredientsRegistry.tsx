@@ -7,7 +7,7 @@ import Switch from '../../components/generic/form/Switch';
 import Registry from './Registry'
 
 // Types
-import { Ingredient } from "@my-org/shared";
+import { Ingredient } from '@models/Ingredient';
 
 // Utils
 import { useLoading } from '../../loadingProvider/LoadingProvider';

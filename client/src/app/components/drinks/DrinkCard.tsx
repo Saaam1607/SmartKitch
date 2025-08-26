@@ -1,7 +1,6 @@
 import React from 'react';
 
-import { Drink } from "@my-org/shared";
-
+import { Drink } from '@models/Drink';
 import Form from '../generic/form/Form';
 import Title from '../generic/form/Title';
 import CardImage from '../generic/card/CardImage';

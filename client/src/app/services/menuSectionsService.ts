@@ -1,6 +1,6 @@
 import CrudService from "../types/CrudService";
 
-import { MenuSection } from "@my-org/shared";
+import { MenuSection } from '@models/MenuSection';
 
 import { blobToBase64, blobUrlToBlob } from "../utils/blobToBase64";
 

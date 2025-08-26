@@ -7,7 +7,7 @@ import Switch from '../../components/generic/form/Switch';
 import Registry from './Registry'
 
 // Types
-import { Dish } from "@my-org/shared";
+import type { Dish } from '@models/Dish';
 
 // Utils
 import { useLoading } from '../../loadingProvider/LoadingProvider';

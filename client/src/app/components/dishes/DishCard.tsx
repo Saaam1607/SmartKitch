@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 
-import { Dish } from "@my-org/shared";
+import type { BaseItem } from '@models/BaseItem';
+import type { Dish } from '@models/Dish';
+import type { Ingredient } from '@models/Ingredient';
 
 import Form from '../generic/form/Form';
 import Title from '../generic/form/Title';
@@ -18,9 +20,9 @@ import '../../styles/card.css';
 import ColorThief from 'colorthief';
 
 
-export default function DishCard({ item, isHovered, isEditing, handleCheckChange, handleTextChange, handleImageChange, handlePriceChange, handleArrayAddition, handleArrayRemoval }: CardComponentProps<Dish>) {
+export default function DishCard<T extends BaseItem>({ item, isHovered, isEditing, handleCheckChange, handleTextChange, handleImageChange, handlePriceChange, handleArrayAddition, handleArrayRemoval }: CardComponentProps<Dish>) {
 
-  const { ingredients } = useStore();
+  const ingredients = useStore((state) => state.ingredients);
 
   const [ingredientsNames, setIngredientsNames] = useState(ingredients.map(obj => obj.name));
 

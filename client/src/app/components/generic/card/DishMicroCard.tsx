@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { Dish } from "@my-org/shared";
+import type { Dish } from '@models/Dish';
 
 import CardImage from '../card/CardImage';
 

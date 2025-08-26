@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Ingredient } from "@my-org/shared";
+import { Ingredient } from '@models/Ingredient';
 
 import Form from '../generic/form/Form';
 import Title from '../generic/form/Title';

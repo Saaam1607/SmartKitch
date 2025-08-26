@@ -4,7 +4,7 @@ import Modal from '../generic/modal/Modal';
 import Control from '../generic/form/Control';
 import Check from '../generic/form/Check';
 
-import { MenuSection } from "@my-org/shared";
+import { MenuSection } from '@models/MenuSection';
 
 import '../../styles/creationModal.css';
 

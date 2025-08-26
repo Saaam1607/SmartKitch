@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { MenuSection } from "@my-org/shared";
+import { MenuSection } from '@models/MenuSection';
 
 import Form from '../generic/form/Form';
 import Title from '../generic/form/Title';

@@ -1,6 +1,6 @@
 import pool from '../config/database';
 
-import { Drink } from "@my-org/shared";
+import { Drink } from '@models/Drink';
 
 export const getItems = async (): Promise<Drink[]> => {
   const result = await pool.query('SELECT name, description, out_of_stock AS "outOfStock", disabled, price FROM drinks');

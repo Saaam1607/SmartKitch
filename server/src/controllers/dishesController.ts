@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import * as dishesService from '../services/dishesService';
 
-import { Dish } from "@my-org/shared";
+import { Dish } from '@models/Dish';
 
 export const getDishes = async (req: Request, res: Response) => {
   try {
