@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useRef, useState, useCallback } from 'react';
 
 import { Form } from 'react-bootstrap';
 
-import TextareaAutosize from 'react-textarea-autosize';
+import debounce from "lodash/debounce";
 
 import '../../../styles/scrollbar.css';
 import '../../../styles/control.css';
+
+import useAutosizeTextArea from "./useAutosizeTextArea";
 
 const commonStyle = {
   width: '100%',
@@ -28,24 +30,43 @@ interface TextAreaProps {
 
 function TextArea({ itemKey, value, fieldName, isEditing, handleChange }: TextAreaProps) {
   
-  const textAreaStyle: React.CSSProperties = {
-    ...commonStyle,
-    ...getCommonEditingStyle(isEditing || false),
-    resize: 'none',
-    width: '100%',
-    borderRadius: '0.25rem',
-    overflowY: 'auto',
-  };
+  const textAreaRef = useRef<HTMLTextAreaElement>(null);
+  useAutosizeTextArea(textAreaRef.current, value);
+
+  const [internalValue, setInternalValue] = useState(value);
+
+  const debouncedHandleChange = useCallback(
+    debounce((val: string) => {
+      handleChange({
+        target: { value: val } as HTMLTextAreaElement,
+      } as React.ChangeEvent<HTMLTextAreaElement>);
+    }, 300),
+    [handleChange]
+  );
+
+  function handleInternalChange(event: React.ChangeEvent<HTMLTextAreaElement>) {
+    setInternalValue(event.target.value);
+    debouncedHandleChange(event.target.value);
+  }
 
   return (
-    <TextareaAutosize
+    <textarea
       className="p-1 customScrollbar"
-      minRows={1}
-      maxRows={4}
-      value={value}
-      onChange={handleChange}
-      // style={textAreaStyle}
-
+      id="review-text"
+      onChange={handleInternalChange}
+      placeholder=""
+      ref={textAreaRef}
+      rows={1}
+      value={internalValue}
+      style={{
+        ...commonStyle,
+        ...getCommonEditingStyle(isEditing || false),
+        resize: 'none',
+        width: '100%',
+        borderRadius: '0.25rem',
+        overflowY: 'auto',
+        height: 'fit-content'
+      }}
     />
   );
 }

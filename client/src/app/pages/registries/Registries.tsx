@@ -23,28 +23,32 @@ import { AnimatePresence, motion } from "framer-motion";
 
 import RegistryContainer from './RegistryContainer';
 
-export default function Registries() {
 
-  const { setComponentKey } = useStore();
+interface RegistriesProps {
+  selectedRegistry: string;
+  handleSelect: (eventKey: string | null) => null;
+}
 
-  const [selectedRegistry, setSelectedRegistry] = useState('dishes');
+export default function Registries({
+  selectedRegistry,
+  handleSelect,
+} : RegistriesProps) {
 
   const { cardsContainerBg, toolbarBg, toolbarTextColor } = useThemeStyles();
-
-  const handleSelect = (eventKey: string | null) => {
-    setComponentKey("");
-    if (eventKey) {
-      setSelectedRegistry(eventKey);
-    }
-  }
 
   const isActive = (path: string) => {
     return selectedRegistry === path ? 'active' : '';
   };
 
   return (
-    <div style={{ height: '100%' }} className="d-flex flex-column">
-      <Navbar
+    <div
+      style={{
+        height: '100%',
+        width: '100%',
+      }}
+      className="d-flex flex-column"
+    >
+      {/* <Navbar
         style={{
           backgroundColor: toolbarBg,
         }}
@@ -86,7 +90,7 @@ export default function Registries() {
             </Nav.Item>
           </Nav>
         </Container>
-      </Navbar>
+      </Navbar> */}
       <div
         className="p-3"
         style={{

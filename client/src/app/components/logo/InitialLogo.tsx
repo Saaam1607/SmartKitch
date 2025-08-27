@@ -29,6 +29,7 @@ export default function InitialLogo() {
       variants={container}
       initial="hidden"
       animate="visible"
+      className="m-0 p-0"
       style={{
         fontSize: "3rem",
         display: "flex",

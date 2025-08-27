@@ -1,5 +1,9 @@
 "use client";
 
+import React, { useState } from 'react';
+
+import useStore from './state/useStore'
+
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import NavbarBrand from 'react-bootstrap/NavbarBrand';
@@ -11,7 +15,14 @@ import { CircleUserRound, Settings, Palette } from 'lucide-react';
 import UserDropDown from './components/generic/dropdown/UserDropDown';
 import ThemeDropDown from './components/generic/dropdown/ThemeDropDown';
 
+import Menu from "./Menu";
+
 import { useThemeStyles } from "./hooks/useThemeStyles";
+
+import { LibraryBig } from 'lucide-react';
+import { ChefHat, Pizza, Utensils, Wine } from 'lucide-react';
+
+import Image from "next/image";
 
 import './styles/fonts.css';
 import './styles/logo.css';
@@ -22,6 +33,18 @@ import Link from 'next/link';
 export default function Main() {
 
   const { bgColor, textColor, toolbarBg, toolbarTextColor } = useThemeStyles();
+
+  const { setComponentKey } = useStore();
+
+  const [selectedRegistry, setSelectedRegistry] = useState('dishes');
+
+
+  const handleSelect = (eventKey: string | null) => {
+    setComponentKey("");
+    if (eventKey) {
+      setSelectedRegistry(eventKey);
+    }
+  }
 
   return (
     <div 
@@ -41,7 +64,13 @@ export default function Main() {
           }}
         >
           <Container fluid>
-            <NavbarBrand>
+            <NavbarBrand className="d-flex align-items-center gap-2">
+              <Image
+                src="/assets/logo/SKlightgrey.png"
+                alt="SmartKitch Logo"
+                width={20}
+                height={20}
+              />
               <h4 className="logo" style={{ color: toolbarTextColor }}>SmartKitch</h4>
             </NavbarBrand>
 
@@ -62,8 +91,21 @@ export default function Main() {
         </Navbar>
       </div>
 
-      <div className="d-flex flex-column" style={{ flexGrow: 1, overflow: 'hidden' }}>
-        <Registries />
+      <div
+        className="d-flex flex-row"
+        style={{
+          width: '100%',
+          flexGrow: 1,
+          overflow: 'hidden'
+        }}
+      >
+        <Menu
+          handleSelect={handleSelect}
+        />
+        <Registries
+          selectedRegistry={selectedRegistry}
+          handleSelect={handleSelect}
+        />
       </div>
     </div>
   );
