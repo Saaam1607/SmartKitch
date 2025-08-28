@@ -26,12 +26,10 @@ import RegistryContainer from './RegistryContainer';
 
 interface RegistriesProps {
   selectedRegistry: string;
-  handleSelect: (eventKey: string | null) => null;
 }
 
 export default function Registries({
   selectedRegistry,
-  handleSelect,
 } : RegistriesProps) {
 
   const { cardsContainerBg, toolbarBg, toolbarTextColor } = useThemeStyles();

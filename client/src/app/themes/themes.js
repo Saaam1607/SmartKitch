@@ -31,7 +31,7 @@ export const themes = {
   },
   solarized: {
     "--toolbar-bg": "rgb(101, 123, 131)",
-    "--toolbar-text-color": "rgba(38, 46, 49, 1)",
+    "--toolbar-text-color": "rgb(38, 46, 49)",
     "--bg-color": "rgb(253, 246, 227)",
     "--text-color": "rgb(88, 110, 117)",
     "--new-color": "rgb(38, 139, 210)",

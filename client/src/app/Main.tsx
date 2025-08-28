@@ -15,12 +15,11 @@ import { CircleUserRound, Settings, Palette } from 'lucide-react';
 import UserDropDown from './components/generic/dropdown/UserDropDown';
 import ThemeDropDown from './components/generic/dropdown/ThemeDropDown';
 
-import Menu from "./Menu";
+import Menu from "./components/menu/Menu";
 
 import { useThemeStyles } from "./hooks/useThemeStyles";
 
-import { LibraryBig } from 'lucide-react';
-import { ChefHat, Pizza, Utensils, Wine } from 'lucide-react';
+import { AnimatePresence, motion } from "framer-motion";
 
 import Image from "next/image";
 
@@ -99,13 +98,19 @@ export default function Main() {
           overflow: 'hidden'
         }}
       >
-        <Menu
-          handleSelect={handleSelect}
-        />
-        <Registries
-          selectedRegistry={selectedRegistry}
-          handleSelect={handleSelect}
-        />
+        <motion.div
+          layout
+        >
+          <Menu selectedRegistry={selectedRegistry} handleSelect={handleSelect} />
+        </motion.div>
+
+        <motion.div
+          className="flex-grow-1"
+          style={{ height: '100%' }}
+          layout
+        >
+          <Registries selectedRegistry={selectedRegistry} />
+        </motion.div>
       </div>
     </div>
   );

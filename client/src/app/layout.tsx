@@ -8,6 +8,9 @@ import { Toaster } from 'sonner';
 import { ThemeProvider } from "./themes/ThemeProvider";
 import { LoadingProvider } from './loadingProvider/LoadingProvider';
 
+import "@fontsource/nunito/400.css";
+import "@fontsource/nunito/600.css";
+import "@fontsource/nunito/700.css";
 
 import "./globals.css";
 import 'bootstrap/dist/css/bootstrap.min.css';

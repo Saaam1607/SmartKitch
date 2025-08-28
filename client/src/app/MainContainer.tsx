@@ -7,6 +7,9 @@ import { AnimatePresence, motion } from "framer-motion";
 
 import Image from "next/image";
 
+const delay1: number = 500;
+const delay2: number = 2500;
+
 export default function MainContainer() {
   const [showText, setShowText] = useState(false);
   const [showImage, setShowImage] = useState(true)
@@ -14,7 +17,7 @@ export default function MainContainer() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowText(true)
-    }, 500);
+    }, delay1);
     return () => clearTimeout(timer);
   }, []);
 
@@ -23,7 +26,7 @@ export default function MainContainer() {
       const timer = setTimeout(() => {
         setShowText(false)
         setShowImage(false)
-      }, 2500);
+      }, delay2);
       return () => clearTimeout(timer);
     }
   }, [setShowText]);

@@ -37,9 +37,11 @@ function TextArea({ itemKey, value, fieldName, isEditing, handleChange }: TextAr
 
   const debouncedHandleChange = useCallback(
     debounce((val: string) => {
-      handleChange({
-        target: { value: val } as HTMLTextAreaElement,
-      } as React.ChangeEvent<HTMLTextAreaElement>);
+      if(handleChange) {
+        handleChange({
+          target: { value: val } as HTMLTextAreaElement,
+        } as React.ChangeEvent<HTMLTextAreaElement>);
+      }
     }, 300),
     [handleChange]
   );
