@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import DrinkCard from '../../components/drinks/DrinkCard';
 import IngredientCreationModal from '../../components/ingredients/IngredientCreationModal';
 import Switch from '../../components/generic/form/Switch';
-import Registry from './Registry'
+import Registry from '../generic/registries/Registry'
 
 // Types
 import { Drink } from '@models/Drink';

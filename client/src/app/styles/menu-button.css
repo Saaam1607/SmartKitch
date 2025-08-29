@@ -1,3 +1,43 @@
+.sidebar {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  transition: width 0.5s ease-in-out;
+  width: 200px;
+}
+
+.sidebar.collapsed {
+  display: flex;
+  align-items: center;
+  width: 60px;
+}
+
+.fake-expanded-div {
+  max-width: 100%;
+  transition: max-width 0.5s ease-in-out;
+}
+
+.fake-expanded-div.collapsed  {
+  max-width: 0;
+}
+
+.menu-button {
+  cursor: pointer;
+  background-color: transparent;
+  transition: background-color 0.15s ease-in-out;
+}
+
+.menu-button:hover {
+  background-color: rgba(214, 244, 255, 0.05);
+}
+
+.menu-button.current {
+  background-color: rgba(214, 244, 255, 0.2);
+}
+
+  /* background-color: var(--new-color); */
+
+
 .menu-button a {
   display: flex;
   align-items: center;
@@ -27,24 +67,32 @@
   transition: width 0.4s ease, left 0.4s ease;
 } */
 
-.menu-button .active p::after {
+/* .menu-button .active p::after {
   width: 100%;
   left: 0;
-}
+} */
 
 .menu-button svg {
   display: flex;
   align-items: center;
   justify-content: center;
   transition: transform 0.2s ease;
-  margin-right: 0.5rem;
-
 }
 
-.menu-button a:hover svg {
+.menu-button:hover svg {
   transform: scale(1.1);
 }
 
 .menu-button a:active svg  {
   transform: scale(0.9);
+}
+
+.expand-button {
+  cursor: pointer;
+  background-color: transparent;
+  transition: background-color 0.15s ease-in-out;
+}
+
+.expand-button:hover {
+  background-color: rgba(214, 244, 255, 0.2);
 }

@@ -7,8 +7,12 @@ import { AnimatePresence, motion } from "framer-motion";
 
 import Image from "next/image";
 
-const delay1: number = 500;
-const delay2: number = 2500;
+// const delay1: number = 500;
+// const delay2: number = 2500;
+
+const delay1: number = 0
+const delay2: number = 0
+
 
 export default function MainContainer() {
   const [showText, setShowText] = useState(false);

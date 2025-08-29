@@ -9,13 +9,13 @@ import Nav from 'react-bootstrap/Nav';
 import NavbarBrand from 'react-bootstrap/NavbarBrand';
 import Container from 'react-bootstrap/Container';
 
-import Registries from './pages/registries/Registries';
+import Registries from './components/generic/registries/Registries';
 import { CircleUserRound, Settings, Palette } from 'lucide-react';
 
 import UserDropDown from './components/generic/dropdown/UserDropDown';
 import ThemeDropDown from './components/generic/dropdown/ThemeDropDown';
 
-import Menu from "./components/menu/Menu";
+import Menu from "./components/generic/menu/Menu";
 
 import { useThemeStyles } from "./hooks/useThemeStyles";
 
@@ -25,7 +25,7 @@ import Image from "next/image";
 
 import './styles/fonts.css';
 import './styles/logo.css';
-import './styles/menu-button.css';
+
 
 import Link from 'next/link';
 
@@ -62,7 +62,10 @@ export default function Main() {
             color: toolbarTextColor,
           }}
         >
-          <Container fluid>
+          <Container fluid className="d-flex">
+            
+            <div className="flew-grow-1 w-100" />
+            
             <NavbarBrand className="d-flex align-items-center gap-2">
               <Image
                 src="/assets/logo/SKlightgrey.png"
@@ -73,7 +76,7 @@ export default function Main() {
               <h4 className="logo" style={{ color: toolbarTextColor }}>SmartKitch</h4>
             </NavbarBrand>
 
-            <Nav className="ms-auto">
+            <Nav className="d-flex justify-content-end ms-auto flex-grow-1 w-100">
               <div className="nav-link d-flex align-items-center">
                 <ThemeDropDown iconComponent={<Palette size={25} color={toolbarTextColor} />} />
               </div>
@@ -98,19 +101,16 @@ export default function Main() {
           overflow: 'hidden'
         }}
       >
-        <motion.div
-          layout
-        >
+        <div >
           <Menu selectedRegistry={selectedRegistry} handleSelect={handleSelect} />
-        </motion.div>
+        </div>
 
-        <motion.div
+        <div
           className="flex-grow-1"
           style={{ height: '100%' }}
-          layout
         >
           <Registries selectedRegistry={selectedRegistry} />
-        </motion.div>
+        </div>
       </div>
     </div>
   );

@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from 'react';
 
 // Components
-import IngredientCard from '../../components/ingredients/IngredientCard';
+import DishCard from '../../components/dishes/DishCard';
 import IngredientCreationModal from '../../components/ingredients/IngredientCreationModal';
 import Switch from '../../components/generic/form/Switch';
-import Registry from './Registry'
+import Registry from '../generic/registries/Registry'
 
 // Types
-import { Ingredient } from '@models/Ingredient';
+import type { Dish } from '@models/Dish';
 
 // Utils
 import { useLoading } from '../../loadingProvider/LoadingProvider';
+import dishesService from '../../services/dishesService';
 import ingredientsService from '../../services/ingredientsService';
 import useStore from '../../state/useStore'
 
@@ -42,11 +43,12 @@ function Filters({ filterByOutOfStock, setFilterByOutOfStock, filterByDisabled, 
   );
 }
 
-export default function IngredientsRegistry() {
+export default function DishesRegistry() {
 
-  const { ingredients, updateIngredient, setIngredients } = useStore();
-  const [filteredItems, setFilteredItems] = useState<Ingredient[]>([]);
+  const { dishes, updateDish, setDishes } = useStore();
+  const { setIngredients } = useStore();
 
+  const [filteredItems, setFilteredItems] = useState<Dish[]>([]);
   const [filterByOutOfStock, setFilterByOutOfStock] = useState(false);
   const [filterByDisabled, setFilterByDisabled] = useState(false);
 
@@ -56,8 +58,10 @@ export default function IngredientsRegistry() {
     async function fetchData() {
       setLoading(true);
       try {
-        const data = await ingredientsService.fetchItems();
-        setIngredients(data)
+        const data = await dishesService.fetchItems();
+        setDishes(data)
+        const ingredients = await ingredientsService.fetchItems();
+        setIngredients(ingredients);
       } catch (error) {
         console.error(error);
       } finally {
@@ -65,11 +69,11 @@ export default function IngredientsRegistry() {
       }
     }
     fetchData();
-  }, []);
+  }, [setDishes, setIngredients]);
 
 
   useEffect(() => {
-    let results = ingredients;
+    let results = dishes;
 
     if (filterByOutOfStock)
       results = results.filter(item => item.outOfStock);
@@ -78,13 +82,14 @@ export default function IngredientsRegistry() {
       results = results.filter(item => item.disabled);
 
     setFilteredItems(results);
-  }, [ingredients, filterByOutOfStock, filterByDisabled]);
+  }, [dishes, filterByOutOfStock, filterByDisabled]);
 
-  async function createItem(newItem: Ingredient) {
+
+  async function createItem(newItem: Dish) {
     try {
-      await ingredientsService.addItem(newItem);
-      const freshData = await ingredientsService.fetchItems();
-      setIngredients(freshData);
+      await dishesService.addItem(newItem); 
+      const freshData = await dishesService.fetchItems();
+      setDishes(freshData);
     } catch (error) {
       console.error(error);
     }
@@ -94,9 +99,9 @@ export default function IngredientsRegistry() {
     <Registry
       filteredItems={filteredItems}
       keyField={"name"}
-      cardComponent={IngredientCard}
-      updateItem={updateIngredient}
-      service={ingredientsService}
+      cardComponent={DishCard}
+      updateItem={updateDish}
+      service={dishesService}
       showNavbar={true}
       filtersComponent={
         <Filters
@@ -107,11 +112,12 @@ export default function IngredientsRegistry() {
         />
       }
       renderCreationModal={(visible: boolean, close: () => void) => (
-        <IngredientCreationModal
-          visible={visible}
-          close={close}
-          create={createItem}
-        />
+       <></> 
+        // <IngredientCreationModal
+        //   visible={visible}
+        //   close={close}
+        //   create={createItem}
+        // />
       )}
     />
   );

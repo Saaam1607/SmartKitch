@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 
 import Nav from 'react-bootstrap/Nav';
 
-import { useThemeStyles } from '../../hooks/useThemeStyles';
+import { useThemeStyles } from '../../../hooks/useThemeStyles';
 
 interface MenuSectionProps {
   label: string;
@@ -29,27 +29,20 @@ export default function MenuSection({
       style={{
       }}
     >
-      <div
-        className="d-flex gap-2 align-items-center"
+      <p
+        className="m-0 p-0"
         style={{
-          width: '100%',
+          color: toolbarTextColor,
+          opacity: '0.6',
+          width: isExpanded ? "100%" : "0",
+          overflow: "hidden",
+          whiteSpace: "nowrap",
         }}
       >
-        <p
-          className="m-0 p-0"
-          style={{
-            color: toolbarTextColor,
-            opacity: '0.6',
-            width: isExpanded ? "100%" : "0",
-            overflow: "hidden",
-            whiteSpace: "nowrap",
-          }}
-        >
-          {label} 
-        </p>
-      </div>
+        {label} 
+      </p>
       
-      <Nav onSelect={handleSelect} className="d-flex flex-column justify-content-start menu-button">
+      <Nav onSelect={handleSelect} className="d-flex flex-column justify-content-start">
         {children}
       </Nav>
     </div>

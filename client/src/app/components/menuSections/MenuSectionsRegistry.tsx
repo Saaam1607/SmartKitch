@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 
 // Components
-import MenuSectionCard from '../../components/menuSections/MenuSectionCard';
-import MenuSectionDishesCard from '../../components/menuSections/MenuSectionDishesCard';
-import MenuSectionsCreationModal from '../../components/menuSections/MenuSectionsCreationModal';
-import Registry from './Registry'
+import MenuSectionCard from './MenuSectionCard';
+import MenuSectionDishesCard from './MenuSectionDishesCard';
+import MenuSectionsCreationModal from './MenuSectionsCreationModal';
+import Registry from '../generic/registries/Registry'
 
 // Types
 import { MenuSection } from '@models/MenuSection';

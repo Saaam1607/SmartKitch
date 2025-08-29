@@ -1,14 +1,20 @@
 "use client";
 
+import React, { useState } from 'react';
+
 import Dropdown from "./Dropdown";
 
 import { useRouter } from 'next/navigation';
+
+import Modal from '../modal/Modal';
 
 interface UserDropDownProps {
   iconComponent: React.ReactNode,
 }
 
 export default function UserDropDown({ iconComponent } : UserDropDownProps) {
+
+  const [showProfileModal, setShowProfileModal] = useState(false);
 
   const router = useRouter();
 
@@ -20,7 +26,8 @@ export default function UserDropDown({ iconComponent } : UserDropDownProps) {
   function handleClick(item: string) {
     switch (item) {
       case "Profile":
-        break;
+      setShowProfileModal(true);  
+      break;
       case "LogOut":
         localStorage.removeItem('authToken');
         router.push('/login');
@@ -32,6 +39,15 @@ export default function UserDropDown({ iconComponent } : UserDropDownProps) {
 
   return (
     <div style={{ position: 'relative'}} >
+      <Modal
+        title="Profile"
+        show={showProfileModal}
+        close={() => {setShowProfileModal(false)}}
+        saveItem={() => {setShowProfileModal(false)}}
+      >
+        <p>aaaaaaa</p>
+      </Modal>
+
       <Dropdown
         iconComponent={iconComponent}
         dataList={dataList}

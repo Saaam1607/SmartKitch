@@ -1,23 +1,14 @@
 'use client';
 
-import useStore from '../../state/useStore'
-
 import React, { useState } from 'react';
 
-import Navbar from 'react-bootstrap/Navbar';
-import Nav from 'react-bootstrap/Nav';
-import Container from 'react-bootstrap/Container';
 
-import { ChefHat, Pizza, Utensils, Wine } from 'lucide-react';
+import { useThemeStyles } from '../../../hooks/useThemeStyles';
 
-import { toast } from 'sonner';
-
-import { useThemeStyles } from '../../hooks/useThemeStyles';
-
-import IngredientsRegistry from './IngredientsRegistry'
-import DrinksRegistry from './DrinksRegistry'
-import DishesRegistry from './DishesRegistry'
-import MenuSectionsRegistry from './MenuSectionsRegistry'
+import IngredientsRegistry from '../../ingredients/IngredientsRegistry'
+import DrinksRegistry from '../../drinks/DrinksRegistry'
+import DishesRegistry from '../../dishes/DishesRegistry'
+import MenuSectionsRegistry from '../../menuSections/MenuSectionsRegistry'
 
 import { AnimatePresence, motion } from "framer-motion";
 

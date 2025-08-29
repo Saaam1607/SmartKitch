@@ -4,7 +4,10 @@ import React, { useState, useEffect } from 'react';
 
 import { ChevronsLeft, ChevronsRight } from 'lucide-react';
 
-import { useThemeStyles } from '../../hooks/useThemeStyles';
+import { useThemeStyles } from '../../../hooks/useThemeStyles';
+
+import { AnimatePresence, motion } from "framer-motion";
+
 
 interface ExpandButtonProps {
   isExpanded: boolean;
@@ -16,15 +19,12 @@ export default function ExpandButton({
   setIsExpanded
 } : ExpandButtonProps) {
 
-
-
   const { bgColor, textColor, toolbarBg, toolbarTextColor } = useThemeStyles();
 
   const commonIconStyle = {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    cursor: "pointer",
     width: "25px",
     height: "25px",
     border: `1px solid ${toolbarTextColor}`,
@@ -33,12 +33,20 @@ export default function ExpandButton({
   }
 
   return (
-    <div className={`d-flex ${isExpanded ? "justify-content-end" : "justify-content-center" } p-2 w-100`}>
-      {isExpanded ? (
-        <ChevronsLeft style={ commonIconStyle } onClick={() => {setIsExpanded(false)}} />
-      ) : (
-        <ChevronsRight style={ commonIconStyle } onClick={() => {setIsExpanded(true)}} />
-      )}
+    <div
+      className={`d-flex justify-content-center p-2 w-100`}
+    >
+      <div className={`flex-grow-1 fake-expanded-div ${!isExpanded && " collapsed"}`} />
+      <div
+      >
+        {isExpanded ? (
+          <ChevronsLeft className="expand-button" style={ commonIconStyle } onClick={() => {setIsExpanded(false)}} />
+        ) : (
+          <ChevronsRight className="expand-button" style={ commonIconStyle } onClick={() => {setIsExpanded(true)}} />
+        )}
+      </div>
+      
+
       
     </div>
   );

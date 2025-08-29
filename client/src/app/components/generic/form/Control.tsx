@@ -128,10 +128,11 @@ function PriceInput({ type, step, itemKey, value, fieldName, isEditing, width, h
           type="number"
           step={step}
           className="ps-2 rounded customScrollbar"
-          value={value || ''}
+          value={value}
           id={`${fieldName}-${itemKey}`}
           onChange={handleChange}
           style={{
+            color: 'inherit',
             width: '100%',
             border: 0,
             backgroundColor: 'transparent',

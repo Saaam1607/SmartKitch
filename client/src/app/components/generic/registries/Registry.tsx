@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from 'react';
 
 // Components
-import RegistryNavBar from '../../components/generic/registry/RegistryNavBar';
-import Card from '../../components/generic/card/Card'
-import FiltersContainer from '../../components/generic/filters/FiltersContainer'
+import RegistryNavBar from './RegistryNavBar';
+import Card from '../card/Card'
+import FiltersContainer from '../filters/FiltersContainer'
 
 // Types
 import { BaseItem } from '@models/BaseItem';
-import CrudService from "../../types/CrudService";
+import CrudService from "../../../types/CrudService";
 
 import { LayoutGroup, motion } from "framer-motion";
 
-import { useThemeStyles } from '../../hooks/useThemeStyles';
+import { useThemeStyles } from '../../../hooks/useThemeStyles';
 
-import CardComponentProps from '../../types/props/CardComponentProps';
+import CardComponentProps from '../../../types/props/CardComponentProps';
 
 interface RegistryProps<T extends BaseItem> {
   filteredItems: T[];

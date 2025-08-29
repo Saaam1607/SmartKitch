@@ -3,13 +3,14 @@ import pool from '../config/database';
 import { Ingredient } from '../models/Ingredient';
 
 export const getItems = async (): Promise<Ingredient[]> => {
-  const result = await pool.query('SELECT name, description, out_of_stock AS "outOfStock", disabled, is_addable AS "isAddable", addition_price AS "additionPrice" FROM ingredients');
+  const result = await pool.query('SELECT name, description, image, out_of_stock AS "outOfStock", disabled, is_addable AS "isAddable", addition_price AS "additionPrice" FROM ingredients');
+  
   const ingredients = result.rows.map(row => {
-    // const base64Image = row.image.toString('base64');
-    // const mimeType = 'image/jpeg';
+    const base64Image = row.image.toString('base64');
+    const mimeType = 'image/jpeg';
     return {
       ...row,
-      // image: `data:${mimeType};base64,${base64Image}`
+      image: `data:${mimeType};base64,${base64Image}`
     };
   });
 

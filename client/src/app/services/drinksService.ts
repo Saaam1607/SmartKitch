@@ -6,8 +6,6 @@ import { blobToBase64, blobUrlToBlob } from "../utils/blobToBase64";
 
 const API_URL = (process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5001") + '/drinks';
 
-
-
 export const drinksService: CrudService<Drink> = {
   
   async fetchItems(): Promise<Drink[]> {
