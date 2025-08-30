@@ -42,7 +42,7 @@ export default function Registry<T extends BaseItem>({
   const [itemsToShow, setItemsToShow] = useState<T[]>(filteredItems);
 
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const [showFilters, setShowFilters] = useState<boolean>(true);
+  const [showFilters, setShowFilters] = useState<boolean>(false);
 
   const {
     cardsContainerBg,
@@ -66,7 +66,7 @@ export default function Registry<T extends BaseItem>({
   return (
     <div
       style={{ height: '100%', width: '100%' }}
-      className="d-flex flex-column gap-2"
+      className="d-flex flex-column gap-3"
     >
       {showNavbar && (
         <div className="">
@@ -83,8 +83,9 @@ export default function Registry<T extends BaseItem>({
       )}
         
       <div
-        className="d-flex flex-row my-2 gap-3"
+        className="d-flex flex-column flex-lg-row"
         style={{
+          gap: showFilters ? '1rem' : '0',
           flexGrow: 1,
           overflowY: 'hidden',
           height: '100%',
@@ -92,11 +93,12 @@ export default function Registry<T extends BaseItem>({
       >
           {filtersComponent && (
             <div
-              className="customScrollbar d-flex flex-column gap-3"
+              className="customScrollbar d-flex flex-column"
               style={{
                 overflowX: 'hidden',
                 overflowY: 'auto',
                 borderRadius: '15px',
+                minHeight: "fit-content",
                 backgroundColor: filtersContainerBg,
               }}
             >
@@ -112,8 +114,6 @@ export default function Registry<T extends BaseItem>({
               style={{
                 padding: "20px",
                 backgroundColor: cardsContainerBg,
-                // background: "linear-gradient(to bottom, #f8f9fa, #e2e7f0ff)",
-                // border: "2px solid #e2e7f0ff",
                 boxShadow: 'rgba(0, 0, 0, 0.15) 2.4px 2.4px 3.2px',
                 borderRadius: "15px",
                 flexGrow: 1,

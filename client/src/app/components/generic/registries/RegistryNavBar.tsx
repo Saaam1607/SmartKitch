@@ -56,15 +56,13 @@ export default function RegistryNavBar({ searchTerm, setSearchTerm, showFilters,
               width: '100%',
             }}
           >
-            {showFilters && (
-              <IconButton
-                iconName="SlidersHorizontal" 
-                color="grey"
-                outline={false}
-                title="Filters"
-                onClick={handleFiltersClick}
-              />
-            )}
+            <IconButton
+              iconName="SlidersHorizontal" 
+              color="grey"
+              outline={false}
+              title="Filters"
+              onClick={handleFiltersClick}
+            />
             
             <Form className="d-flex" style={{ width: '100%', maxWidth: '600px' }}>
               <div

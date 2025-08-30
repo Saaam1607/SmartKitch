@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 
 import type { BaseItem } from '@models/BaseItem';
 import type { Dish } from '@models/Dish';
-import type { Ingredient } from '@models/Ingredient';
 
 import Form from '../generic/form/Form';
 import Title from '../generic/form/Title';
@@ -11,13 +10,14 @@ import Control from '../generic/form/Control';
 import Check from '../generic/form/Check';
 import ComboList from '../generic/form/ComboList';
 
+import CardImageContainer from '../generic/card/CardImageContainer'
+
 import CardComponentProps from '../../types/props/CardComponentProps';
 
 import useStore from '../../state/useStore'
 
 import '../../styles/card.css';
 
-import ColorThief from 'colorthief';
 
 
 export default function DishCard<T extends BaseItem>({ item, isHovered, isEditing, handleCheckChange, handleTextChange, handleImageChange, handlePriceChange, handleArrayAddition, handleArrayRemoval }: CardComponentProps<Dish>) {
@@ -25,20 +25,6 @@ export default function DishCard<T extends BaseItem>({ item, isHovered, isEditin
   const ingredients = useStore((state) => state.ingredients);
 
   const [ingredientsNames, setIngredientsNames] = useState(ingredients.map(obj => obj.name));
-
-  const [mainColor, setMainColor] = useState<[number, number, number] | null>(null); // default bianco
-
-  useEffect(() => {
-    const img = new Image();
-    img.crossOrigin = 'Anonymous'; // serve se l'immagine viene da un dominio esterno
-    img.src = item.image;
-
-    img.onload = () => {
-      const colorThief = new ColorThief();
-      const color: [number, number, number] = colorThief.getColor(img); // ritorna [R,G,B]
-      setMainColor(color);
-    };
-  }, [item]);
 
   useEffect(() => {
     setIngredientsNames(ingredients.map(obj => obj.name))
@@ -57,35 +43,17 @@ export default function DishCard<T extends BaseItem>({ item, isHovered, isEditin
   }
 
   return (
-    <div
-
-      className="d-flex w-100"
-    >
-      <div
-        className="d-flex align-items-center p-3"
-        style={{
-          minHeight: '100%',
-          background: mainColor && mainColor.length > 0
-            ? `linear-gradient(to right, rgb(${mainColor[0]}, ${mainColor[1]}, ${mainColor[2]}) 75%, transparent 25%)`
-            : "#ffffff",
-          transition: "opacity 0.5s ease",
-          opacity: mainColor && mainColor.length > 0 ? 1 : 0,
-          borderTopLeftRadius: "15px",
-          borderBottomLeftRadius: "15px",
-        }}
-      >
-        <div style={{borderRadius: "15px"}}>
-          <CardImage
-            image={item.image}
-            size={175}
-            borderSize={8}
-            // isHovered={isHovered}
-            updateImage={(image: string) => handleImageChange(image, 'image')}
-            isEditing={isEditing}
-          />
-        </div> 
-        
-      </div>
+    <div className="d-flex flex-column flex-lg-row w-100" >
+      <CardImageContainer image={item.image}>
+        <CardImage
+          image={item.image}
+          size={175}
+          borderSize={8}
+          // isHovered={isHovered}
+          updateImage={(image: string) => handleImageChange(image, 'image')}
+          isEditing={isEditing}
+        />
+      </CardImageContainer>
 
       <div className="d-flex w-100">
         <div

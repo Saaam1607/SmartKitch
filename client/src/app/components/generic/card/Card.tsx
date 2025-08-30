@@ -170,20 +170,25 @@ export default function Card<T extends BaseItem>({
         e.stopPropagation();
       }}
     >
-      <BootstrapCard.Body className="d-flex m-0 p-0">
-        <CardComponent
-          item={item}
-          isHovered={isHovered}
-          isEditing={isEditing}
-          handleCheckChange={handleCheckChange}
-          handleTextChange={handleTextChange}
-          handleImageChange={handleImageChange}
-          handlePriceChange={handlePriceChange}
-          handleArrayAddition={handleArrayAddition}
-          handleArrayRemoval={handleArrayRemoval}
-          handleArraySet={handleArraySet}
-        />
-        <div className="d-flex flex-column gap-2 p-2">
+      <BootstrapCard.Body className="d-flex flex-column flex-lg-row m-0 p-0">
+       <div className="order-2 order-lg-1 w-100">
+          <CardComponent
+            item={item}
+            isHovered={isHovered}
+            isEditing={isEditing}
+            handleCheckChange={handleCheckChange}
+            handleTextChange={handleTextChange}
+            handleImageChange={handleImageChange}
+            handlePriceChange={handlePriceChange}
+            handleArrayAddition={handleArrayAddition}
+            handleArrayRemoval={handleArrayRemoval}
+            handleArraySet={handleArraySet}
+          />  
+        </div> 
+
+        <div
+          className="d-flex flex-row flex-lg-column justify-content-end justify-content-lg-start order-1 order-lg-2 gap-2 p-2"
+        >
           {!isEditing ? (
             <>
               <IconButton

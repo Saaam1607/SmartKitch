@@ -37,49 +37,6 @@ export default function Registries({
       }}
       className="d-flex flex-column"
     >
-      {/* <Navbar
-        style={{
-          backgroundColor: toolbarBg,
-        }}
-        className="p-0"
-      >
-        <Container>
-          <Nav onSelect={handleSelect} className="m-auto menu-button">
-            <Nav.Item>
-              <Nav.Link eventKey="ingredients" className={isActive('ingredients')}>
-                <div className="d-flex align-items-center">
-                  <ChefHat color={toolbarTextColor} />
-                  <p style={{ color: toolbarTextColor }}>Ingredients</p>
-                </div>
-              </Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
-              <Nav.Link eventKey="dishes" className={isActive('dishes')}>
-                <div className="d-flex align-items-center">
-                  <Pizza color={toolbarTextColor} />
-                  <p style={{ color: toolbarTextColor }}>Dishes</p>
-                </div>
-              </Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
-              <Nav.Link eventKey="drinks" className={isActive('drinks')}>
-                <div className="d-flex align-items-center">
-                  <Wine color={toolbarTextColor} />
-                  <p style={{ color: toolbarTextColor }}>Drinks</p>
-                </div>
-              </Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
-              <Nav.Link eventKey="menu" className={isActive('menu')}>
-                <div className="d-flex align-items-center">
-                  <Utensils color={toolbarTextColor} />
-                  <p style={{ color: toolbarTextColor }}>Menu</p>
-                </div>
-              </Nav.Link>
-            </Nav.Item>
-          </Nav>
-        </Container>
-      </Navbar> */}
       <div
         className="p-3"
         style={{

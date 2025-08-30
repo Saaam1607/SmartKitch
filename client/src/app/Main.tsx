@@ -49,7 +49,7 @@ export default function Main() {
     <div 
       className="d-flex flex-column"
       style={{  
-        height: '100vh',
+        height: '100dvh',
         backgroundColor: bgColor,
         color: textColor,
       }}

@@ -36,12 +36,12 @@ export default function MainContainer() {
   }, [setShowText]);
 
   return (
-    <div style={{ position: "relative", height: "100vh", width: "100%" }}>
+    <div style={{ position: "relative", height: "100dvh", width: "100%" }}>
       
       <div
         style={{
           position: "absolute",
-          height: "100vh",
+          height: "100dvh",
           width: "100%",
         }}
       >
@@ -55,7 +55,7 @@ export default function MainContainer() {
             className="d-flex align-items-center justify-content-center"
             style={{
               position: "absolute",
-              height: "100vh",
+              height: "100dvh",
               width: "100%",
               backgroundColor: 'white',
               zIndex: 9999,

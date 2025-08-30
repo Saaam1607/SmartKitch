@@ -8,6 +8,7 @@ import CardImage from '../generic/card/CardImage';
 import Control from '../generic/form/Control';
 import Check from '../generic/form/Check';
 
+import CardImageContainer from '../generic/card/CardImageContainer'
 
 import CardComponentProps from '../../types/props/CardComponentProps';
 
@@ -17,19 +18,16 @@ import '../../styles/card.css';
 export default function IngredientCard({ item, isEditing, handleCheckChange, handleTextChange, handleImageChange, handlePriceChange }: CardComponentProps<Ingredient>) {
 
   return (
-    <div className="d-flex w-100" >
-      <div
-        className="d-flex align-items-center p-3"
-        style={{
-          minHeight: '100%'
-        }}
-      >
+    <div className="d-flex flex-column flex-lg-row w-100" >
+      <CardImageContainer image={item.image} >
         <CardImage
           image={item.image}
+          size={175}
+          borderSize={8}
           updateImage={(image: string) => handleImageChange(image, 'image')}
           isEditing={isEditing}
         />
-      </div>
+      </CardImageContainer>
 
       <div className="d-flex w-100">
         <div
