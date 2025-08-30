@@ -68,7 +68,7 @@ export default function MenuSectionRegistry() {
       className="d-flex flex-row gap-3"
       style={{ height: '100%', width: '100%' }}
     >
-      <div className="d-flex">
+      {/* <div className="d-flex">
         <Registry
           filteredItems={filteredItems}
           keyField={"name"}
@@ -84,13 +84,13 @@ export default function MenuSectionRegistry() {
             />
           )}
         />
-      </div>
+      </div> */}
       <div className="d-flex flex-grow-1">
         <Registry
           filteredItems={filteredItems}
           keyField={"name"}
           cardComponent={MenuSectionDishesCard}
-          canDelete={false}
+          canDelete={true}
           updateItem={updateMenuSection}
           service={menuSectionsService}
           showNavbar={true}

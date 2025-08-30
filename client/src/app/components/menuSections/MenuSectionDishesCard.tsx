@@ -5,6 +5,8 @@ import { MenuSection } from '@models/MenuSection';
 import Form from '../generic/form/Form';
 import Title from '../generic/form/Title';
 import MenuComboList from '../generic/form/MenuComboList';
+import Control from '../generic/form/Control';
+import Check from '../generic/form/Check';
 
 import CardComponentProps from '../../types/props/CardComponentProps';
 
@@ -43,6 +45,27 @@ export default function MenuSectionDishesCard({ item, isEditing, handleCheckChan
         >
           <Form isEditing={isEditing}>
             <Title title={item.name} />
+
+
+            <Control
+              type="textarea"
+              itemKey={item.name}
+              value={item.description}
+              fieldName="Description"
+              isEditing={isEditing}
+              handleChange={(event) => handleTextChange(event, "description")}
+            />
+
+            <div className="d-flex gap-5">
+              <Check
+                itemKey={item.name}
+                value={item.disabled}
+                fieldName="Disabled"
+                isEditing={isEditing}
+                handleChange={(event) => handleCheckChange(event, "disabled")}
+              />
+            </div> 
+
             <MenuComboList
               valueList={item.dishes}
               dataList={availableDishes}

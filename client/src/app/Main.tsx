@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import useStore from './state/useStore'
 
@@ -35,15 +35,21 @@ export default function Main() {
 
   const { setComponentKey } = useStore();
 
-  const [selectedRegistry, setSelectedRegistry] = useState('dishes');
+  const [selectedRegistry, setSelectedRegistry] = useState('');
 
 
   const handleSelect = (eventKey: string | null) => {
     setComponentKey("");
     if (eventKey) {
       setSelectedRegistry(eventKey);
+      localStorage.setItem('selectedRegistry', eventKey);
     }
   }
+
+  useEffect(() => {
+    const _selectedRegistry: string = localStorage.getItem('selectedRegistry');
+    setSelectedRegistry(_selectedRegistry);
+  }, [])
 
   return (
     <div 

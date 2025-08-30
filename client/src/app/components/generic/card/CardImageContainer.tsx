@@ -23,7 +23,6 @@ export default function CardImageContainer({ image, children }: CardImageContain
       setMainColor(color);
     };
   }, [image]);
-  
 
   useEffect(() => {
     const handleResize = () => setIsLgUp(window.innerWidth >= 992);

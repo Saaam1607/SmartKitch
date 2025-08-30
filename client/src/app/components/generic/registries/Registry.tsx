@@ -9,7 +9,7 @@ import FiltersContainer from '../filters/FiltersContainer'
 import { BaseItem } from '@models/BaseItem';
 import CrudService from "../../../types/CrudService";
 
-import { LayoutGroup, motion } from "framer-motion";
+import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
 
 import { useThemeStyles } from '../../../hooks/useThemeStyles';
 
@@ -44,6 +44,8 @@ export default function Registry<T extends BaseItem>({
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [showFilters, setShowFilters] = useState<boolean>(false);
 
+  const [isLgUp, setIsLgUp] = useState(false);
+
   const {
     cardsContainerBg,
     filtersContainerBg,
@@ -63,93 +65,103 @@ export default function Registry<T extends BaseItem>({
     setItemsToShow(results);  
   }, [filteredItems, searchTerm])
 
+  useEffect(() => {
+    const handleResize = () => setIsLgUp(window.innerWidth >= 992);
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
     <div
       style={{ height: '100%', width: '100%' }}
       className="d-flex flex-column gap-3"
     >
       {showNavbar && (
-        <div className="">
-          <RegistryNavBar
-            searchTerm={searchTerm}
-            setSearchTerm={setSearchTerm}
-            {...(filtersComponent && { 
-              showFilters, 
-              setShowFilters 
-            })}
-            renderCreationModal={renderCreationModal}
-          />
-        </div>
+        <RegistryNavBar
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          {...(filtersComponent && { 
+            showFilters, 
+            setShowFilters 
+          })}
+          renderCreationModal={renderCreationModal}
+        />
       )}
         
-      <div
-        className="d-flex flex-column flex-lg-row"
-        style={{
-          gap: showFilters ? '1rem' : '0',
-          flexGrow: 1,
-          overflowY: 'hidden',
-          height: '100%',
-        }}
-      >
-          {filtersComponent && (
-            <div
-              className="customScrollbar d-flex flex-column"
-              style={{
-                overflowX: 'hidden',
-                overflowY: 'auto',
-                borderRadius: '15px',
-                minHeight: "fit-content",
-                backgroundColor: filtersContainerBg,
-              }}
-            >
-              <FiltersContainer showFilters={showFilters}>
-                {filtersComponent}
-              </FiltersContainer>
-            </div>
-          )}
-          
-          <LayoutGroup>
-            <div
-              className="d-flex flex-column gap-3 customScrollbar"
-              style={{
-                padding: "20px",
-                backgroundColor: cardsContainerBg,
-                boxShadow: 'rgba(0, 0, 0, 0.15) 2.4px 2.4px 3.2px',
-                borderRadius: "15px",
-                flexGrow: 1,
-                overflowX: "hidden",
-                overflowY: "auto",
-              }}
-            >
-              {itemsToShow.map((item, i) => {
-                return (
-                  <motion.div
-                    layout="position"
-                    initial={true}
-                    transition={{ duration: 0.5, ease: "easeInOut" }}
-
-                    className=""
-                    key={i}
-                    style={{
-                      borderRadius: "12px",
-                      boxShadow: "0 4px 15px rgba(0,0,0,0.08)"
-                    }}
-                  >
-                    <Card
-                      item={item}
-                      keyField={keyField}
-                      canDelete={canDelete}
-                      updateItem={updateItem}
-                      service={service}
-                      cardComponent={cardComponent}
-                    />
-                  </motion.div>
-                );
-              })}
-            </div>
-          </LayoutGroup>
- 
-      </div>
+      <LayoutGroup>
+        
+          <div
+            className="d-flex flex-column flex-lg-row"
+            style={{
+              gap: showFilters ? '1rem' : '0',
+              flexGrow: 1,
+              overflowY: 'hidden',
+              height: '100%',
+            }}
+          >
+            <AnimatePresence>
+              {filtersComponent && showFilters && (
+                <motion.div
+                  layout
+                  initial={isLgUp ? { width: 0 } : { height: 0 }}
+                  animate={isLgUp ? { width: "auto" } : { height: "auto" }}
+                  exit={isLgUp ? { width: 0 } : { height: 0 }}
+                  transition={{ type: "tween", ease: "easeOut", duration: 0.3 }}
+                  className="customScrollbar d-flex flex-column"
+                  style={{
+                    overflowX: 'hidden',
+                    overflowY: 'auto',
+                    borderRadius: '15px',
+                    minHeight: "fit-content",
+                    backgroundColor: filtersContainerBg,
+                    transformOrigin: 'left',
+                  }}
+                >
+                  <FiltersContainer showFilters={showFilters}>
+                    {filtersComponent}
+                  </FiltersContainer>
+                </motion.div>
+              )}
+            </AnimatePresence>
+              <div
+                className="d-flex flex-column gap-3 customScrollbar"
+                style={{
+                  padding: "20px",
+                  backgroundColor: cardsContainerBg,
+                  boxShadow: 'rgba(0, 0, 0, 0.15) 2.4px 2.4px 3.2px',
+                  borderRadius: "15px",
+                  flexGrow: 1,
+                  overflowX: "hidden",
+                  overflowY: "auto",
+                }}
+              >
+                <LayoutGroup>
+		              {itemsToShow.map((item, i) => {
+                    return (
+                      <div
+                        key={i}
+                        style={{
+                          borderRadius: "12px",
+                          boxShadow: "0 4px 15px rgba(0,0,0,0.08)"
+                        }}
+                      >
+                        <Card
+                          item={item}
+                          keyField={keyField}
+                          canDelete={canDelete}
+                          updateItem={updateItem}
+                          service={service}
+                          cardComponent={cardComponent}
+                        />
+                      </div>
+                    );
+                  })}
+                </LayoutGroup>
+              </div>
+          </div>
+      </LayoutGroup>
     </div>
   );
 }
