@@ -20,7 +20,7 @@ interface RegistryProps<T extends BaseItem> {
   keyField: string;
   cardComponent: React.ComponentType<CardComponentProps<T>>;
   canDelete?: boolean;
-  updateItem: (newItem: T) => void;
+  canSave?: (newItem: T) => boolean;
   service: CrudService<T>,
   showNavbar?: boolean;  
   filtersComponent?: React.ReactNode;
@@ -31,8 +31,8 @@ export default function Registry<T extends BaseItem>({
   filteredItems,
   keyField,
   cardComponent,
-  updateItem,
   canDelete = true,
+  canSave,
   service,
   showNavbar = false,
   filtersComponent,
@@ -151,7 +151,7 @@ export default function Registry<T extends BaseItem>({
                           item={item}
                           keyField={keyField}
                           canDelete={canDelete}
-                          updateItem={updateItem}
+                          canSave={canSave}
                           service={service}
                           cardComponent={cardComponent}
                         />

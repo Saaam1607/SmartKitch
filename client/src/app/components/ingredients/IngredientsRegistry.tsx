@@ -14,6 +14,8 @@ import { useLoading } from '../../loadingProvider/LoadingProvider';
 import ingredientsService from '../../services/ingredientsService';
 import useStore from '../../state/useStore'
 
+import { toast } from 'sonner';
+
 interface FiltersProps {
   filterByOutOfStock: boolean;
   setFilterByOutOfStock: (value: boolean) => void;
@@ -44,7 +46,7 @@ function Filters({ filterByOutOfStock, setFilterByOutOfStock, filterByDisabled, 
 
 export default function IngredientsRegistry() {
 
-  const { ingredients, updateIngredient, setIngredients } = useStore();
+  const { ingredients, setIngredients } = useStore();
   const [filteredItems, setFilteredItems] = useState<Ingredient[]>([]);
 
   const [filterByOutOfStock, setFilterByOutOfStock] = useState(false);
@@ -90,12 +92,28 @@ export default function IngredientsRegistry() {
     }
   }
 
+  async function canSave(newItem: Ingredient) {
+
+    let errMsg: string = "";
+    
+    if (newItem.isAddable)
+      if (newItem.additionPrice === null || newItem.additionPrice === undefined)
+        errMsg =  "If the item is addable, add the additional price"
+
+    if (errMsg) {
+      toast.error(errMsg);
+      return false;
+    }
+
+    return true;
+  }
+
   return (
     <Registry
       filteredItems={filteredItems}
       keyField={"name"}
       cardComponent={IngredientCard}
-      updateItem={updateIngredient}
+      canSave={canSave}
       service={ingredientsService}
       showNavbar={true}
       filtersComponent={

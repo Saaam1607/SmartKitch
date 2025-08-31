@@ -21,7 +21,7 @@ interface CardProps<T extends BaseItem> {
   item: T;
   keyField: string,
   canDelete?: boolean,
-  updateItem: (newItem: T) => void,
+  canSave?: (newItem: T) => boolean;
   service: CrudService<T>,
   cardComponent: React.ComponentType<CardComponentProps<T>>;
 };
@@ -30,13 +30,13 @@ export default function Card<T extends BaseItem>({
   item,
   keyField,
   canDelete=true,
-  updateItem,
+  canSave,
   service,
   cardComponent: CardComponent,
 }: CardProps<T>) {
 
   const { componentKey, setComponentKey, resetComponentKey } = useStore();
-  const [itemBeforeEdit, setItemBeforeEdit] = useState<T | null>(null);
+  const [sessionItem, setSessionItem] = useState<T>(item);
   
   const [isHovered, setIsHovered] = useState(false);
 
@@ -57,7 +57,6 @@ export default function Card<T extends BaseItem>({
   // STARTS EDIT
   function startEdit() {
     if (componentKey == "") {
-      setItemBeforeEdit(item);
       setComponentKey(item[keyField as keyof T] as string);
     } else {
       toast.warning("You are already editing an item");
@@ -67,8 +66,14 @@ export default function Card<T extends BaseItem>({
   // SAVES CHANGES
   async function saveChanges() {
     try {
+      if (canSave) {
+        const result = await canSave(sessionItem);
+        if (!result)
+          return;
+      }
+
       setLoading(true);
-      await service.editItem(item);
+      await service.editItem(sessionItem);
       toast.success("Changes Saved");
       await service.fetchItems();
       setLoading(false);
@@ -79,9 +84,9 @@ export default function Card<T extends BaseItem>({
   }
 
   // DISCARD CHANGES
-  function undoChanges(prevItem: T) {
+  function undoChanges() {
     if (componentKey) {
-      updateItem(prevItem);
+      setSessionItem(item);
       resetComponentKey();
       toast.info("Changes Discarded");
     }
@@ -101,49 +106,48 @@ export default function Card<T extends BaseItem>({
 
   function handleCheckChange(event: React.ChangeEvent<HTMLInputElement>, fieldName: string) {
     const { checked } = event.target;
-    const newItem = { ...item, [fieldName]: checked };
-    updateItem(newItem);
+    const newItem = { ...sessionItem, [fieldName]: checked };
+    setSessionItem(newItem);
   }
 
   function handleTextChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, fieldName: string) {
     const { value } = event.target;
-    const newItem = { ...item, [fieldName]: value };
-    updateItem(newItem);
+    const newItem = { ...sessionItem, [fieldName]: value };
+    setSessionItem(newItem);
   }
 
   function handleImageChange(newImage: string, fieldName: string) {
-    const newItem = { ...item, [fieldName]: newImage };
-    updateItem(newItem);
+    const newItem = { ...sessionItem, [fieldName]: newImage };
+    setSessionItem(newItem);
   }
       
   function handlePriceChange(event: React.ChangeEvent<HTMLInputElement>, fieldName: string) {
-    const newItem = { ...item, [fieldName]: parseFloat(event.target.value) };
-    updateItem(newItem);
+    const newItem = { ...sessionItem, [fieldName]: parseFloat(event.target.value) };
+    setSessionItem(newItem);
   }
 
   function handleArrayAddition(value: string, fieldName: string) {
+    if (!(sessionItem[fieldName as keyof T] as Array<string>).includes(value)) {
 
-    if (!(item[fieldName as keyof T] as Array<string>).includes(value)) {
-
-      const newArray = item[fieldName as keyof T] as Array<string>;
+      const newArray = sessionItem[fieldName as keyof T] as Array<string>;
       newArray.push(value);
 
-      const newItem = { ...item, [fieldName]: newArray };
-      updateItem(newItem);
+      const newItem = { ...sessionItem, [fieldName]: newArray };
+      setSessionItem(newItem);
     }
   }
 
   function handleArrayRemoval(value: string, fieldName: string) {
-    if ((item[fieldName as keyof T] as Array<string>).includes(value)) {
-      const newArray = (item[fieldName as keyof T] as Array<string>).filter(i => i != value);
-      const newItem = { ...item, [fieldName]: newArray };
-      updateItem(newItem);
+    if ((sessionItem[fieldName as keyof T] as Array<string>).includes(value)) {
+      const newArray = (sessionItem[fieldName as keyof T] as Array<string>).filter(i => i != value);
+      const newItem = { ...sessionItem, [fieldName]: newArray };
+      setSessionItem(newItem);
     }
   }
 
   function handleArraySet(newArray: string[], fieldName: string) {
-    const newItem = { ...item, [fieldName]: newArray };
-    updateItem(newItem);
+    const newItem = { ...sessionItem, [fieldName]: newArray };
+    setSessionItem(newItem);
   }
 
   const backgroundColor = (!isEditing ? mainCardBg : mainCardEditingBg);
@@ -173,7 +177,7 @@ export default function Card<T extends BaseItem>({
       <BootstrapCard.Body className="d-flex flex-column flex-lg-row m-0 p-0">
        <div className="order-2 order-lg-1 w-100">
           <CardComponent
-            item={item}
+            item={sessionItem}
             isHovered={isHovered}
             isEditing={isEditing}
             handleCheckChange={handleCheckChange}
@@ -222,11 +226,7 @@ export default function Card<T extends BaseItem>({
                 color={undoColor}
                 outline={true}
                 title="Discard Changes"
-                onClick={() => {
-                  if (itemBeforeEdit)
-                    undoChanges(itemBeforeEdit)
-                  }
-                }
+                onClick={() => {undoChanges()}}
               />
             </>
           )}

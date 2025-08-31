@@ -66,7 +66,7 @@ export default function IngredientCard({ item, isEditing, handleCheckChange, han
                 value={item.additionPrice}
                 fieldName="Addition Price"
                 isEditing={isEditing}
-                handleChange={(event) => handlePriceChange(event as React.ChangeEvent<HTMLInputElement>, "price")}
+                handleChange={(event) => handlePriceChange(event as React.ChangeEvent<HTMLInputElement>, "additionPrice")}
               />
             </div>
 

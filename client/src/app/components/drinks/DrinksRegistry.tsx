@@ -43,7 +43,7 @@ function Filters({ filterByOutOfStock, setFilterByOutOfStock, filterByDisabled, 
 
 export default function IngredientsRegistry() {
 
-  const { drinks, updateDrink, setDrinks } = useStore();
+  const { drinks, setDrinks } = useStore();
   const [filteredItems, setFilteredItems] = useState<Drink[]>([]);
 
   const [filterByOutOfStock, setFilterByOutOfStock] = useState(false);
@@ -95,7 +95,6 @@ export default function IngredientsRegistry() {
       filteredItems={filteredItems}
       keyField={"name"}
       cardComponent={DrinkCard}
-      updateItem={updateDrink}
       service={drinksService}
       showNavbar={true}
       filtersComponent={

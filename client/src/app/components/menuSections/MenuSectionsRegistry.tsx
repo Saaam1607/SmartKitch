@@ -23,7 +23,7 @@ interface FiltersProps {
 
 export default function MenuSectionRegistry() {
 
-  const { menuSections, updateMenuSection, setMenuSections } = useStore();
+  const { menuSections, setMenuSections } = useStore();
   const { setDishes } = useStore();
   const [filteredItems, setFilteredItems] = useState<MenuSection[]>([]);
 
@@ -73,7 +73,6 @@ export default function MenuSectionRegistry() {
           filteredItems={filteredItems}
           keyField={"name"}
           cardComponent={MenuSectionCard}
-          updateItem={updateMenuSection}
           service={menuSectionsService}
           showNavbar={true}
           renderCreationModal={(visible: boolean, close: () => void) => (
@@ -91,7 +90,6 @@ export default function MenuSectionRegistry() {
           keyField={"name"}
           cardComponent={MenuSectionDishesCard}
           canDelete={true}
-          updateItem={updateMenuSection}
           service={menuSectionsService}
           showNavbar={true}
           renderCreationModal={(visible: boolean, close: () => void) => (

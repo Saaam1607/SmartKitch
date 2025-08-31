@@ -45,7 +45,7 @@ function Filters({ filterByOutOfStock, setFilterByOutOfStock, filterByDisabled, 
 
 export default function DishesRegistry() {
 
-  const { dishes, updateDish, setDishes } = useStore();
+  const { dishes, setDishes } = useStore();
   const { setIngredients } = useStore();
 
   const [filteredItems, setFilteredItems] = useState<Dish[]>([]);
@@ -100,7 +100,6 @@ export default function DishesRegistry() {
       filteredItems={filteredItems}
       keyField={"name"}
       cardComponent={DishCard}
-      updateItem={updateDish}
       service={dishesService}
       showNavbar={true}
       filtersComponent={

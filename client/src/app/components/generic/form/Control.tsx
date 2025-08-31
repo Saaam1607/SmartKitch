@@ -1,4 +1,4 @@
-import React, { useRef, useState, useCallback } from 'react';
+import React, { useRef, useState, useCallback, useImperativeHandle, forwardRef } from 'react';
 
 import { Form } from 'react-bootstrap';
 
@@ -20,6 +20,71 @@ const getCommonEditingStyle = (isEditing: boolean): React.CSSProperties => ({
   border: isEditing ? '2px solid rgb(219, 123, 33)' : '2px solid transparent',
 });
 
+interface ControlProps {
+  type: string;
+  step?: number;
+  itemKey: string;
+  value: string | number;
+  fieldName: string;
+  showLabel?: boolean;
+  width?: number;
+  isEditing?: boolean;
+  handleChange?: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+}
+
+export default function Control({ type, step, itemKey, value, fieldName, isEditing, showLabel=true, width, handleChange=() => {}}  : ControlProps) {
+
+  return (
+    <Form.Group className="d-flex flex-column align-items-left">
+      {showLabel && (
+        <Form.Label
+          className="m-0"
+          htmlFor={`${fieldName}-${itemKey}`}
+          style={{
+            fontSize: '0.75rem',
+            pointerEvents: 'none',
+            userSelect: 'none'
+          }}
+        >
+          {fieldName}
+        </Form.Label>
+      )}
+
+      {type === 'textarea' && (
+        <TextArea
+          itemKey={itemKey}
+          value={value as string}
+          fieldName={fieldName}
+          isEditing={isEditing}
+          handleChange={handleChange}
+        />
+      )}
+      {type === 'text' && (
+        <TextInput
+          type={type}
+          itemKey={itemKey}
+          value={value as string}
+          fieldName={fieldName}
+          isEditing={isEditing}
+          handleChange={handleChange}
+        />
+      )}
+      {type === 'price' && (
+        <PriceInput
+          type={type}
+          step={step || 1}
+          itemKey={itemKey}
+          value={value as number}
+          fieldName={fieldName}
+          isEditing={isEditing}
+          width={width}
+          handleChange={handleChange}
+        />
+      )}
+    </Form.Group>
+  );
+}
+
 interface TextAreaProps {
   itemKey: string;
   value: string;
@@ -33,33 +98,15 @@ function TextArea({ itemKey, value, fieldName, isEditing, handleChange }: TextAr
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   useAutosizeTextArea(textAreaRef.current, value);
 
-  const [internalValue, setInternalValue] = useState(value);
-
-  const debouncedHandleChange = useCallback(
-    debounce((val: string) => {
-      if(handleChange) {
-        handleChange({
-          target: { value: val } as HTMLTextAreaElement,
-        } as React.ChangeEvent<HTMLTextAreaElement>);
-      }
-    }, 300),
-    [handleChange]
-  );
-
-  function handleInternalChange(event: React.ChangeEvent<HTMLTextAreaElement>) {
-    setInternalValue(event.target.value);
-    debouncedHandleChange(event.target.value);
-  }
-
   return (
     <textarea
       className="p-1 customScrollbar"
       id="review-text"
-      onChange={handleInternalChange}
+      onChange={handleChange}
       placeholder=""
       ref={textAreaRef}
       rows={1}
-      value={internalValue}
+      value={value}
       style={{
         ...commonStyle,
         ...getCommonEditingStyle(isEditing || false),
@@ -128,7 +175,7 @@ function PriceInput({ type, step, itemKey, value, fieldName, isEditing, width, h
           type="number"
           step={step}
           className="ps-2 rounded customScrollbar"
-          value={value}
+          value={value ?? ""}
           id={`${fieldName}-${itemKey}`}
           onChange={handleChange}
           style={{
@@ -166,70 +213,5 @@ function TextInput({ type, itemKey, value, fieldName, isEditing, handleChange }:
         ...getCommonEditingStyle(isEditing || false),
       }}
     />
-  );
-}
-
-interface ControlProps {
-  type: string;
-  step?: number;
-  itemKey: string;
-  value: string | number;
-  fieldName: string;
-  showLabel?: boolean;
-  width?: number;
-  isEditing?: boolean;
-  handleChange?: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
-}
-
-export default function Control({ type, step, itemKey, value, fieldName, isEditing, showLabel=true, width, handleChange=() => {}}  : ControlProps) {
-
-  return (
-    <Form.Group className="d-flex flex-column align-items-left">
-      {showLabel && (
-        <Form.Label
-          className="m-0"
-          htmlFor={`${fieldName}-${itemKey}`}
-          style={{
-            fontSize: '0.75rem',
-            pointerEvents: 'none',
-            userSelect: 'none'
-          }}
-        >
-          {fieldName}
-        </Form.Label>
-      )}
-
-      {type === 'textarea' && (
-        <TextArea
-          itemKey={itemKey}
-          value={value as string}
-          fieldName={fieldName}
-          isEditing={isEditing}
-          handleChange={handleChange}
-        />
-      )}
-      {type === 'text' && (
-        <TextInput
-          type={type}
-          itemKey={itemKey}
-          value={value as string}
-          fieldName={fieldName}
-          isEditing={isEditing}
-          handleChange={handleChange}
-        />
-      )}
-      {type === 'price' && (
-        <PriceInput
-          type={type}
-          step={step || 1}
-          itemKey={itemKey}
-          value={value as number}
-          fieldName={fieldName}
-          isEditing={isEditing}
-          width={width}
-          handleChange={handleChange}
-        />
-      )}
-    </Form.Group>
   );
 }
