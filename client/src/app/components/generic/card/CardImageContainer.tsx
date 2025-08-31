@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import ColorThief from 'colorthief';
 
 interface CardImageContainerProps {
-  image: string;
+  image?: string;
   children: React.ReactNode;
 }
 
@@ -13,15 +13,18 @@ export default function CardImageContainer({ image, children }: CardImageContain
   const [isLgUp, setIsLgUp] = useState(false);
 
   useEffect(() => {
-    const img = new Image();
-    img.crossOrigin = 'Anonymous';
-    img.src = image;
+    if (image) {
+      const img = new Image();
+      img.crossOrigin = 'Anonymous';
+      img.src = image;
 
-    img.onload = () => {
-      const colorThief = new ColorThief();
-      const color: [number, number, number] = colorThief.getColor(img);
-      setMainColor(color);
-    };
+      img.onload = () => {
+        const colorThief = new ColorThief();
+        const color: [number, number, number] = colorThief.getColor(img);
+        setMainColor(color);
+      };
+    }
+
   }, [image]);
 
   useEffect(() => {
@@ -46,7 +49,6 @@ export default function CardImageContainer({ image, children }: CardImageContain
         minHeight: '100%',
         background: background,
         transition: "opacity 0.5s ease",
-        opacity: mainColor && mainColor.length > 0 ? 1 : 0,
         borderTopLeftRadius: isLgUp ? "15px" : "0",
         borderBottomLeftRadius: isLgUp ? "15px" : "0",
       }}

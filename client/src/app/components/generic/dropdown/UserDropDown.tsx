@@ -45,7 +45,6 @@ export default function UserDropDown({ iconComponent } : UserDropDownProps) {
         close={() => {setShowProfileModal(false)}}
         saveItem={() => {setShowProfileModal(false)}}
       >
-        <p>aaaaaaa</p>
       </Modal>
 
       <Dropdown

@@ -14,6 +14,10 @@ export const ingredientsService: CrudService<Ingredient> = {
     return res.json();
   },
 
+  async fetchItemImage(componentKey: string): Promise<string> {
+    return `${API_URL}/image/${encodeURIComponent(componentKey)}`;
+  },
+
   async addItem(newIngredient: Ingredient): Promise<Ingredient> {
     const res = await fetch(API_URL, {
       method: 'POST',

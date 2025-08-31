@@ -15,13 +15,14 @@ import CardComponentProps from '../../types/props/CardComponentProps';
 
 import '../../styles/card.css';
 
-export default function IngredientCard({ item, isEditing, handleCheckChange, handleTextChange, handleImageChange, handlePriceChange }: CardComponentProps<Ingredient>) {
+export default function IngredientCard({ item, getImage, isEditing, handleCheckChange, handleTextChange, handleImageChange, handlePriceChange }: CardComponentProps<Ingredient>) {
 
   return (
     <div className="d-flex flex-column flex-lg-row w-100" >
-      <CardImageContainer image={item.image} >
+
+      <CardImageContainer >
         <CardImage
-          image={item.image}
+          getImage={() => getImage(item.name)}
           size={175}
           borderSize={8}
           updateImage={(image: string) => handleImageChange(image, 'image')}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { Image, Pencil } from 'lucide-react';
 
@@ -10,7 +10,7 @@ import getCroppedImg from '../../../utils/getCroppedImg';
 import { useThemeStyles } from '../../../hooks/useThemeStyles';
 
 interface CardImageProps {
-  image: string;
+  getImage?: (componentKey: string) => Promise<string>;
   size?: number;
   isHovered?: boolean;
   borderSize?: number;
@@ -19,7 +19,9 @@ interface CardImageProps {
   isEditing?: boolean;
 }
 
-export default function CardImage({ image, size=175, isHovered, borderSize=0, borderRadius=15, updateImage, isEditing }: CardImageProps) {
+export default function CardImage({ getImage, size=175, isHovered, borderSize=0, borderRadius=15, updateImage, isEditing }: CardImageProps) {
+
+  const [imageUrl, setImageUrl] = useState(undefined)
 
   const [showEditModal, setShowEditModal] = useState(false);
   const [newImage, setNewImage] = useState<string | null>(null);
@@ -29,6 +31,23 @@ export default function CardImage({ image, size=175, isHovered, borderSize=0, bo
     mainCardBg,
     mainCardEditingBg,
   } = useThemeStyles();
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const loadImage = async () => {
+      if (getImage) {
+        const url = await getImage();
+        if (isMounted) setImageUrl(url);
+      }
+    };
+
+    loadImage();
+
+    return () => {
+      isMounted = false; // evita setState dopo unmount
+    };
+  }, [getImage]);
 
   async function saveChanges() {
     if (newImage) {
@@ -67,35 +86,24 @@ export default function CardImage({ image, size=175, isHovered, borderSize=0, bo
         style={{
           border: `${borderSize}px solid ${!isEditing ? mainCardBg : mainCardEditingBg}`, 
           borderRadius: `${borderRadius + borderSize}px`,
+          width: size,
+          height: size
         }}
       >
-        {image && image != "" ? (
-          <div
-            className="rounded-start"
+
+        {imageUrl ? (
+          <img
+            alt="Card Image"
+            src={imageUrl}
+            width={size}
+            height={size}
             style={{
-              width: `${size}px`,
-              height: `${size}px`,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              userSelect: 'none',
-              pointerEvents: 'none'
-            }} 
-          >
-            <img
-              className=""
-              alt={"Card Image"}
-              src={image}
-              style={{
-                width: `${size}px`,
-                height: `${size}px`,
-                objectFit: 'cover',
-                borderRadius: `${borderRadius}px`,
-                transition: 'transform 0.3s ease',
-                transform: isHovered ? 'scale(1.05)' : 'scale(1)',
-              }}
-            /> 
-          </div>
+              objectFit: 'cover',
+              borderRadius: `${borderRadius}px`,
+              transition: 'transform 0.3s ease',
+              transform: isHovered ? 'scale(1.05)' : 'scale(1)',
+            }}
+          />
         ) : (
           <div
             className=""
@@ -112,6 +120,36 @@ export default function CardImage({ image, size=175, isHovered, borderSize=0, bo
             <Image width={50} height={50} style={{color: "grey"}}/>
           </div>
         )}
+        {/* {getImage ? (
+          <img
+            className=""
+            alt={"Card Image"}
+            src={image}
+            style={{
+              width: `${size}px`,
+              height: `${size}px`,
+              objectFit: 'cover',
+              borderRadius: `${borderRadius}px`,
+              transition: 'transform 0.3s ease',
+              transform: isHovered ? 'scale(1.05)' : 'scale(1)',
+            }}
+          /> 
+        ) : (
+          <div
+            className=""
+            style={{
+              width: `${size}px`,
+              height: `${size}px`,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundColor: '#f0f0f0',
+              borderRadius: `${borderRadius}px`
+            }} 
+          >
+            <Image width={50} height={50} style={{color: "grey"}}/>
+          </div>
+        )} */}
 
         {isEditing && (
           <div

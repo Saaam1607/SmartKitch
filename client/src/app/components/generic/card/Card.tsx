@@ -178,6 +178,7 @@ export default function Card<T extends BaseItem>({
        <div className="order-2 order-lg-1 w-100">
           <CardComponent
             item={sessionItem}
+            getImage={service?.fetchItemImage}
             isHovered={isHovered}
             isEditing={isEditing}
             handleCheckChange={handleCheckChange}
