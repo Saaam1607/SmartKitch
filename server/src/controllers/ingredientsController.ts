@@ -19,7 +19,7 @@ export const getIngredientImage = async (req: Request, res: Response) => {
 
     const buffer = await ingredientsService.getItemImage(name);
 
-        if (!buffer) {
+    if (!buffer) {
       return res.status(404).json({ message: "Image not found" });
     }
 
@@ -32,7 +32,7 @@ export const getIngredientImage = async (req: Request, res: Response) => {
 
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Error fetching ingredients' });
+    res.status(500).json({ message: 'Error fetching ingredient image' });
   }
 };
 

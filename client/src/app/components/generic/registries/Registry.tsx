@@ -20,7 +20,7 @@ interface RegistryProps<T extends BaseItem> {
   keyField: string;
   cardComponent: React.ComponentType<CardComponentProps<T>>;
   canDelete?: boolean;
-  canSave?: (newItem: T) => boolean;
+  canSave?: (newItem: T) => Promise<boolean>;
   service: CrudService<T>,
   showNavbar?: boolean;  
   filtersComponent?: React.ReactNode;

@@ -7,6 +7,8 @@ import Control from '../form/Control';
 
 import useStore from '../../../state/useStore'
 
+import dishesService from '../../../services/dishesService'
+
 import '../../../styles/card.css';
 
 interface DishMiniCardProps {
@@ -16,6 +18,7 @@ interface DishMiniCardProps {
 export default function DishMiniCard({ dishName }: DishMiniCardProps) {
 
   const { dishes } = useStore();
+  const [imageUrl, setImageUrl] = useState("")
 
   const [dish, setDish] = useState<Dish | null>(null);
 
@@ -24,6 +27,25 @@ export default function DishMiniCard({ dishName }: DishMiniCardProps) {
     setDish(foundDish || null);
   }, [dishes, dishName]);
 
+  useEffect(() => {
+    if (dish) {
+      let isMounted = true;
+      const loadImage = async () => {
+        if (dishesService.fetchItemImage) {
+          const url = await dishesService.fetchItemImage(dishName)
+          if (url)
+            if (isMounted)
+              setImageUrl(url);
+        }
+      };
+
+      loadImage();
+
+      return () => {
+        isMounted = false;
+      };
+    }
+  }, [dish]);
 
   return (
     <div
@@ -44,7 +66,7 @@ export default function DishMiniCard({ dishName }: DishMiniCardProps) {
             }}
           >
             <CardImage
-              image={dish.image}
+              imageUrl={imageUrl}
               size={100}
               borderRadius={10}
             />

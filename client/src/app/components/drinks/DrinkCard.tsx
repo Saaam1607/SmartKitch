@@ -7,27 +7,24 @@ import CardImage from '../generic/card/CardImage';
 import Control from '../generic/form/Control';
 import Check from '../generic/form/Check';
 
-import CardImageContainer from '../generic/card/CardImageContainer'
+import CardImageSection from '../generic/card/CardImageSection'
 
 import CardComponentProps from '../../types/props/CardComponentProps';
 
 
 import '../../styles/card.css';
 
-export default function DrinkCard({ item, isEditing, handleCheckChange, handleTextChange, handleImageChange, handlePriceChange }: CardComponentProps<Drink>) {
+export default function DrinkCard({ item, getImage, isEditing, handleCheckChange, handleTextChange, handleImageChange, handlePriceChange }: CardComponentProps<Drink>) {
 
   return (
     <div className="d-flex flex-column flex-lg-row w-100" >
       
-      <CardImageContainer image={item.image}>
-        <CardImage
-          image={item.image}
-          size={175}
-          borderSize={8}
-          updateImage={(image: string) => handleImageChange(image, 'image')}
-          isEditing={isEditing}
-        />
-      </CardImageContainer>
+      <CardImageSection
+        getImage={() => getImage?.(item.name)}
+        updateImage={(image: string) => handleImageChange(image, 'image')}
+        isEditing={isEditing}
+      >
+      </CardImageSection>
 
       <div className="d-flex w-100">
         <div

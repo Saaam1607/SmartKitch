@@ -8,7 +8,7 @@ import CardImage from '../generic/card/CardImage';
 import Control from '../generic/form/Control';
 import Check from '../generic/form/Check';
 
-import CardImageContainer from '../generic/card/CardImageContainer'
+import CardImageSection from '../generic/card/CardImageSection'
 
 import CardComponentProps from '../../types/props/CardComponentProps';
 
@@ -20,15 +20,12 @@ export default function IngredientCard({ item, getImage, isEditing, handleCheckC
   return (
     <div className="d-flex flex-column flex-lg-row w-100" >
 
-      <CardImageContainer >
-        <CardImage
-          getImage={() => getImage(item.name)}
-          size={175}
-          borderSize={8}
-          updateImage={(image: string) => handleImageChange(image, 'image')}
-          isEditing={isEditing}
-        />
-      </CardImageContainer>
+      <CardImageSection
+        getImage={() => getImage?.(item.name)}
+        updateImage={(image: string) => handleImageChange(image, 'image')}
+        isEditing={isEditing}
+      >
+      </CardImageSection>
 
       <div className="d-flex w-100">
         <div

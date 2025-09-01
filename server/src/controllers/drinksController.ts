@@ -13,6 +13,29 @@ export const getDrinks = async (req: Request, res: Response) => {
   }
 };
 
+export const getDrinkImage = async (req: Request, res: Response) => {
+  try {
+    const { name } = req.params;
+
+    const buffer = await drinksService.getItemImage(name);
+
+    if (!buffer) {
+      return res.status(404).json({ message: "Image not found" });
+    }
+
+    res.writeHead(200, {
+      "Content-Type": "image/jpeg",
+      "Cache-Control": "public, max-age=31536000, immutable",
+    });
+
+    return res.end(buffer);
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error fetching drink image' });
+  }
+};
+
 export const createDrink = async (req: Request, res: Response) => {
   try {
     const newItem: Drink = req.body;

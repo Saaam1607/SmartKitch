@@ -47,8 +47,10 @@ export default function Main() {
   }
 
   useEffect(() => {
-    const _selectedRegistry: string = localStorage.getItem('selectedRegistry');
-    setSelectedRegistry(_selectedRegistry);
+    const _selectedRegistry = localStorage.getItem('selectedRegistry');
+    if (_selectedRegistry !== null) {
+      setSelectedRegistry(_selectedRegistry);
+    }
   }, [])
 
   return (

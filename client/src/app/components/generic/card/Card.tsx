@@ -21,7 +21,7 @@ interface CardProps<T extends BaseItem> {
   item: T;
   keyField: string,
   canDelete?: boolean,
-  canSave?: (newItem: T) => boolean;
+  canSave?: (newItem: T) => Promise<boolean>;
   service: CrudService<T>,
   cardComponent: React.ComponentType<CardComponentProps<T>>;
 };

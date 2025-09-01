@@ -1,22 +1,44 @@
 import React, { useState, useEffect } from 'react';
 
+import CardImage from './CardImage';
+
 import ColorThief from 'colorthief';
 
-interface CardImageContainerProps {
-  image?: string;
-  children: React.ReactNode;
+interface CardImageSectionProps {
+  getImage?: () => Promise<string> | undefined;
+  updateImage?: (image: string) => void;
+  isEditing: boolean;
 }
 
-export default function CardImageContainer({ image, children }: CardImageContainerProps) {
+export default function CardImageSection({ getImage, updateImage, isEditing }: CardImageSectionProps) {
+
+  const [imageUrl, setImageUrl] = useState<string>("")
 
   const [mainColor, setMainColor] = useState<[number, number, number] | null>(null);
   const [isLgUp, setIsLgUp] = useState(false);
 
   useEffect(() => {
-    if (image) {
+    let isMounted = true;
+    const loadImage = async () => {
+      if (getImage) {
+        const image = await getImage()
+        if (image)
+          if (isMounted) setImageUrl(image);
+      }
+    };
+
+    loadImage();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [getImage]);
+
+  useEffect(() => {
+    if (imageUrl) {
       const img = new Image();
       img.crossOrigin = 'Anonymous';
-      img.src = image;
+      img.src = imageUrl;
 
       img.onload = () => {
         const colorThief = new ColorThief();
@@ -24,8 +46,7 @@ export default function CardImageContainer({ image, children }: CardImageContain
         setMainColor(color);
       };
     }
-
-  }, [image]);
+  }, [imageUrl]);
 
   useEffect(() => {
     const handleResize = () => setIsLgUp(window.innerWidth >= 992);
@@ -54,7 +75,13 @@ export default function CardImageContainer({ image, children }: CardImageContain
       }}
     >
       <div style={{borderRadius: "15px"}}>
-        {children}
+        <CardImage
+          imageUrl={imageUrl}
+          size={175}
+          borderSize={8}
+          updateImage={updateImage}
+          isEditing={isEditing}
+        />
       </div> 
     </div>
   );

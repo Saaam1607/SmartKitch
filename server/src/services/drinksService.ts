@@ -3,18 +3,20 @@ import pool from '../config/database';
 import { Drink } from '../models/Drink';
 
 export const getItems = async (): Promise<Drink[]> => {
-  const result = await pool.query('SELECT name, description, image, out_of_stock AS "outOfStock", disabled, price FROM drinks');
-  const items = result.rows.map(row => {
-    const base64Image = row.image.toString('base64');
-    const mimeType = 'image/jpeg';
-    return {
-      ...row,
-      image: `data:${mimeType};base64,${base64Image}`
-    };
-  });
-
-  return items;
+  const result = await pool.query('SELECT name, description, out_of_stock AS "outOfStock", disabled, price FROM drinks');
+  return result.rows;
 };
+
+export const getItemImage = async (keyValue: string): Promise<Buffer | null> => {
+  
+  const result = await pool.query("SELECT image FROM drinks WHERE name = $1", [keyValue]);
+
+  if (result.rows.length === 0 || !result.rows[0].image) {
+    return null;
+  }
+
+  return result.rows[0].image as Buffer;
+}
 
 export const createItem = async (newItem: Drink): Promise<Drink> => {
   const base64Data = newItem.image.replace(/^data:image\/\w+;base64,/, "");

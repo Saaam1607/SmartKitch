@@ -10,7 +10,7 @@ import getCroppedImg from '../../../utils/getCroppedImg';
 import { useThemeStyles } from '../../../hooks/useThemeStyles';
 
 interface CardImageProps {
-  getImage?: (componentKey: string) => Promise<string>;
+  imageUrl: string;
   size?: number;
   isHovered?: boolean;
   borderSize?: number;
@@ -19,9 +19,7 @@ interface CardImageProps {
   isEditing?: boolean;
 }
 
-export default function CardImage({ getImage, size=175, isHovered, borderSize=0, borderRadius=15, updateImage, isEditing }: CardImageProps) {
-
-  const [imageUrl, setImageUrl] = useState(undefined)
+export default function CardImage({ imageUrl, size=175, isHovered, borderSize=0, borderRadius=15, updateImage, isEditing }: CardImageProps) {
 
   const [showEditModal, setShowEditModal] = useState(false);
   const [newImage, setNewImage] = useState<string | null>(null);
@@ -32,34 +30,17 @@ export default function CardImage({ getImage, size=175, isHovered, borderSize=0,
     mainCardEditingBg,
   } = useThemeStyles();
 
-  useEffect(() => {
-    let isMounted = true;
-
-    const loadImage = async () => {
-      if (getImage) {
-        const url = await getImage();
-        if (isMounted) setImageUrl(url);
-      }
-    };
-
-    loadImage();
-
-    return () => {
-      isMounted = false; // evita setState dopo unmount
-    };
-  }, [getImage]);
-
   async function saveChanges() {
-    if (newImage) {
-      const croppedBlob = await getCroppedImg(newImage, croppedAreaPixels) as Blob;
-      const imageUrl = URL.createObjectURL(croppedBlob);
-      if (imageUrl && updateImage)
-        updateImage(imageUrl as string);
-    } else {
-      if (updateImage) updateImage("");
-    }
-    setShowEditModal(false);
-    setCroppedAreaPixels(null);
+    // if (newImage) {
+    //   const croppedBlob = await getCroppedImg(newImage, croppedAreaPixels) as Blob;
+    //   const imageUrl = URL.createObjectURL(croppedBlob);
+    //   if (imageUrl && updateImage)
+    //     updateImage(imageUrl as string);
+    // } else {
+    //   if (updateImage) updateImage("");
+    // }
+    // setShowEditModal(false);
+    // setCroppedAreaPixels(null);
   }
 
   function undoChanges() {
@@ -86,8 +67,8 @@ export default function CardImage({ getImage, size=175, isHovered, borderSize=0,
         style={{
           border: `${borderSize}px solid ${!isEditing ? mainCardBg : mainCardEditingBg}`, 
           borderRadius: `${borderRadius + borderSize}px`,
-          width: size,
-          height: size
+          width: size + 2 * borderSize,
+          height: size + 2 * borderSize,
         }}
       >
 
@@ -95,9 +76,9 @@ export default function CardImage({ getImage, size=175, isHovered, borderSize=0,
           <img
             alt="Card Image"
             src={imageUrl}
-            width={size}
-            height={size}
             style={{
+              width: "100%",
+              height: "100%",
               objectFit: 'cover',
               borderRadius: `${borderRadius}px`,
               transition: 'transform 0.3s ease',

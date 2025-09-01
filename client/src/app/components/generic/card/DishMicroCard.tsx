@@ -6,6 +6,8 @@ import CardImage from '../card/CardImage';
 
 import useStore from '../../../state/useStore'
 
+import dishesService from '../../../services/dishesService'
+
 import '../../../styles/card.css';
 
 interface DishMiniCardProps {
@@ -17,6 +19,7 @@ interface DishMiniCardProps {
 export default function DishMicroCard({ dishName, isSelected, menuSection }: DishMiniCardProps) {
 
   const { dishes } = useStore();
+  const [imageUrl, setImageUrl] = useState("")
 
   const [dish, setDish] = useState<Dish | null>(null);
 
@@ -24,6 +27,26 @@ export default function DishMicroCard({ dishName, isSelected, menuSection }: Dis
     const foundDish = dishes.find(d => d.name === dishName);
     setDish(foundDish || null);
   }, [dishes, dishName]);
+
+  useEffect(() => {
+    if (dish) {
+      let isMounted = true;
+      const loadImage = async () => {
+        if (dishesService.fetchItemImage) {
+          const url = await dishesService.fetchItemImage(dishName)
+          if (url)
+            if (isMounted)
+              setImageUrl(url);
+        }
+      };
+
+      loadImage();
+
+      return () => {
+        isMounted = false;
+      };
+    }
+  }, [dish]);
 
 
   return (
@@ -44,7 +67,7 @@ export default function DishMicroCard({ dishName, isSelected, menuSection }: Dis
             className="d-flex align-items-center p-0"
             style={{ minHeight: '100%' }}
           >
-            <CardImage image={dish.image} size={60} />
+            <CardImage imageUrl={imageUrl} size={60} />
           </div>
 
           <div className="d-flex w-100">

@@ -7,7 +7,6 @@ export const getItems = async (): Promise<Dish[]> => {
     SELECT
       d.name,
       d.description,
-      d.image,
       d.out_of_stock AS "outOfStock", 
       d.disabled,
       d.price,
@@ -18,17 +17,25 @@ export const getItems = async (): Promise<Dish[]> => {
   `);
 
   const items = result.rows.map(row => {
-    const base64Image = row.image.toString('base64');
-    const mimeType = 'image/jpeg';
     return {
       ...row,
-      image: `data:${mimeType};base64,${base64Image}`,
       ingredients: row.ingredients || []
     };
   });
 
   return items;
 };
+
+export const getItemImage = async (keyValue: string): Promise<Buffer | null> => {
+  
+  const result = await pool.query("SELECT image FROM dishes WHERE name = $1", [keyValue]);
+
+  if (result.rows.length === 0 || !result.rows[0].image) {
+    return null;
+  }
+
+  return result.rows[0].image as Buffer;
+}
 
 export const createItem = async (newItem: Dish): Promise<Dish> => {
 

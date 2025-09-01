@@ -10,7 +10,7 @@ import Control from '../generic/form/Control';
 import Check from '../generic/form/Check';
 import ComboList from '../generic/form/ComboList';
 
-import CardImageContainer from '../generic/card/CardImageContainer'
+import CardImageSection from '../generic/card/CardImageSection'
 
 import CardComponentProps from '../../types/props/CardComponentProps';
 
@@ -20,7 +20,7 @@ import '../../styles/card.css';
 
 
 
-export default function DishCard<T extends BaseItem>({ item, isHovered, isEditing, handleCheckChange, handleTextChange, handleImageChange, handlePriceChange, handleArrayAddition, handleArrayRemoval }: CardComponentProps<Dish>) {
+export default function DishCard<T extends BaseItem>({ item, getImage, isHovered, isEditing, handleCheckChange, handleTextChange, handleImageChange, handlePriceChange, handleArrayAddition, handleArrayRemoval }: CardComponentProps<Dish>) {
 
   const ingredients = useStore((state) => state.ingredients);
 
@@ -44,16 +44,15 @@ export default function DishCard<T extends BaseItem>({ item, isHovered, isEditin
 
   return (
     <div className="d-flex flex-column flex-lg-row w-100" >
-      <CardImageContainer image={item.image}>
-        <CardImage
-          image={item.image}
-          size={175}
-          borderSize={8}
-          // isHovered={isHovered}
-          updateImage={(image: string) => handleImageChange(image, 'image')}
-          isEditing={isEditing}
-        />
-      </CardImageContainer>
+      
+      
+      
+      <CardImageSection
+        getImage={() => getImage?.(item.name)}
+        updateImage={(image: string) => handleImageChange(image, 'image')}
+        isEditing={isEditing}
+      >
+      </CardImageSection>
 
       <div className="d-flex w-100">
         <div
