@@ -47,8 +47,12 @@ export default function Menu({
       <MenuSection label="TEAM" handleSelect={handleSelect} isExpanded={isExpanded} >
         <MenuItem label="Roles" iconComponent={Book} selectedRegistry={selectedRegistry} isExpanded={isExpanded} />
       </MenuSection>
-      
+
       <MenuSection label="REGISTRIES" handleSelect={handleSelect} isExpanded={isExpanded} >
+      </MenuSection>
+
+      
+      <MenuSection label="KITCHEN REGISTRIES" handleSelect={handleSelect} isExpanded={isExpanded} >
         <MenuItem label="Ingredients" iconComponent={ChefHat} selectedRegistry={selectedRegistry} isExpanded={isExpanded} />
         <MenuItem label="Dishes" iconComponent={Pizza} selectedRegistry={selectedRegistry} isExpanded={isExpanded} />
         <MenuItem label="Drinks" iconComponent={Wine} selectedRegistry={selectedRegistry} isExpanded={isExpanded} />

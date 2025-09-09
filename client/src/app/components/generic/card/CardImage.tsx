@@ -31,16 +31,17 @@ export default function CardImage({ imageUrl, size=175, isHovered, borderSize=0,
   } = useThemeStyles();
 
   async function saveChanges() {
-    // if (newImage) {
-    //   const croppedBlob = await getCroppedImg(newImage, croppedAreaPixels) as Blob;
-    //   const imageUrl = URL.createObjectURL(croppedBlob);
-    //   if (imageUrl && updateImage)
-    //     updateImage(imageUrl as string);
+
+    if (newImage) {
+      // const croppedBlob = await getCroppedImg(newImage, croppedAreaPixels) as Blob;
+      // const imageUrl = URL.createObjectURL(croppedBlob);
+      // if (imageUrl && updateImage)
+        updateImage(newImage as string);
     // } else {
     //   if (updateImage) updateImage("");
-    // }
-    // setShowEditModal(false);
-    // setCroppedAreaPixels(null);
+    }
+    setShowEditModal(false);
+    setCroppedAreaPixels(null);
   }
 
   function undoChanges() {

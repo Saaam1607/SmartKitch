@@ -30,21 +30,45 @@ export const ingredientsService: CrudService<Ingredient> = {
   },
 
   async editItem(newIngredient: Ingredient): Promise<Ingredient> {
-    let imageBase64: string = '';
 
-    if (newIngredient.image.startsWith('data:image')) {
-      imageBase64 = newIngredient.image;
-    } else if (newIngredient.image.startsWith('blob:')) {
-      const blob = await blobUrlToBlob(newIngredient.image);
-      imageBase64 = await blobToBase64(blob);
+    let ingredientToSend = newIngredient;
+
+    if (newIngredient?.image) {
+      let imageBase64: string = '';
+      if (newIngredient.image.startsWith('data:image')) {
+        imageBase64 = newIngredient.image;
+      } else if (newIngredient.image.startsWith('blob:')) {
+        const blob = await blobUrlToBlob(newIngredient.image);
+        imageBase64 = await blobToBase64(blob);
+      }
+
+      ingredientToSend = { ...ingredientToSend, image: imageBase64 };
     }
-
-    const ingredientToSend = { ...newIngredient, image: imageBase64 };
 
     const res = await fetch(`${API_URL}/${encodeURIComponent(newIngredient.name)}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(ingredientToSend),
+    });
+
+    if (!res.ok) throw new Error('Failed to edit ingredient');
+    return res.json();
+  },
+
+  async editItemImage(name: string, newImage: string): Promise<Ingredient> {
+
+    let imageBase64: string = '';
+    if (newImage.startsWith('data:image')) {
+      imageBase64 = newImage;
+    } else if (newImage.startsWith('blob:')) {
+      const blob = await blobUrlToBlob(newImage);
+      imageBase64 = await blobToBase64(blob);
+    }
+
+    const res = await fetch(`${API_URL}/image/${encodeURIComponent(name)}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(imageBase64),
     });
 
     if (!res.ok) throw new Error('Failed to edit ingredient');

@@ -74,6 +74,9 @@ export default function Card<T extends BaseItem>({
 
       setLoading(true);
       await service.editItem(sessionItem);
+      if (sessionItem?.image) {
+        await service.editItemImage(sessionItem.name, sessionItem.image);
+      }
       toast.success("Changes Saved");
       await service.fetchItems();
       setLoading(false);
@@ -116,7 +119,16 @@ export default function Card<T extends BaseItem>({
     setSessionItem(newItem);
   }
 
-  function handleImageChange(newImage: string, fieldName: string) {
+  async function handleImageChange(newImage: string, fieldName: string) {
+    try {
+      setLoading(true);
+      await service.editItemImage(sessionItem.name, sessionItem.image);
+      toast.success("Image Saved");
+      // await service.fetchItems();
+      setLoading(false);
+    } catch (error) {
+      console.error(error);
+    }
     const newItem = { ...sessionItem, [fieldName]: newImage };
     setSessionItem(newItem);
   }

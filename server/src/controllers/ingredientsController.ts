@@ -69,6 +69,30 @@ export const editIngredient = async (req: Request, res: Response) => {
   }
 };
 
+export const editIngredientImage = async (req: Request, res: Response) => {
+  try {
+
+    const { name } = req.params;
+    const newImage = req.body;
+
+    if (!name) {
+      return res.status(400).json({ message: 'Ingredient name is required' });
+    }
+
+    const updatedIngredient = await ingredientsService.editItemImage(name, newImage);
+    return res.status(200).json(updatedIngredient);
+
+  } catch (error: any) {
+    console.error('Error updating ingredient:', error.message || error);
+
+    if (error.message && error.message.includes('not found')) {
+      return res.status(404).json({ message: error.message });
+    }
+
+    return res.status(500).json({ message: 'Failed to update ingredient' });
+  }
+};
+
 export const deleteIngredient = async (req: Request, res: Response) => {
   try {
     const { name } = req.params;

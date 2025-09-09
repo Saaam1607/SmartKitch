@@ -25,7 +25,7 @@ export const createItem = async (newIngredient: Ingredient): Promise<Ingredient>
   const buffer = Buffer.from(base64Data, 'base64');
 
   const result = await pool.query(`
-    INSERT INTO ingredients (name, description, image, out_of_stock, disabled, isAddable, additionPrice)
+    INSERT INTO ingredients (name, description, image, out_of_stock, disabled, is_addable, addition_price)
     VALUES ($1, $2, $3, $4, $5, $6, $7)
     RETURNING name, description, image, out_of_stock AS "outOfStock", disabled, is_addable AS "isAddable", addition_price AS "additionPrice"
   `, [
@@ -42,27 +42,44 @@ export const createItem = async (newIngredient: Ingredient): Promise<Ingredient>
 };
 
 export const editItem = async (newIngredient: Ingredient): Promise<Ingredient> => {
-  const base64Data = newIngredient.image.replace(/^data:image\/\w+;base64,/, "");
-  const buffer = Buffer.from(base64Data, 'base64');
-
   const result = await pool.query(`
     UPDATE ingredients
     SET description = $2,
-        image = $3,
-        out_of_stock = $4,
-        disabled = $5,
-        is_addable = $6,
-        addition_price = $7
+        out_of_stock = $3,
+        disabled = $4,
+        is_addable = $5,
+        addition_price = $6
     WHERE name = $1
-    RETURNING name, description, image, out_of_stock AS "outOfStock", disabled, is_addable AS "isAddable", addition_price AS "additionPrice"
+    RETURNING name, description,  out_of_stock AS "outOfStock", disabled, is_addable AS "isAddable", addition_price AS "additionPrice"
   `, [
       newIngredient.name,
       newIngredient.description,
-      buffer,
       newIngredient.outOfStock,
       newIngredient.disabled,
       newIngredient.isAddable,
       newIngredient.additionPrice
+    ]
+  );
+
+  if (result.rowCount === 0) {
+    throw new Error(`Item with name "${newIngredient.name}" not found.`);
+  }
+
+  return result.rows[0];
+};
+
+export const editItemImage = async (name: string, newImage: string): Promise<Ingredient> => {
+  const base64Data = newImage.replace(/^data:image\/\w+;base64,/, "");
+  const buffer = Buffer.from(base64Data, 'base64');
+
+  const result = await pool.query(`
+    UPDATE ingredients
+    SET image = $2,
+    WHERE name = $1
+    RETURNING name, description, image, out_of_stock AS "outOfStock", disabled, is_addable AS "isAddable", addition_price AS "additionPrice"
+  `, [
+      newIngredient.name,
+      buffer,
     ]
   );
 

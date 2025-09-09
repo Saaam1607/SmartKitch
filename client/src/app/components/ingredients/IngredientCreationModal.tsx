@@ -29,6 +29,9 @@ export default function IngredientCreationModal({ visible, close, create }: Ingr
   const [outOfStock, setOutOfStock] = useState(false);
   const [disabled, setDisabled] = useState(false);
 
+  const [isAddable, setIsAddable] = useState(false);
+  const [additionPrice, setAdditionPrice] = useState(null);
+
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
 
@@ -37,6 +40,8 @@ export default function IngredientCreationModal({ visible, close, create }: Ingr
     setDescription("");
     setOutOfStock(false);
     setDisabled(false);
+    setIsAddable(false);
+    setAdditionPrice(null);
     setUploadedImage(null);
   }, [visible])
 
@@ -47,8 +52,8 @@ export default function IngredientCreationModal({ visible, close, create }: Ingr
       image: '',
       outOfStock: outOfStock,
       disabled: disabled,
-      isAddable: false,
-      additionPrice: 0,
+      isAddable: isAddable,
+      additionPrice: additionPrice,
     }
 
     if (uploadedImage && croppedAreaPixels) {
@@ -72,46 +77,68 @@ export default function IngredientCreationModal({ visible, close, create }: Ingr
       close={close}
       saveItem={createItem}
     >
-      <Control
-        type="text"
-        itemKey={name}
-        value={name}
-        fieldName="Name"
-        isEditing={true}
-        handleChange={(e) => setName(e.target.value)}
-      />
-
-      <Control
-        type="textarea"
-        itemKey={name}
-        value={description}
-        fieldName="Description"
-        isEditing={true}
-        handleChange={(e) => setDescription(e.target.value)}
-      />
-      <ImageUploader
-        uploadedImage={uploadedImage}
-        setUploadedImage={setUploadedImage}
-        setCroppedAreaPixels={(area: Area) => setCroppedAreaPixels(area)}
-      />
-
-      <div className="d-flex gap-5">
-        <Check
+      <div className="d-flex flex-column gap-3">
+        <Control
+          type="text"
           itemKey={name}
-          value={outOfStock}
-          fieldName="Out Of Stock"
+          value={name}
+          fieldName="Name"
           isEditing={true}
-          handleChange={() => setOutOfStock(!outOfStock)}
+          handleChange={(e) => setName(e.target.value)}
         />
-        <Check
-          itemKey={name}
-          value={disabled}
-          fieldName="Disabled"
-          isEditing={true}
-          handleChange={() => setDisabled(!disabled)}
-        />
-      </div> 
 
+        <Control
+          type="textarea"
+          itemKey={name}
+          value={description}
+          fieldName="Description"
+          isEditing={true}
+          handleChange={(e) => setDescription(e.target.value)}
+        />
+
+        <ImageUploader
+          uploadedImage={uploadedImage}
+          setUploadedImage={setUploadedImage}
+          setCroppedAreaPixels={(area: Area) => setCroppedAreaPixels(area)}
+        />
+
+        <div className="d-flex gap-5">
+          <Check
+            itemKey={name}
+            value={isAddable}
+            fieldName="Is Addable"
+            isEditing={true}
+            handleChange={() => setIsAddable(!isAddable)}
+          />
+
+          <Control
+            type="price"
+            step={0.1}
+            itemKey={name}
+            value={additionPrice}
+            fieldName="Addition Price"
+            isEditing={true}
+            handleChange={(e) => setAdditionPrice(e.target.value)}
+          />
+        </div>
+
+        <div className="d-flex gap-5">
+          <Check
+            itemKey={name}
+            value={outOfStock}
+            fieldName="Out Of Stock"
+            isEditing={true}
+            handleChange={() => setOutOfStock(!outOfStock)}
+          />
+          <Check
+            itemKey={name}
+            value={disabled}
+            fieldName="Disabled"
+            isEditing={true}
+            handleChange={() => setDisabled(!disabled)}
+          />
+        </div> 
+      </div>
     </Modal>
   );
 }
