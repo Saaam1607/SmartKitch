@@ -16,6 +16,7 @@ import { toast } from 'sonner';
 
 import { useThemeStyles } from '../../../hooks/useThemeStyles';
 
+import { blobToBase64 } from '../../../utils/blobToBase64';
 
 interface CardProps<T extends BaseItem> {
   item: T;
@@ -120,15 +121,6 @@ export default function Card<T extends BaseItem>({
   }
 
   async function handleImageChange(newImage: string, fieldName: string) {
-    try {
-      setLoading(true);
-      await service.editItemImage(sessionItem.name, sessionItem.image);
-      toast.success("Image Saved");
-      // await service.fetchItems();
-      setLoading(false);
-    } catch (error) {
-      console.error(error);
-    }
     const newItem = { ...sessionItem, [fieldName]: newImage };
     setSessionItem(newItem);
   }

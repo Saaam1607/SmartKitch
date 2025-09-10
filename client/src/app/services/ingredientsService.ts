@@ -56,7 +56,6 @@ export const ingredientsService: CrudService<Ingredient> = {
   },
 
   async editItemImage(name: string, newImage: string): Promise<Ingredient> {
-
     let imageBase64: string = '';
     if (newImage.startsWith('data:image')) {
       imageBase64 = newImage;
@@ -68,7 +67,7 @@ export const ingredientsService: CrudService<Ingredient> = {
     const res = await fetch(`${API_URL}/image/${encodeURIComponent(name)}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(imageBase64),
+      body: JSON.stringify({ image: imageBase64 }),
     });
 
     if (!res.ok) throw new Error('Failed to edit ingredient');

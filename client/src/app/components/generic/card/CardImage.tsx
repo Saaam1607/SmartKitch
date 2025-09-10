@@ -9,6 +9,8 @@ import getCroppedImg from '../../../utils/getCroppedImg';
 
 import { useThemeStyles } from '../../../hooks/useThemeStyles';
 
+import { blobToBase64 } from '../../../utils/blobToBase64';
+
 interface CardImageProps {
   imageUrl: string;
   size?: number;
@@ -33,10 +35,16 @@ export default function CardImage({ imageUrl, size=175, isHovered, borderSize=0,
   async function saveChanges() {
 
     if (newImage) {
+
+    if (newImage && croppedAreaPixels) {
+      const croppedBlob = await getCroppedImg(newImage, croppedAreaPixels) as Blob;
+      const imageString = await blobToBase64(croppedBlob);
+      updateImage(imageString);
+    }
+
       // const croppedBlob = await getCroppedImg(newImage, croppedAreaPixels) as Blob;
       // const imageUrl = URL.createObjectURL(croppedBlob);
       // if (imageUrl && updateImage)
-        updateImage(newImage as string);
     // } else {
     //   if (updateImage) updateImage("");
     }

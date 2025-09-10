@@ -6,11 +6,12 @@ import ColorThief from 'colorthief';
 
 interface CardImageSectionProps {
   getImage?: () => Promise<string> | undefined;
+  customImage?: string;
   updateImage?: (image: string) => void;
   isEditing: boolean;
 }
 
-export default function CardImageSection({ getImage, updateImage, isEditing }: CardImageSectionProps) {
+export default function CardImageSection({ getImage, customImage, updateImage, isEditing }: CardImageSectionProps) {
 
   const [imageUrl, setImageUrl] = useState<string>("")
 
@@ -19,11 +20,13 @@ export default function CardImageSection({ getImage, updateImage, isEditing }: C
 
   useEffect(() => {
     let isMounted = true;
+
     const loadImage = async () => {
-      if (getImage) {
-        const image = await getImage()
-        if (image)
-          if (isMounted) setImageUrl(image);
+      if (customImage) { // new modified image
+        setImageUrl(customImage);
+      } else if (getImage) { // gets from be
+        const image = await getImage();
+        if (image && isMounted) setImageUrl(image);
       }
     };
 
@@ -32,7 +35,7 @@ export default function CardImageSection({ getImage, updateImage, isEditing }: C
     return () => {
       isMounted = false;
     };
-  }, [getImage]);
+  }, [getImage, customImage]);
 
   useEffect(() => {
     if (imageUrl) {

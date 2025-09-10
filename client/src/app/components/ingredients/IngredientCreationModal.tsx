@@ -11,7 +11,7 @@ import { Ingredient } from '@models/Ingredient';
 
 import getCroppedImg from '../../utils/getCroppedImg';
 
-import { blobToBase64, blobUrlToBlob } from '../../utils/blobToBase64';
+import { blobToBase64 } from '../../utils/blobToBase64';
 
 import '../../styles/creationModal.css';
 
@@ -21,52 +21,36 @@ interface IngredientCreationModalProps {
   create: (ingredient: Ingredient) => void;
 }
 
+const defaultNewIngredient: Ingredient = {
+  name: "",
+  description: "",
+  disabled: false,
+  isAddable: false,
+  additionPrice: null,
+  image: null,
+  outOfStock: false,
+}
+
 export default function IngredientCreationModal({ visible, close, create }: IngredientCreationModalProps) {
 
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
+  const [newIngredient, setNewIngredient] = useState<Ingredient>(defaultNewIngredient);
+  const [uploadedImage, setUploadedImage] = useState(null);
 
-  const [outOfStock, setOutOfStock] = useState(false);
-  const [disabled, setDisabled] = useState(false);
-
-  const [isAddable, setIsAddable] = useState(false);
-  const [additionPrice, setAdditionPrice] = useState(null);
-
-  const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
 
   useEffect(() => {
-    setName("");
-    setDescription("");
-    setOutOfStock(false);
-    setDisabled(false);
-    setIsAddable(false);
-    setAdditionPrice(null);
-    setUploadedImage(null);
+    setNewIngredient(defaultNewIngredient);
   }, [visible])
 
   async function createItem() {
-    let newIngredient: Ingredient = {
-      name: name,
-      description: description,
-      image: '',
-      outOfStock: outOfStock,
-      disabled: disabled,
-      isAddable: isAddable,
-      additionPrice: additionPrice,
-    }
+    let ingredientToCreate = newIngredient;
 
     if (uploadedImage && croppedAreaPixels) {
       const croppedBlob = await getCroppedImg(uploadedImage, croppedAreaPixels) as Blob;
-      newIngredient = {
-        ...newIngredient,
-        image: await blobToBase64(croppedBlob),
-      };
-    } else {
-      newIngredient = { ...newIngredient };
+      ingredientToCreate = { ...newIngredient, image: await blobToBase64(croppedBlob), }
     }
 
-    create(newIngredient);
+    create(ingredientToCreate);
     close();
   }
 
@@ -80,20 +64,24 @@ export default function IngredientCreationModal({ visible, close, create }: Ingr
       <div className="d-flex flex-column gap-3">
         <Control
           type="text"
-          itemKey={name}
-          value={name}
+          itemKey={newIngredient.name}
+          value={newIngredient.name}
           fieldName="Name"
           isEditing={true}
-          handleChange={(e) => setName(e.target.value)}
+          handleChange={(e) =>
+            setNewIngredient({ ...newIngredient, name: e.target.value })
+          }
         />
 
         <Control
           type="textarea"
-          itemKey={name}
-          value={description}
+          itemKey={newIngredient.name}
+          value={newIngredient.description}
           fieldName="Description"
           isEditing={true}
-          handleChange={(e) => setDescription(e.target.value)}
+          handleChange={(e) =>
+            setNewIngredient({ ...newIngredient, description: e.target.value })
+          }
         />
 
         <ImageUploader
@@ -104,38 +92,46 @@ export default function IngredientCreationModal({ visible, close, create }: Ingr
 
         <div className="d-flex gap-5">
           <Check
-            itemKey={name}
-            value={isAddable}
+            itemKey={newIngredient.name}
+            value={newIngredient.isAddable}
             fieldName="Is Addable"
             isEditing={true}
-            handleChange={() => setIsAddable(!isAddable)}
+            handleChange={() =>
+              setNewIngredient({ ...newIngredient, isAddable: !newIngredient.isAddable })
+            } 
           />
 
           <Control
             type="price"
             step={0.1}
-            itemKey={name}
-            value={additionPrice}
+            itemKey={newIngredient.name}
+            value={newIngredient.additionPrice}
             fieldName="Addition Price"
             isEditing={true}
-            handleChange={(e) => setAdditionPrice(e.target.value)}
+            handleChange={() =>
+              setNewIngredient({ ...newIngredient, additionPrice: !newIngredient.additionPrice })
+            } 
           />
         </div>
 
         <div className="d-flex gap-5">
           <Check
-            itemKey={name}
-            value={outOfStock}
+            itemKey={newIngredient.name}
+            value={newIngredient.outOfStock}
             fieldName="Out Of Stock"
             isEditing={true}
-            handleChange={() => setOutOfStock(!outOfStock)}
+            handleChange={() =>
+              setNewIngredient({ ...newIngredient, outOfStock: !newIngredient.outOfStock })
+            }
           />
           <Check
-            itemKey={name}
-            value={disabled}
+            itemKey={newIngredient.name}
+            value={newIngredient.disabled}
             fieldName="Disabled"
             isEditing={true}
-            handleChange={() => setDisabled(!disabled)}
+            handleChange={() =>
+              setNewIngredient({ ...newIngredient, disabled: !newIngredient.disabled })
+            }
           />
         </div> 
       </div>

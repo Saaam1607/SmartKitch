@@ -74,17 +74,16 @@ export const editItemImage = async (name: string, newImage: string): Promise<Ing
 
   const result = await pool.query(`
     UPDATE ingredients
-    SET image = $2,
+    SET image = $2
     WHERE name = $1
     RETURNING name, description, image, out_of_stock AS "outOfStock", disabled, is_addable AS "isAddable", addition_price AS "additionPrice"
   `, [
-      newIngredient.name,
-      buffer,
-    ]
-  );
+    name,
+    buffer,
+  ]);
 
   if (result.rowCount === 0) {
-    throw new Error(`Item with name "${newIngredient.name}" not found.`);
+    throw new Error(`Item with name "${name}" not found.`);
   }
 
   return result.rows[0];

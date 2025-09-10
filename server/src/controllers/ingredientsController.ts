@@ -73,7 +73,7 @@ export const editIngredientImage = async (req: Request, res: Response) => {
   try {
 
     const { name } = req.params;
-    const newImage = req.body;
+    const { image: newImage } = req.body;
 
     if (!name) {
       return res.status(400).json({ message: 'Ingredient name is required' });

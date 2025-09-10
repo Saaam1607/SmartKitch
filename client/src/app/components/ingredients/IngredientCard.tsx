@@ -22,6 +22,7 @@ export default function IngredientCard({ item, getImage, isEditing, handleCheckC
 
       <CardImageSection
         getImage={() => getImage?.(item.name)}
+        customImage={item.image}
         updateImage={(image: string) => handleImageChange(image, 'image')}
         isEditing={isEditing}
       >
