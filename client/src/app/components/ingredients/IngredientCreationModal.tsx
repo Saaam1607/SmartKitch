@@ -26,7 +26,7 @@ const defaultNewIngredient: Ingredient = {
   description: "",
   disabled: false,
   isAddable: false,
-  additionPrice: null,
+  additionPrice: 0,
   image: null,
   outOfStock: false,
 }
@@ -51,6 +51,7 @@ export default function IngredientCreationModal({ visible, close, create }: Ingr
     }
 
     create(ingredientToCreate);
+    setNewIngredient(defaultNewIngredient);
     close();
   }
 
@@ -108,8 +109,8 @@ export default function IngredientCreationModal({ visible, close, create }: Ingr
             value={newIngredient.additionPrice}
             fieldName="Addition Price"
             isEditing={true}
-            handleChange={() =>
-              setNewIngredient({ ...newIngredient, additionPrice: !newIngredient.additionPrice })
+            handleChange={(e) =>
+              setNewIngredient({ ...newIngredient, additionPrice: e.target.value })
             } 
           />
         </div>

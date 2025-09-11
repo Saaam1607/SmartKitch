@@ -1,7 +1,5 @@
 'use client';
 
-import useStore from '../../../state/useStore'
-
 import React, { useState } from 'react';
 
 import { ChefHat, Pizza, Utensils, Wine, Book, NotebookText, CircleDollarSign, Crown } from 'lucide-react';
@@ -29,8 +27,6 @@ export default function Menu({
 
   const { bgColor, textColor, toolbarBg, toolbarTextColor } = useThemeStyles();
 
-  const { setComponentKey } = useStore();
-
   const [isExpanded, setIsExpanded] = useState(true);
 
   return (
@@ -50,7 +46,6 @@ export default function Menu({
 
       <MenuSection label="REGISTRIES" handleSelect={handleSelect} isExpanded={isExpanded} >
       </MenuSection>
-
       
       <MenuSection label="KITCHEN REGISTRIES" handleSelect={handleSelect} isExpanded={isExpanded} >
         <MenuItem label="Ingredients" iconComponent={ChefHat} selectedRegistry={selectedRegistry} isExpanded={isExpanded} />

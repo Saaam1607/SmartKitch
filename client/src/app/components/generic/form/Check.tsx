@@ -26,8 +26,8 @@ export default function Check({ itemKey, value, fieldName, isEditing, handleChan
         <label 
           className="lbl" 
           htmlFor={`cbx-${fieldName}-${itemKey}`}
+          readOnly={!isEditing}
           style={{
-            pointerEvents: isEditing ? 'auto' : 'none',
             userSelect: 'none'
           }}
         >

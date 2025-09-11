@@ -10,6 +10,8 @@ import IconButton from '../button/IconButton';
 
 import { useThemeStyles } from '../../../hooks/useThemeStyles';
 
+import useStore from '../../../state/useStore'
+
 type RegistryNavBarProps = {
   searchTerm: string;
   setSearchTerm: (value: string) => void;
@@ -21,6 +23,8 @@ type RegistryNavBarProps = {
 export default function RegistryNavBar({ searchTerm, setSearchTerm, showFilters, setShowFilters, renderCreationModal }: RegistryNavBarProps) {
 
   const [showCreationModal, setShowCreationModal] = useState(false);
+
+  const { componentKey } = useStore();
 
   const {
     newColor,
@@ -45,83 +49,75 @@ export default function RegistryNavBar({ searchTerm, setSearchTerm, showFilters,
 
   return (
     <>
-      
       {renderCreationModal(showCreationModal, creationModalClose)}
 
-      <Navbar bg="transparent" data-bs-theme="light" className="d-flex justify-content-center p-0" > 
-        <div className="d-flex align-items-center justify-content-between" style={{ width: '100%' }}>
+      <Navbar
+        bg="transparent"
+        data-bs-theme="light"
+        className="d-flex align-items-center justify-content-between p-0"
+        style={{
+          opacity: componentKey ? 0.5 : 1,
+          pointerEvents: componentKey ? "none" : "auto"
+        }}
+      > 
+        <div
+          className="d-flex align-items-center gap-2 me-2"
+          style={{ width: '100%' }}
+        >
+          <IconButton
+            iconName="SlidersHorizontal" 
+            color="grey"
+            outline={false}
+            title="Filters"
+            onClick={handleFiltersClick}
+          />
+          
           <div
-            className="d-flex align-items-center gap-2 me-2"
+            className="d-flex align-items-center bg-white border px-2 gap-2 shadow-sm"
             style={{
-              width: '100%',
+              width: "100%",
+              maxWidth: '600px',
+              borderRadius: '10px'
+            }}
+            onSubmit={(e) => e.preventDefault()}
+          >
+            <Search size={20} className="text-muted" color="rgb(89, 92, 94)" strokeWidth={1}/>
+            <Form.Control
+              placeholder="Search..."
+              className="p-0 py-1 m-0 shadow-none flex-grow-1 border-0"
+              aria-label="Search"
+              value={searchTerm}
+              onChange={handleSearchChange}
+            />
+          </div>
+
+          <div
+            className="d-flex align-items-center bg-white border px-2 gap-2 shadow-sm"
+            style={{
+              width: "100%",
+              maxWidth: '200px',
+              borderRadius: '10px'
             }}
           >
-            <IconButton
-              iconName="SlidersHorizontal" 
-              color="grey"
-              outline={false}
-              title="Filters"
-              onClick={handleFiltersClick}
-            />
-            
-            <Form className="d-flex" style={{ width: '100%', maxWidth: '600px' }}>
-              <div
-                className="d-flex align-items-center bg-white border px-2 gap-2 shadow-sm"
-                style={{
-                  width: "100%",
-                  borderRadius: '10px'
-                }}
-              >
-                <Search size={20} className="text-muted" color="rgb(89, 92, 94)" strokeWidth={1}/>
-                <Form.Control
-                  type="search"
-                  placeholder="Search..."
-                  className="p-0 py-1 m-0 shadow-none flex-grow-1 border-0"
-                  aria-label="Search"
-                  value={searchTerm}
-                  onChange={handleSearchChange}
-                />
-              </div>
-            </Form>
+            <Form.Select
+              className="p-0 py-1 m-0 shadow-none flex-grow-1 border-0"
 
-            <Form className="d-flex" style={{ width: '100%', maxWidth: '200px' }}>
-              <div
-                className="d-flex align-items-center bg-white border px-2 gap-2 shadow-sm"
-                style={{
-                  width: "100%",
-                  borderRadius: '10px'
-                }}
-              >
-                <Form.Select
-                  className="p-0 py-1 m-0 shadow-none flex-grow-1 border-0"
-
-                >
-                  <option>Alphabetical Asc</option>
-                  <option>Alphabetical Desc</option>
-                </Form.Select>
-                {/* <Form.Control
-                  type="search"
-                  placeholder="Search..."
-                  className="p-0 py-1 m-0 shadow-none flex-grow-1 border-0"
-                  aria-label="Search"
-                  value={searchTerm}
-                  onChange={handleSearchChange}
-                /> */}
-              </div>
-            </Form>
-
-
+            >
+              <option>Alphabetical Asc</option>
+              <option>Alphabetical Desc</option>
+            </Form.Select>
           </div>
-            
-          <IconButton
-            iconName="Plus"
-            color={newColor}
-            outline={false}
-            title='New Item'
-            onClick={handleCreationModalClick}
-          />
 
         </div>
+          
+        <IconButton
+          iconName="Plus"
+          color={newColor}
+          outline={false}
+          title='New Item'
+          onClick={handleCreationModalClick}
+        />
+
       </Navbar>
     </>
   );

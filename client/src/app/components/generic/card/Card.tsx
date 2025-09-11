@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { Card as BootstrapCard } from 'react-bootstrap';
 
@@ -54,6 +54,10 @@ export default function Card<T extends BaseItem>({
     saveColor,
     undoColor
   } = useThemeStyles();
+
+  useEffect(() => {
+    setSessionItem(item)
+  }, [item])
 
   // STARTS EDIT
   function startEdit() {

@@ -23,6 +23,8 @@ import { AnimatePresence, motion } from "framer-motion";
 
 import Image from "next/image";
 
+import { toast } from 'sonner';
+
 import './styles/fonts.css';
 import './styles/logo.css';
 
@@ -33,13 +35,16 @@ export default function Main() {
 
   const { bgColor, textColor, toolbarBg, toolbarTextColor } = useThemeStyles();
 
-  const { setComponentKey } = useStore();
+  const { componentKey } = useStore();
 
   const [selectedRegistry, setSelectedRegistry] = useState('');
 
-
   const handleSelect = (eventKey: string | null) => {
-    setComponentKey("");
+    if (componentKey) {
+      toast.warning("Finish editing the item before changing page");
+      return;
+    }
+
     if (eventKey) {
       setSelectedRegistry(eventKey);
       localStorage.setItem('selectedRegistry', eventKey);

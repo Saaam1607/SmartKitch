@@ -1,8 +1,6 @@
-import React, { useRef, useState, useCallback, useImperativeHandle, forwardRef } from 'react';
+import React, { useRef } from 'react';
 
 import { Form } from 'react-bootstrap';
-
-import debounce from "lodash/debounce";
 
 import '../../../styles/scrollbar.css';
 import '../../../styles/control.css';
@@ -107,6 +105,7 @@ function TextArea({ itemKey, value, fieldName, isEditing, handleChange }: TextAr
       ref={textAreaRef}
       rows={1}
       value={value}
+      readOnly={!isEditing}
       style={{
         ...commonStyle,
         ...getCommonEditingStyle(isEditing || false),
@@ -114,6 +113,7 @@ function TextArea({ itemKey, value, fieldName, isEditing, handleChange }: TextAr
         width: '100%',
         borderRadius: '0.25rem',
         overflowY: 'auto',
+        minHeight: '2rem',
         height: 'fit-content'
       }}
     />
@@ -178,6 +178,7 @@ function PriceInput({ type, step, itemKey, value, fieldName, isEditing, width, h
           value={value ?? ""}
           id={`${fieldName}-${itemKey}`}
           onChange={handleChange}
+          readOnly={!isEditing}
           style={{
             color: 'inherit',
             width: '100%',
@@ -208,6 +209,7 @@ function TextInput({ type, itemKey, value, fieldName, isEditing, handleChange }:
       value={value}
       id={`${fieldName}-${itemKey}`}
       onChange={handleChange}
+      readOnly={!isEditing}
       style={{
         ...commonStyle,
         ...getCommonEditingStyle(isEditing || false),

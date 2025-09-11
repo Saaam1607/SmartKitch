@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 // Components
 import DishCard from '../../components/dishes/DishCard';
-import IngredientCreationModal from '../../components/ingredients/IngredientCreationModal';
+import DishCreationModal from '../../components/dishes/DishCreationModal';
 import Switch from '../../components/generic/form/Switch';
 import Registry from '../generic/registries/Registry'
 
@@ -111,12 +111,11 @@ export default function DishesRegistry() {
         />
       }
       renderCreationModal={(visible: boolean, close: () => void) => (
-       <></> 
-        // <IngredientCreationModal
-        //   visible={visible}
-        //   close={close}
-        //   create={createItem}
-        // />
+        <DishCreationModal
+          visible={visible}
+          close={close}
+          create={createItem}
+        />
       )}
     />
   );
