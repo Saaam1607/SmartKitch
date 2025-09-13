@@ -14,10 +14,6 @@ export const dishesService: CrudService<Dish> = {
     return res.json();
   },
 
-  async fetchItemImage(componentKey: string): Promise<string> {
-    return `${API_URL}/image/${encodeURIComponent(componentKey)}`;
-  },
-
   async addItem(newItem: Dish): Promise<Dish> {
     const res = await fetch(API_URL, {
       method: 'POST',

@@ -2,7 +2,6 @@ import { BaseItem } from '@models/BaseItem';
 
 export default interface CardComponentProps<T extends BaseItem> {
   item: T;
-  getImage?: (componentKey: string) => Promise<string>;
   isHovered: boolean;
   isEditing: boolean;
   handleCheckChange: (event: React.ChangeEvent<HTMLInputElement>, fieldName: string) => void;

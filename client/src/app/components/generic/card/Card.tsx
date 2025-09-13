@@ -16,7 +16,7 @@ import { toast } from 'sonner';
 
 import { useThemeStyles } from '../../../hooks/useThemeStyles';
 
-import { blobToBase64 } from '../../../utils/blobToBase64';
+import Swal from 'sweetalert2'
 
 interface CardProps<T extends BaseItem> {
   item: T;
@@ -100,9 +100,25 @@ export default function Card<T extends BaseItem>({
     }
   }
 
+  async function askIfDeleteOk(componentKey: string) {
+    Swal.fire({
+      title: "Confirm Item Elimination?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "DELETE",
+      cancelButtonText: "Undo"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteItem(componentKey);
+      }
+    });
+  }
+
   // DELETES ITEM
   async function deleteItem(componentKey: string) {
-    if (componentKey === "") {
+    if (componentKey !== "") {
       try {
         await service.deleteItem(componentKey);
         await service.fetchItems();
@@ -124,8 +140,8 @@ export default function Card<T extends BaseItem>({
     setSessionItem(newItem);
   }
 
-  async function handleImageChange(newImage: string, fieldName: string) {
-    const newItem = { ...sessionItem, [fieldName]: newImage };
+  async function handleImageChange(newImageUrl: string, fieldName: string) {
+    const newItem = { ...sessionItem, [fieldName]: newImageUrl };
     setSessionItem(newItem);
   }
       
@@ -186,7 +202,6 @@ export default function Card<T extends BaseItem>({
        <div className="order-2 order-lg-1 w-100">
           <CardComponent
             item={sessionItem}
-            getImage={service?.fetchItemImage}
             isHovered={isHovered}
             isEditing={isEditing}
             handleCheckChange={handleCheckChange}
@@ -217,7 +232,7 @@ export default function Card<T extends BaseItem>({
                   color={deleteColor}
                   outline={true}
                   title="Delete"
-                  onClick={() => {deleteItem(item.name)}}
+                  onClick={() => askIfDeleteOk(item.name)}
                 />
               )}
             </>

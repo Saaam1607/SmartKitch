@@ -3,6 +3,6 @@ import { BaseItem } from './BaseItem';
 export interface Ingredient extends BaseItem {
   isAddable: boolean;
   additionPrice: number;
-  image: string;
+  imageUrl: string;
   outOfStock: boolean;
 }

@@ -10,6 +10,7 @@ import ingredientsRoutes from './routes/ingredientsRoutes';
 import dishesRoutes from './routes/dishesRoutes';
 import drinksRoutes from './routes/drinksRoutes';
 import menuSectionsRoutes from './routes/menuSectionsRoutes';
+import imagesRoutes from './routes/imagesRoutes';
 
 const app = express();
 app.use(cors());
@@ -33,14 +34,12 @@ app.get('/', (req: Request, res: Response) => {
   res.send('Hello World!');
 });
 
-
 app.use('/user', usersRoutes);
+app.use('/image', imagesRoutes);
 
 app.use('/ingredients', ingredientsRoutes);
 app.use('/dishes', dishesRoutes);
 app.use('/drinks', drinksRoutes);
 app.use('/menuSections', menuSectionsRoutes);
-
-
 
 export default app;

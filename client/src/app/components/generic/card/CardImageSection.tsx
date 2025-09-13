@@ -4,42 +4,38 @@ import CardImage from './CardImage';
 
 import ColorThief from 'colorthief';
 
+import { Pencil } from 'lucide-react';
+
+import Modal from '../../generic/modal/Modal';
+import ImageUploader from '../../generic/image/ImageUploader';
+
+import { useThemeStyles } from '../../../hooks/useThemeStyles';
+
+import imagesService from '../../../services/imagesService';
+
 interface CardImageSectionProps {
-  getImage?: () => Promise<string> | undefined;
-  customImage?: string;
-  updateImage?: (image: string) => void;
+  imageUrl: string;
+  handleImageChange?: (event: React.ChangeEvent<HTMLInputElement>,  key: string) => void;
   isEditing: boolean;
 }
 
-export default function CardImageSection({ getImage, customImage, updateImage, isEditing }: CardImageSectionProps) {
+export default function CardImageSection({ imageUrl, handleImageChange, isEditing }: CardImageSectionProps) {
 
-  const [imageUrl, setImageUrl] = useState<string>("")
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [newImage, setNewImage] = useState<string | null>(null);
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState<null | { x: number; y: number; width: number; height: number }>(null);
 
   const [mainColor, setMainColor] = useState<[number, number, number] | null>(null);
   const [isLgUp, setIsLgUp] = useState(false);
 
-  useEffect(() => {
-    let isMounted = true;
-
-    const loadImage = async () => {
-      if (customImage) { // new modified image
-        setImageUrl(customImage);
-      } else if (getImage) { // gets from be
-        const image = await getImage();
-        if (image && isMounted) setImageUrl(image);
-      }
-    };
-
-    loadImage();
-
-    return () => {
-      isMounted = false;
-    };
-  }, [getImage, customImage]);
+  const {
+    mainCardBg,
+    mainCardEditingBg,
+  } = useThemeStyles();
 
   useEffect(() => {
     if (imageUrl) {
-      const img = new Image();
+      const img = new window.Image();
       img.crossOrigin = 'Anonymous';
       img.src = imageUrl;
 
@@ -59,6 +55,26 @@ export default function CardImageSection({ getImage, customImage, updateImage, i
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  async function saveChanges() {
+    if (newImage) {
+      if (newImage && croppedAreaPixels) {
+        const croppedBlob = await getCroppedImg(newImage, croppedAreaPixels) as Blob;
+        const imageString = await blobToBase64(croppedBlob);
+        
+        imagesService.
+        
+        
+        updateImage(imageString);
+      }
+    }
+    setShowEditModal(false);
+    setCroppedAreaPixels(null);
+  }
+
+  function undoChanges() {
+    setShowEditModal(false)
+  }
+
   const background =
     mainColor && mainColor.length > 0
       ? isLgUp
@@ -77,14 +93,45 @@ export default function CardImageSection({ getImage, customImage, updateImage, i
         borderBottomLeftRadius: isLgUp ? "15px" : "0",
       }}
     >
-      <div style={{borderRadius: "15px"}}>
+      <div
+        className="position-relative"
+        style={{
+          border: `${8}px solid ${!isEditing ? mainCardBg : mainCardEditingBg}`, 
+          borderRadius: "16px",
+          width: 175 + 2 * 8,
+          height: 175 + 2 * 8,
+        }}
+      >
+        <Modal
+          title="Edit Image"
+          show={showEditModal}
+          close={undoChanges}
+          saveItem={saveChanges}
+        >
+          <ImageUploader
+            uploadedImage={newImage}
+            setUploadedImage={setNewImage}
+            setCroppedAreaPixels={setCroppedAreaPixels}
+          />
+        </Modal>
         <CardImage
           imageUrl={imageUrl}
           size={175}
           borderSize={8}
-          updateImage={updateImage}
           isEditing={isEditing}
         />
+        {isEditing && (
+          <div
+            className="d-flex align-items-center justify-content-center position-absolute top-0 end-0 p-2 m-1"
+            style={{
+              backgroundColor: "white",
+              borderRadius: '50%',
+              zIndex: 1
+            }}
+          >
+            <Pencil size={15} onClick={() => {setShowEditModal(true)}} />
+          </div>
+        )}
       </div> 
     </div>
   );

@@ -1,37 +1,36 @@
 import pool from '../config/database';
+import { imagekit, uploadImage } from '../config/imagekit';
+
+import sharp from "sharp";
 
 import { Ingredient } from '../models/Ingredient';
 
 export const getItems = async (): Promise<Ingredient[]> => {
-  const result = await pool.query('SELECT name, description, out_of_stock AS "outOfStock", disabled, is_addable AS "isAddable", addition_price AS "additionPrice" FROM ingredients');
+  const result = await pool.query('SELECT name, description, image_url AS "imageUrl", out_of_stock AS "outOfStock", disabled, is_addable AS "isAddable", addition_price AS "additionPrice" FROM ingredients');
   
   return result.rows;
 };
-
-export const getItemImage = async (keyValue: string): Promise<Buffer | null> => {
-  
-  const result = await pool.query("SELECT image FROM ingredients WHERE name = $1", [keyValue]);
-
-  if (result.rows.length === 0 || !result.rows[0].image) {
-    return null;
-  }
-
-  return result.rows[0].image as Buffer;
-}
 
 export const createItem = async (newIngredient: Ingredient): Promise<Ingredient> => {
   
   const base64Data = newIngredient.image.replace(/^data:image\/\w+;base64,/, "");
   const buffer = Buffer.from(base64Data, 'base64');
 
+  const uploadResponse = await uploadImage({
+    file: buffer,
+    fileName: `${newIngredient.name.replace(/\s+/g, "_")}.jpg`
+  });
+
+  const imageUrl = uploadResponse.url;
+
   const result = await pool.query(`
-    INSERT INTO ingredients (name, description, image, out_of_stock, disabled, is_addable, addition_price)
+    INSERT INTO ingredients (name, description, image_url, out_of_stock, disabled, is_addable, addition_price)
     VALUES ($1, $2, $3, $4, $5, $6, $7)
-    RETURNING name, description, image, out_of_stock AS "outOfStock", disabled, is_addable AS "isAddable", addition_price AS "additionPrice"
+    RETURNING name, description, image_url AS "imageUrl", out_of_stock AS "outOfStock", disabled, is_addable AS "isAddable", addition_price AS "additionPrice"
   `, [
       newIngredient.name,
       newIngredient.description,
-      buffer,
+      imageUrl,
       newIngredient.outOfStock,
       newIngredient.disabled,
       newIngredient.isAddable,
@@ -50,7 +49,7 @@ export const editItem = async (newIngredient: Ingredient): Promise<Ingredient> =
         is_addable = $5,
         addition_price = $6
     WHERE name = $1
-    RETURNING name, description,  out_of_stock AS "outOfStock", disabled, is_addable AS "isAddable", addition_price AS "additionPrice"
+    RETURNING name, description, out_of_stock AS "outOfStock", disabled, is_addable AS "isAddable", addition_price AS "additionPrice"
   `, [
       newIngredient.name,
       newIngredient.description,
