@@ -83,6 +83,7 @@ export default function IngredientsRegistry() {
   }, [ingredients, filterByOutOfStock, filterByDisabled]);
 
   async function createItem(newItem: Ingredient) {
+    setLoading(true);
     try {
       await ingredientsService.addItem(newItem);
       const freshData = await ingredientsService.fetchItems();
@@ -90,6 +91,19 @@ export default function IngredientsRegistry() {
     } catch (error) {
       console.error(error);
     }
+    setLoading(false);
+  }
+
+  async function deleteItem(key: string) {
+    setLoading(true);
+    try {
+      await ingredientsService.deleteItem(key);
+      const freshData = await ingredientsService.fetchItems();
+      setIngredients(freshData);
+    } catch (error) {
+      console.error(error);
+    }
+    setLoading(false);
   }
 
   async function canSave(newItem: Ingredient) {
@@ -114,6 +128,7 @@ export default function IngredientsRegistry() {
       keyField={"name"}
       cardComponent={IngredientCard}
       canSave={canSave}
+      deleteItem={deleteItem}
       service={ingredientsService}
       showNavbar={true}
       filtersComponent={

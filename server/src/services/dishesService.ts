@@ -7,13 +7,14 @@ export const getItems = async (): Promise<Dish[]> => {
     SELECT
       d.name,
       d.description,
+      d.image_url AS "imageUrl",
       d.out_of_stock AS "outOfStock", 
       d.disabled,
       d.price,
       COALESCE(array_agg(DISTINCT di.ingredient_name) FILTER (WHERE di.ingredient_name IS NOT NULL), '{}') AS ingredients
     FROM dishes d
     LEFT JOIN dish_ingredients di ON di.dish_name = d.name
-    GROUP BY d.name, d.description, d.image, d.out_of_stock, d.disabled, d.price
+    GROUP BY d.name, d.description, d.image_url, d.out_of_stock, d.disabled, d.price
   `);
 
   const items = result.rows.map(row => {
@@ -26,36 +27,18 @@ export const getItems = async (): Promise<Dish[]> => {
   return items;
 };
 
-export const getItemImage = async (keyValue: string): Promise<Buffer | null> => {
-  
-  const result = await pool.query("SELECT image FROM dishes WHERE name = $1", [keyValue]);
-
-  if (result.rows.length === 0 || !result.rows[0].image) {
-    return null;
-  }
-
-  return result.rows[0].image as Buffer;
-}
-
 export const createItem = async (newItem: Dish): Promise<Dish> => {
-
-  let buffer: Buffer | undefined;
-
-  if (newItem?.image) {
-    const base64Data = newItem.image.replace(/^data:image\/\w+;base64,/, "");
-    buffer = Buffer.from(base64Data, 'base64');
-  }
 
   try {
     await pool.query('BEGIN');
 
     await pool.query(`
-      INSERT INTO dishes (name, description, image, out_of_stock, disabled, price)
+      INSERT INTO dishes (name, description, image_url, out_of_stock, disabled, price)
       VALUES ($1, $2, $3, $4, $5, $6)
     `, [
       newItem.name,
       newItem.description,
-      buffer,
+      newItem.imageUrl,
       newItem.outOfStock,
       newItem.disabled,
       newItem.price,
@@ -71,16 +54,7 @@ export const createItem = async (newItem: Dish): Promise<Dish> => {
 
     await pool.query('COMMIT');
 
-    if (buffer) {
-      return {
-        ...newItem,
-        image: `data:image/jpeg;base64,${buffer.toString('base64')}`,
-      };
-    } else {
-      return {
-        ...newItem
-      };
-    }
+    return newItem;
 
   } catch (err) {
     await pool.query('ROLLBACK');
@@ -89,8 +63,6 @@ export const createItem = async (newItem: Dish): Promise<Dish> => {
 };
 
 export const editItem = async (newItem: Dish): Promise<Dish> => {
-  const base64Data = newItem.image.replace(/^data:image\/\w+;base64,/, "");
-  const buffer = Buffer.from(base64Data, 'base64');
 
   try {
     await pool.query('BEGIN');
@@ -98,16 +70,16 @@ export const editItem = async (newItem: Dish): Promise<Dish> => {
     const result = await pool.query(`
       UPDATE dishes
       SET description = $2,
-          image = $3,
+          image_url = $3,
           out_of_stock = $4,
           disabled = $5,
           price = $6
       WHERE name = $1
-      RETURNING name, description, image, out_of_stock AS "outOfStock", disabled, price
+      RETURNING name, description, image_url AS "imageUrl", out_of_stock AS "outOfStock", disabled, price
     `, [
       newItem.name,
       newItem.description,
-      buffer,
+      newItem.imageUrl,
       newItem.outOfStock,
       newItem.disabled,
       newItem.price
@@ -132,10 +104,7 @@ export const editItem = async (newItem: Dish): Promise<Dish> => {
 
     await pool.query('COMMIT');
 
-    return {
-      ...newItem,
-      image: `data:image/jpeg;base64,${buffer.toString('base64')}`
-    };
+    return newItem;
   } catch (err) {
     await pool.query('ROLLBACK');
     throw err;

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 // Components
 import DrinkCard from '../../components/drinks/DrinkCard';
-import IngredientCreationModal from '../../components/ingredients/IngredientCreationModal';
+import DrinkCreationModal from '../../components/drinks/DrinkCreationModal';
 import Switch from '../../components/generic/form/Switch';
 import Registry from '../generic/registries/Registry'
 
@@ -106,12 +106,11 @@ export default function IngredientsRegistry() {
         />
       }
       renderCreationModal={(visible: boolean, close: () => void) => (
-        <></>
-        // <IngredientCreationModal
-        //   visible={visible}
-        //   close={close}
-        //   create={createItem}
-        // />
+        <DrinkCreationModal
+          visible={visible}
+          close={close}
+          create={createItem}
+        />
       )}
     />
   );

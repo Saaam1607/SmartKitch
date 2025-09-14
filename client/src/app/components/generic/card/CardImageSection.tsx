@@ -13,13 +13,23 @@ import { useThemeStyles } from '../../../hooks/useThemeStyles';
 
 import imagesService from '../../../services/imagesService';
 
+import getCroppedImg from '../../../utils/getCroppedImg';
+import { blobToBase64 } from '../../../utils/blobToBase64';
+
+import useStore from '../../../state/useStore'
+
+import { useLoading } from '../../../loadingProvider/LoadingProvider';
+
+
 interface CardImageSectionProps {
   imageUrl: string;
-  handleImageChange?: (event: React.ChangeEvent<HTMLInputElement>,  key: string) => void;
+  handleImageChange?: (newImageUrl: string, fieldName: string) => void;
   isEditing: boolean;
 }
 
 export default function CardImageSection({ imageUrl, handleImageChange, isEditing }: CardImageSectionProps) {
+
+  const { componentKey } = useStore();
 
   const [showEditModal, setShowEditModal] = useState(false);
   const [newImage, setNewImage] = useState<string | null>(null);
@@ -27,6 +37,8 @@ export default function CardImageSection({ imageUrl, handleImageChange, isEditin
 
   const [mainColor, setMainColor] = useState<[number, number, number] | null>(null);
   const [isLgUp, setIsLgUp] = useState(false);
+
+  const { setLoading } = useLoading();
 
   const {
     mainCardBg,
@@ -58,13 +70,14 @@ export default function CardImageSection({ imageUrl, handleImageChange, isEditin
   async function saveChanges() {
     if (newImage) {
       if (newImage && croppedAreaPixels) {
+        setLoading(true);
+
         const croppedBlob = await getCroppedImg(newImage, croppedAreaPixels) as Blob;
         const imageString = await blobToBase64(croppedBlob);
-        
-        imagesService.
-        
-        
-        updateImage(imageString);
+        const imageUrl = await imagesService.uploadImage(imageString, componentKey);
+        handleImageChange(imageUrl, "imageUrl");
+
+        setLoading(false);
       }
     }
     setShowEditModal(false);
@@ -97,7 +110,7 @@ export default function CardImageSection({ imageUrl, handleImageChange, isEditin
         className="position-relative"
         style={{
           border: `${8}px solid ${!isEditing ? mainCardBg : mainCardEditingBg}`, 
-          borderRadius: "16px",
+          borderRadius: "24px",
           width: 175 + 2 * 8,
           height: 175 + 2 * 8,
         }}

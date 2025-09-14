@@ -1,5 +1,4 @@
 import pool from '../config/database';
-import { imagekit, uploadImage } from '../config/imagekit';
 
 import sharp from "sharp";
 
@@ -12,16 +11,6 @@ export const getItems = async (): Promise<Ingredient[]> => {
 };
 
 export const createItem = async (newIngredient: Ingredient): Promise<Ingredient> => {
-  
-  const base64Data = newIngredient.image.replace(/^data:image\/\w+;base64,/, "");
-  const buffer = Buffer.from(base64Data, 'base64');
-
-  const uploadResponse = await uploadImage({
-    file: buffer,
-    fileName: `${newIngredient.name.replace(/\s+/g, "_")}.jpg`
-  });
-
-  const imageUrl = uploadResponse.url;
 
   const result = await pool.query(`
     INSERT INTO ingredients (name, description, image_url, out_of_stock, disabled, is_addable, addition_price)
@@ -30,7 +19,7 @@ export const createItem = async (newIngredient: Ingredient): Promise<Ingredient>
   `, [
       newIngredient.name,
       newIngredient.description,
-      imageUrl,
+      newIngredient.imageUrl,
       newIngredient.outOfStock,
       newIngredient.disabled,
       newIngredient.isAddable,
@@ -44,15 +33,17 @@ export const editItem = async (newIngredient: Ingredient): Promise<Ingredient> =
   const result = await pool.query(`
     UPDATE ingredients
     SET description = $2,
-        out_of_stock = $3,
-        disabled = $4,
-        is_addable = $5,
-        addition_price = $6
+        image_url = $3,
+        out_of_stock = $4,
+        disabled = $5,
+        is_addable = $6,
+        addition_price = $7
     WHERE name = $1
-    RETURNING name, description, out_of_stock AS "outOfStock", disabled, is_addable AS "isAddable", addition_price AS "additionPrice"
+    RETURNING name, description, image_url AS "imageUrl", out_of_stock AS "outOfStock", disabled, is_addable AS "isAddable", addition_price AS "additionPrice"
   `, [
       newIngredient.name,
       newIngredient.description,
+      newIngredient.imageUrl,
       newIngredient.outOfStock,
       newIngredient.disabled,
       newIngredient.isAddable,
@@ -62,27 +53,6 @@ export const editItem = async (newIngredient: Ingredient): Promise<Ingredient> =
 
   if (result.rowCount === 0) {
     throw new Error(`Item with name "${newIngredient.name}" not found.`);
-  }
-
-  return result.rows[0];
-};
-
-export const editItemImage = async (name: string, newImage: string): Promise<Ingredient> => {
-  const base64Data = newImage.replace(/^data:image\/\w+;base64,/, "");
-  const buffer = Buffer.from(base64Data, 'base64');
-
-  const result = await pool.query(`
-    UPDATE ingredients
-    SET image = $2
-    WHERE name = $1
-    RETURNING name, description, image, out_of_stock AS "outOfStock", disabled, is_addable AS "isAddable", addition_price AS "additionPrice"
-  `, [
-    name,
-    buffer,
-  ]);
-
-  if (result.rowCount === 0) {
-    throw new Error(`Item with name "${name}" not found.`);
   }
 
   return result.rows[0];

@@ -2,6 +2,6 @@ import { BaseItem } from './BaseItem';
 
 export interface Drink extends BaseItem {
   price: number;
-  image: string;
+  imageUrl: string;
   outOfStock: boolean;
 }

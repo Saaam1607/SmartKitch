@@ -4,7 +4,6 @@ import { Ingredient } from '@models/Ingredient';
 
 import Form from '../generic/form/Form';
 import Title from '../generic/form/Title';
-import CardImage from '../generic/card/CardImage';
 import Control from '../generic/form/Control';
 import Check from '../generic/form/Check';
 
@@ -22,7 +21,7 @@ export default function IngredientCard({ item, isEditing, handleCheckChange, han
 
       <CardImageSection
         imageUrl={item.imageUrl}
-        handleImageChange={(event) => handleImageChange(event, "imageUrl")}
+        handleImageChange={handleImageChange}
         isEditing={isEditing}
       />
 

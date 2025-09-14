@@ -23,6 +23,7 @@ interface CardProps<T extends BaseItem> {
   keyField: string,
   canDelete?: boolean,
   canSave?: (newItem: T) => Promise<boolean>;
+  deleteItem: (key: string) => void;
   service: CrudService<T>,
   cardComponent: React.ComponentType<CardComponentProps<T>>;
 };
@@ -32,6 +33,7 @@ export default function Card<T extends BaseItem>({
   keyField,
   canDelete=true,
   canSave,
+  deleteItem,
   service,
   cardComponent: CardComponent,
 }: CardProps<T>) {
@@ -110,22 +112,10 @@ export default function Card<T extends BaseItem>({
       confirmButtonText: "DELETE",
       cancelButtonText: "Undo"
     }).then((result) => {
-      if (result.isConfirmed) {
+      if (result.isConfirmed && componentKey !== "") {
         deleteItem(componentKey);
       }
     });
-  }
-
-  // DELETES ITEM
-  async function deleteItem(componentKey: string) {
-    if (componentKey !== "") {
-      try {
-        await service.deleteItem(componentKey);
-        await service.fetchItems();
-      } catch (error) {
-        console.error(error);
-      }
-    }
   }
 
   function handleCheckChange(event: React.ChangeEvent<HTMLInputElement>, fieldName: string) {

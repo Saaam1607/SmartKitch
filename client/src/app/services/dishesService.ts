@@ -26,21 +26,10 @@ export const dishesService: CrudService<Dish> = {
   },
 
   async editItem(newItem: Dish): Promise<Dish> {
-    let imageBase64: string = '';
-
-    if (newItem.image.startsWith('data:image')) {
-      imageBase64 = newItem.image;
-    } else if (newItem.image.startsWith('blob:')) {
-      const blob = await blobUrlToBlob(newItem.image);
-      imageBase64 = await blobToBase64(blob);
-    }
-
-    const itemToSend = { ...newItem, image: imageBase64 };
-
     const res = await fetch(`${API_URL}/${encodeURIComponent(newItem.name)}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(itemToSend),
+      body: JSON.stringify(newItem),
     });
 
     if (!res.ok) throw new Error('Failed to edit item');

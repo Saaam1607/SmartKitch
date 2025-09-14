@@ -20,8 +20,8 @@ export default function DrinkCard({ item, getImage, isEditing, handleCheckChange
     <div className="d-flex flex-column flex-lg-row w-100" >
       
       <CardImageSection
-        getImage={() => getImage?.(item.name)}
-        updateImage={(image: string) => handleImageChange(image, 'image')}
+        imageUrl={item.imageUrl}
+        handleImageChange={handleImageChange}
         isEditing={isEditing}
       >
       </CardImageSection>

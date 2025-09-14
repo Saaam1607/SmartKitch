@@ -16,7 +16,7 @@ export interface UploadImageOptions {
   fileName: string;
 }
 
-export async function uploadImage({ file, fileName }: UploadImageOptions) {
+export async function uploadImageOnRepository({ file, fileName }: UploadImageOptions) {
   try {
 
     file = await sharp(file)

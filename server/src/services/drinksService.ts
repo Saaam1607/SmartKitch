@@ -3,33 +3,19 @@ import pool from '../config/database';
 import { Drink } from '../models/Drink';
 
 export const getItems = async (): Promise<Drink[]> => {
-  const result = await pool.query('SELECT name, description, out_of_stock AS "outOfStock", disabled, price FROM drinks');
+  const result = await pool.query('SELECT name, description, image_url AS "imageUrl", out_of_stock AS "outOfStock", disabled, price FROM drinks');
   return result.rows;
 };
 
-export const getItemImage = async (keyValue: string): Promise<Buffer | null> => {
-  
-  const result = await pool.query("SELECT image FROM drinks WHERE name = $1", [keyValue]);
-
-  if (result.rows.length === 0 || !result.rows[0].image) {
-    return null;
-  }
-
-  return result.rows[0].image as Buffer;
-}
-
 export const createItem = async (newItem: Drink): Promise<Drink> => {
-  const base64Data = newItem.image.replace(/^data:image\/\w+;base64,/, "");
-  const buffer = Buffer.from(base64Data, 'base64');
-
   const result = await pool.query(`
-    INSERT INTO drinks (name, description, image, out_of_stock, disabled, price)
+    INSERT INTO drinks (name, description, image_url, out_of_stock, disabled, price)
     VALUES ($1, $2, $3, $4, $5, $6)
-    RETURNING name, description, image, out_of_stock AS "outOfStock", disabled, price
+    RETURNING name, description, image_url AS "imageUrl", out_of_stock AS "outOfStock", disabled, price
   `, [
       newItem.name,
       newItem.description,
-      buffer,
+      newItem.imageUrl,
       newItem.outOfStock,
       newItem.disabled,
       newItem.price
@@ -39,22 +25,19 @@ export const createItem = async (newItem: Drink): Promise<Drink> => {
 };
 
 export const editItem = async (newItem: Drink): Promise<Drink> => {
-  const base64Data = newItem.image.replace(/^data:image\/\w+;base64,/, "");
-  const buffer = Buffer.from(base64Data, 'base64');
-
   const result = await pool.query(`
     UPDATE drinks
     SET description = $2,
-        image = $3,
+        image_url = $3,
         out_of_stock = $4,
         disabled = $5,
         price = $6
     WHERE name = $1
-    RETURNING name, description, image, out_of_stock AS "outOfStock", disabled, price
+    RETURNING name, description, image_url AS "imageUrl", out_of_stock AS "outOfStock", disabled, price
   `, [
       newItem.name,
       newItem.description,
-      buffer,
+      newItem.imageUrl,
       newItem.outOfStock,
       newItem.disabled,
       newItem.price

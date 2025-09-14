@@ -7,7 +7,7 @@ import Check from '../generic/form/Check';
 
 import { Area } from 'react-easy-crop';
 
-import { Ingredient } from '@models/Ingredient';
+import { Drink } from '@models/Drink';
 
 import getCroppedImg from '../../utils/getCroppedImg';
 
@@ -19,25 +19,24 @@ import imagesService from '../../services/imagesService';
 
 import '../../styles/creationModal.css';
 
-interface IngredientCreationModalProps {
+interface DrinkCreationModalProps {
   visible: boolean;
   close: () => void;
-  create: (ingredient: Ingredient) => void;
+  create: (drink: Drink) => void;
 }
 
-const defaultNewIngredient: Ingredient = {
+const defaultNewDrink: Drink = {
   name: "",
   description: "",
   disabled: false,
-  isAddable: false,
-  additionPrice: 0,
+  price: 0,
   imageUrl: null,
   outOfStock: false,
 }
 
-export default function IngredientCreationModal({ visible, close, create }: IngredientCreationModalProps) {
+export default function DrinkCreationModal({ visible, close, create }: DrinkCreationModalProps) {
 
-  const [newIngredient, setNewIngredient] = useState<Ingredient>(defaultNewIngredient);
+  const [newDrink, setNewDrink] = useState<Drink>(defaultNewDrink);
   const [uploadedImage, setUploadedImage] = useState(null);
 
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
@@ -45,23 +44,23 @@ export default function IngredientCreationModal({ visible, close, create }: Ingr
   const { setLoading } = useLoading();
 
   useEffect(() => {
-    setNewIngredient(defaultNewIngredient);
+    setNewDrink(defaultNewDrink);
   }, [visible])
 
   async function createItem() {
-    let ingredientToCreate = newIngredient;
+    let drinkToCreate = newDrink;
 
     setLoading(true);
 
     if (uploadedImage && croppedAreaPixels) {
       const croppedBlob = await getCroppedImg(uploadedImage, croppedAreaPixels) as Blob;
       const imageString = await blobToBase64(croppedBlob);
-      const imageUrl = await imagesService.uploadImage(imageString, ingredientToCreate.name);
-      ingredientToCreate = { ...ingredientToCreate, imageUrl: imageUrl }
+      const imageUrl = await imagesService.uploadImage(imageString, drinkToCreate.name);
+      drinkToCreate = { ...drinkToCreate, imageUrl: imageUrl }
     }
     
-    create(ingredientToCreate);
-    setNewIngredient(defaultNewIngredient);
+    create(drinkToCreate);
+    setNewDrink(defaultNewDrink);
     setUploadedImage(null);
     close();
     setLoading(false);
@@ -69,7 +68,7 @@ export default function IngredientCreationModal({ visible, close, create }: Ingr
 
   return (
     <Modal
-      title="New Ingredient"
+      title="New Drink"
       show={visible}
       close={close}
       saveItem={createItem}
@@ -77,23 +76,23 @@ export default function IngredientCreationModal({ visible, close, create }: Ingr
       <div className="d-flex flex-column gap-3">
         <Control
           type="text"
-          itemKey={newIngredient.name}
-          value={newIngredient.name}
+          itemKey={newDrink.name}
+          value={newDrink.name}
           fieldName="Name"
           isEditing={true}
           handleChange={(e) =>
-            setNewIngredient({ ...newIngredient, name: e.target.value })
+            setNewDrink({ ...newDrink, name: e.target.value })
           }
         />
 
         <Control
           type="textarea"
-          itemKey={newIngredient.name}
-          value={newIngredient.description}
+          itemKey={newDrink.name}
+          value={newDrink.description}
           fieldName="Description"
           isEditing={true}
           handleChange={(e) =>
-            setNewIngredient({ ...newIngredient, description: e.target.value })
+            setNewDrink({ ...newDrink, description: e.target.value })
           }
         />
 
@@ -102,48 +101,36 @@ export default function IngredientCreationModal({ visible, close, create }: Ingr
           setUploadedImage={setUploadedImage}
           setCroppedAreaPixels={setCroppedAreaPixels}
         />
+          
+        <Control
+          type="price"
+          step={0.1}
+          itemKey={newDrink.name}
+          value={newDrink.price}
+          fieldName="Price"
+          isEditing={true}
+          handleChange={(e) =>
+            setNewDrink({ ...newDrink, price: e.target.value })
+          } 
+        />
 
         <div className="d-flex gap-5">
           <Check
-            itemKey={newIngredient.name}
-            value={newIngredient.isAddable}
-            fieldName="Is Addable"
-            isEditing={true}
-            handleChange={() =>
-              setNewIngredient({ ...newIngredient, isAddable: !newIngredient.isAddable })
-            } 
-          />
-
-          <Control
-            type="price"
-            step={0.1}
-            itemKey={newIngredient.name}
-            value={newIngredient.additionPrice}
-            fieldName="Addition Price"
-            isEditing={true}
-            handleChange={(e) =>
-              setNewIngredient({ ...newIngredient, additionPrice: e.target.value })
-            } 
-          />
-        </div>
-
-        <div className="d-flex gap-5">
-          <Check
-            itemKey={newIngredient.name}
-            value={newIngredient.outOfStock}
+            itemKey={newDrink.name}
+            value={newDrink.outOfStock}
             fieldName="Out Of Stock"
             isEditing={true}
             handleChange={() =>
-              setNewIngredient({ ...newIngredient, outOfStock: !newIngredient.outOfStock })
+              setNewDrink({ ...newDrink, outOfStock: !newDrink.outOfStock })
             }
           />
           <Check
-            itemKey={newIngredient.name}
-            value={newIngredient.disabled}
+            itemKey={newDrink.name}
+            value={newDrink.disabled}
             fieldName="Disabled"
             isEditing={true}
             handleChange={() =>
-              setNewIngredient({ ...newIngredient, disabled: !newIngredient.disabled })
+              setNewDrink({ ...newDrink, disabled: !newDrink.disabled })
             }
           />
         </div> 

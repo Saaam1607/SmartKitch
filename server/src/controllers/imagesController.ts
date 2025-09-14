@@ -3,13 +3,18 @@ import * as imagesService from '../services/imagesService';
 
 export const uploadImage = async (req: Request, res: Response) => {
   try {
-    const { image: image } = req.body;
+
+    const { image, name } = req.body;
+
+    if (!name) {
+      return res.status(400).json({ message: 'Name is required' });
+    }
 
     if (!image) {
       return res.status(400).json({ message: 'Image is required' });
     }
 
-    const imageUrl = await imagesService.uploadImage(image);
+    const imageUrl = await imagesService.uploadImage(image, name);
     return res.status(200).json(imageUrl);
 
   } catch (error: any) {

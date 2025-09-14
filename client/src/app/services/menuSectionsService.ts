@@ -26,12 +26,10 @@ export const menuSectionsService: CrudService<MenuSection> = {
   },
 
   async editItem(newItem: MenuSection): Promise<MenuSection> {
-    const itemToSend = newItem
-
     const res = await fetch(`${API_URL}/${encodeURIComponent(newItem.name)}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(itemToSend),
+      body: JSON.stringify(newItem),
     });
 
     if (!res.ok) throw new Error('Failed to edit item');
