@@ -30,7 +30,7 @@ const defaultNewDrink: Drink = {
   description: "",
   disabled: false,
   price: 0,
-  imageUrl: null,
+  imageUrl: "",
   outOfStock: false,
 }
 

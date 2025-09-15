@@ -28,6 +28,7 @@ export default function DishCard<T extends BaseItem>({ item, getImage, isHovered
 
   useEffect(() => {
     setIngredientsNames(ingredients.map(obj => obj.name))
+    console.log(ingredients.map(obj => obj.name))
   }, [ingredients])
 
   function handleIngredientAddition(ingredient: string) {

@@ -94,16 +94,9 @@ export default function IngredientsRegistry() {
     setLoading(false);
   }
 
-  async function deleteItem(key: string) {
-    setLoading(true);
-    try {
-      await ingredientsService.deleteItem(key);
-      const freshData = await ingredientsService.fetchItems();
-      setIngredients(freshData);
-    } catch (error) {
-      console.error(error);
-    }
-    setLoading(false);
+  async function refreshData() {
+    const freshData = await ingredientsService.fetchItems();
+    setIngredients(freshData);
   }
 
   async function canSave(newItem: Ingredient) {
@@ -128,7 +121,7 @@ export default function IngredientsRegistry() {
       keyField={"name"}
       cardComponent={IngredientCard}
       canSave={canSave}
-      deleteItem={deleteItem}
+      refreshData={refreshData}
       service={ingredientsService}
       showNavbar={true}
       filtersComponent={
@@ -143,6 +136,8 @@ export default function IngredientsRegistry() {
         <IngredientCreationModal
           visible={visible}
           close={close}
+          addItem={ingredientsService.addItem}
+          refreshData={refreshData}
           create={createItem}
         />
       )}

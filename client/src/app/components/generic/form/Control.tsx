@@ -103,7 +103,6 @@ function TextArea({ itemKey, value, fieldName, isEditing, handleChange }: TextAr
       onChange={handleChange}
       placeholder=""
       ref={textAreaRef}
-      rows={1}
       value={value}
       readOnly={!isEditing}
       style={{
@@ -113,8 +112,7 @@ function TextArea({ itemKey, value, fieldName, isEditing, handleChange }: TextAr
         width: '100%',
         borderRadius: '0.25rem',
         overflowY: 'auto',
-        minHeight: '2rem',
-        height: 'fit-content'
+        minHeight: '36px',
       }}
     />
   );

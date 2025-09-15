@@ -75,7 +75,7 @@ export default function ImageUploader({ uploadedImage, setUploadedImage, setCrop
           style={{ display: 'none' }}
           onChange={handleFileChange}
         />
-          {uploadedImage == null ? (
+          {uploadedImage == null || uploadedImage == "" ? (
             <label htmlFor="myfile">
               <div
                 className={`d-flex flex-column rounded upload-image-container ${isDragging ? 'dashed' : ''}`}

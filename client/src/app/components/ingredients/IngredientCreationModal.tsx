@@ -23,6 +23,8 @@ interface IngredientCreationModalProps {
   visible: boolean;
   close: () => void;
   create: (ingredient: Ingredient) => void;
+  addItem: (newItem: Ingredient) => Promise<void>;
+  refreshData: () => void;
 }
 
 const defaultNewIngredient: Ingredient = {
@@ -31,14 +33,14 @@ const defaultNewIngredient: Ingredient = {
   disabled: false,
   isAddable: false,
   additionPrice: 0,
-  imageUrl: null,
+  imageUrl: "",
   outOfStock: false,
 }
 
-export default function IngredientCreationModal({ visible, close, create }: IngredientCreationModalProps) {
+export default function IngredientCreationModal({ visible, close, create, addItem, refreshData }: IngredientCreationModalProps) {
 
   const [newIngredient, setNewIngredient] = useState<Ingredient>(defaultNewIngredient);
-  const [uploadedImage, setUploadedImage] = useState(null);
+  const [uploadedImage, setUploadedImage] = useState("");
 
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
 
@@ -60,10 +62,13 @@ export default function IngredientCreationModal({ visible, close, create }: Ingr
       ingredientToCreate = { ...ingredientToCreate, imageUrl: imageUrl }
     }
     
-    create(ingredientToCreate);
+    await addItem(ingredientToCreate);
+    await refreshData();
+
     setNewIngredient(defaultNewIngredient);
-    setUploadedImage(null);
+    setUploadedImage("");
     close();
+
     setLoading(false);
   }
 

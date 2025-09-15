@@ -38,6 +38,7 @@ export default function ComboList({ valueList, dataList, handleValueAddition, ha
       </Form.Label>
       
       <div
+        className='rounded'
         style={{
           width: '100%',
           padding: '0.2rem 0.5rem',
@@ -46,7 +47,12 @@ export default function ComboList({ valueList, dataList, handleValueAddition, ha
           border: isEditing ? '2px solid rgb(219, 123, 33)' : '2px solid lightgrey',
         }}
       >
-        <ListGroup className="d-flex flex-row flex-wrap gap-2 rounded-0">
+        <ListGroup
+          className="d-flex flex-row flex-wrap gap-2 rounded-0"
+          style={{
+            minHeight: '36px',
+          }}
+        >
           {valueList.map((item, index) => (
             <ListGroup.Item
               key={index}

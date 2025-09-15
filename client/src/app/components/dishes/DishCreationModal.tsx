@@ -14,6 +14,9 @@ import getCroppedImg from '../../utils/getCroppedImg';
 import { blobToBase64 } from '../../utils/blobToBase64';
 
 import '../../styles/creationModal.css';
+import ComboList from '../generic/form/ComboList';
+
+import useStore from '../../state/useStore'
 
 interface DishCreationModalProps {
   visible: boolean;
@@ -38,9 +41,26 @@ export default function DishCreationModal({ visible, close, create }: DishCreati
 
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
 
+  const ingredients = useStore((state) => state.ingredients);
+
+  const [ingredientsNames, setIngredientsNames] = useState(ingredients.map(obj => obj.name));
+
+  useEffect(() => {
+    setIngredientsNames(ingredients.map(obj => obj.name))
+    console.log(ingredients.map(obj => obj.name))
+  }, [ingredients])
+
   useEffect(() => {
     setNewDish(defaultNewDish);
   }, [visible])
+
+  function handleIngredientAddition(ingredient: string) {
+    setNewDish({ ...newDish, ingredients: [...newDish.ingredients, ingredient] });
+  }
+
+  function handleIngredientRemoval(ingredient: string) {
+    setNewDish({ ...newDish, ingredients: newDish.ingredients.filter(i => i !== ingredient) });
+  }
 
   async function createItem() {
     let ingredientToCreate = newDish;
@@ -88,6 +108,16 @@ export default function DishCreationModal({ visible, close, create }: DishCreati
           handleChange={(e) =>
             setNewDish({ ...newDish, description: e.target.value })
           }
+        />
+
+        <ComboList
+          valueList={newDish.ingredients}
+          dataList={ingredientsNames}
+          handleValueAddition={handleIngredientAddition}
+          handleValueRemoval={handleIngredientRemoval}
+          fieldName="Ingredients"
+          itemKey={newDish.name}
+          isEditing={true}
         />
 
         <ImageUploader
