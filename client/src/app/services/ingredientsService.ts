@@ -2,8 +2,6 @@ import CrudService from "../types/CrudService";
 
 import { Ingredient } from '@models/Ingredient';
 
-import { blobToBase64, blobUrlToBlob } from "../utils/blobToBase64";
-
 const API_URL = (process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5001") + '/ingredients';
 
 export const ingredientsService: CrudService<Ingredient> = {

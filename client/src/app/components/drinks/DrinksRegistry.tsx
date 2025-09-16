@@ -3,8 +3,8 @@ import React, { useEffect, useState } from 'react';
 // Components
 import DrinkCard from '../../components/drinks/DrinkCard';
 import DrinkCreationModal from '../../components/drinks/DrinkCreationModal';
-import Switch from '../../components/generic/form/Switch';
 import Registry from '../generic/registries/Registry'
+import DrinksFilters from './DrinksFilters';
 
 // Types
 import { Drink } from '@models/Drink';
@@ -13,33 +13,7 @@ import { useLoading } from '../../loadingProvider/LoadingProvider';
 import drinksService from '../../services/drinksService';
 import useStore from '../../state/useStore'
 
-interface FiltersProps {
-  filterByOutOfStock: boolean;
-  setFilterByOutOfStock: (value: boolean) => void;
-  filterByDisabled: boolean;
-  setFilterByDisabled: (value: boolean) => void;
-}
-
-function Filters({ filterByOutOfStock, setFilterByOutOfStock, filterByDisabled, setFilterByDisabled } : FiltersProps ) {
-  return (
-    <div className="d-flex flex-column">
-      <Switch
-        itemKey={ 'Out of Stock Filter' }
-        value={filterByOutOfStock}
-        fieldName="Out of Stock"
-        isEditing={true}
-        handleChange={() => setFilterByOutOfStock(!filterByOutOfStock)}
-      />
-      <Switch
-        itemKey={ 'Disabled Filter' }
-        value={filterByDisabled}
-        fieldName="Disabled"
-        isEditing={true}
-        handleChange={() => setFilterByDisabled(!filterByDisabled)}
-      />
-    </div>
-  );
-}
+import { toast } from 'sonner';
 
 export default function IngredientsRegistry() {
 
@@ -52,17 +26,12 @@ export default function IngredientsRegistry() {
   const { setLoading } = useLoading();
 
   useEffect(() => {
-    async function fetchData() {
+    const fetchData = async () => {
       setLoading(true);
-      try {
-        const data = await drinksService.fetchItems();
-        setDrinks(data)
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
-    }
+      await refreshData();
+      setLoading(false)
+    };
+
     fetchData();
   }, []);
 
@@ -70,24 +39,15 @@ export default function IngredientsRegistry() {
   useEffect(() => {
     let results = drinks;
 
-    if (filterByOutOfStock)
-      results = results.filter(item => item.outOfStock);
-
-    if (filterByDisabled)
-      results = results.filter(item => item.disabled);
+    if (filterByOutOfStock) results = results.filter(item => item.outOfStock);
+    if (filterByDisabled) results = results.filter(item => item.disabled);
 
     setFilteredItems(results);
   }, [drinks, filterByOutOfStock, filterByDisabled]);
 
-
-  async function createItem(newItem: Drink) {
-    try {
-      await drinksService.addItem(newItem); 
-      const freshData = await drinksService.fetchItems();
-      setDrinks(freshData);
-    } catch (error) {
-      console.error(error);
-    }
+  async function refreshData() {
+    const freshData = await drinksService.fetchItems();
+    setDrinks(freshData);
   }
 
   return (
@@ -95,10 +55,11 @@ export default function IngredientsRegistry() {
       filteredItems={filteredItems}
       keyField={"name"}
       cardComponent={DrinkCard}
+      refreshData={refreshData}
       service={drinksService}
       showNavbar={true}
       filtersComponent={
-        <Filters
+        <DrinksFilters
           filterByOutOfStock={filterByOutOfStock}
           setFilterByOutOfStock={setFilterByOutOfStock}
           filterByDisabled={filterByDisabled}
@@ -109,7 +70,8 @@ export default function IngredientsRegistry() {
         <DrinkCreationModal
           visible={visible}
           close={close}
-          create={createItem}
+          addItem={drinksService.addItem}
+          refreshData={refreshData}
         />
       )}
     />

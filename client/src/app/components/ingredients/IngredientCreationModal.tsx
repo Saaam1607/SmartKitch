@@ -22,8 +22,7 @@ import '../../styles/creationModal.css';
 interface IngredientCreationModalProps {
   visible: boolean;
   close: () => void;
-  create: (ingredient: Ingredient) => void;
-  addItem: (newItem: Ingredient) => Promise<void>;
+  addItem: (newItem: Ingredient) => Promise<Ingredient>;
   refreshData: () => void;
 }
 
@@ -37,7 +36,7 @@ const defaultNewIngredient: Ingredient = {
   outOfStock: false,
 }
 
-export default function IngredientCreationModal({ visible, close, create, addItem, refreshData }: IngredientCreationModalProps) {
+export default function IngredientCreationModal({ visible, close, addItem, refreshData }: IngredientCreationModalProps) {
 
   const [newIngredient, setNewIngredient] = useState<Ingredient>(defaultNewIngredient);
   const [uploadedImage, setUploadedImage] = useState("");
@@ -127,7 +126,7 @@ export default function IngredientCreationModal({ visible, close, create, addIte
             fieldName="Addition Price"
             isEditing={true}
             handleChange={(e) =>
-              setNewIngredient({ ...newIngredient, additionPrice: e.target.value })
+              setNewIngredient({ ...newIngredient, additionPrice: parseFloat(e.target.value) })
             } 
           />
         </div>

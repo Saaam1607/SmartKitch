@@ -20,7 +20,7 @@ import '../../styles/card.css';
 
 
 
-export default function DishCard<T extends BaseItem>({ item, getImage, isHovered, isEditing, handleCheckChange, handleTextChange, handleImageChange, handlePriceChange, handleArrayAddition, handleArrayRemoval }: CardComponentProps<Dish>) {
+export default function DishCard<T extends BaseItem>({ item, isEditing, handleCheckChange, handleTextChange, handleImageChange, handlePriceChange, handleArrayAddition, handleArrayRemoval }: CardComponentProps<Dish>) {
 
   const ingredients = useStore((state) => state.ingredients);
 

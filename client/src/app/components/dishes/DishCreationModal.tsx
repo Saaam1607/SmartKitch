@@ -16,12 +16,16 @@ import { blobToBase64 } from '../../utils/blobToBase64';
 import '../../styles/creationModal.css';
 import ComboList from '../generic/form/ComboList';
 
+import imagesService from '../../services/imagesService';
+
+import { useLoading } from '../../loadingProvider/LoadingProvider';
 import useStore from '../../state/useStore'
 
 interface DishCreationModalProps {
   visible: boolean;
   close: () => void;
-  create: (dish: Dish) => void;
+  addItem: (newItem: Dish) => Promise<Dish>;
+  refreshData: () => void;
 }
 
 const defaultNewDish: Dish = {
@@ -29,15 +33,15 @@ const defaultNewDish: Dish = {
   description: "",
   ingredients: [],
   disabled: false,
-  price: null,
-  image: null,
+  price: 0,
+  imageUrl: "",
   outOfStock: false,
 }
 
-export default function DishCreationModal({ visible, close, create }: DishCreationModalProps) {
+export default function DishCreationModal({ visible, close, addItem, refreshData }: DishCreationModalProps) {
 
   const [newDish, setNewDish] = useState<Dish>(defaultNewDish);
-  const [uploadedImage, setUploadedImage] = useState(null);
+  const [uploadedImage, setUploadedImage] = useState("");
 
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
 
@@ -45,9 +49,10 @@ export default function DishCreationModal({ visible, close, create }: DishCreati
 
   const [ingredientsNames, setIngredientsNames] = useState(ingredients.map(obj => obj.name));
 
+  const { setLoading } = useLoading();
+
   useEffect(() => {
     setIngredientsNames(ingredients.map(obj => obj.name))
-    console.log(ingredients.map(obj => obj.name))
   }, [ingredients])
 
   useEffect(() => {
@@ -65,20 +70,24 @@ export default function DishCreationModal({ visible, close, create }: DishCreati
   async function createItem() {
     let ingredientToCreate = newDish;
 
+    setLoading(true);
+
     if (uploadedImage && croppedAreaPixels) {
       const croppedBlob = await getCroppedImg(uploadedImage, croppedAreaPixels) as Blob;
-      ingredientToCreate = { ...newDish, image: await blobToBase64(croppedBlob), }
+      const imageString = await blobToBase64(croppedBlob);
+      const imageUrl = await imagesService.uploadImage(imageString, ingredientToCreate.name);
+      ingredientToCreate = { ...ingredientToCreate, imageUrl: imageUrl }
     }
+    
+    await addItem(ingredientToCreate);
+    await refreshData();
 
-    create(ingredientToCreate);
     setNewDish(defaultNewDish);
+    setUploadedImage("");
     close();
+
+    setLoading(false);
   }
-
-  //! ingredients
-
-  //! dish
-  // ingredients: string[];
 
   return (
     <Modal
@@ -134,7 +143,7 @@ export default function DishCreationModal({ visible, close, create }: DishCreati
           fieldName="Price"
           isEditing={true}
           handleChange={(e) =>
-            setNewDish({ ...newDish, price: e.target.value })
+            setNewDish({ ...newDish, price: parseFloat(e.target.value) })
           } 
         />
 

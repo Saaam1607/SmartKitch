@@ -10,7 +10,7 @@ import '../../../styles/imageUploader.css';
 
 interface ImageUploaderProps {
   uploadedImage: string | null;
-  setUploadedImage: (image: string | null) => void;
+  setUploadedImage: (image: string) => void;
   setCroppedAreaPixels: (area: Area) => void;
 }
 

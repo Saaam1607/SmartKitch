@@ -3,8 +3,9 @@ import React, { useEffect, useState } from 'react';
 // Components
 import DishCard from '../../components/dishes/DishCard';
 import DishCreationModal from '../../components/dishes/DishCreationModal';
-import Switch from '../../components/generic/form/Switch';
 import Registry from '../generic/registries/Registry'
+import DishesFilters from './DishesFilters';
+
 
 // Types
 import type { Dish } from '@models/Dish';
@@ -15,33 +16,7 @@ import dishesService from '../../services/dishesService';
 import ingredientsService from '../../services/ingredientsService';
 import useStore from '../../state/useStore'
 
-interface FiltersProps {
-  filterByOutOfStock: boolean;
-  setFilterByOutOfStock: (value: boolean) => void;
-  filterByDisabled: boolean;
-  setFilterByDisabled: (value: boolean) => void;
-}
 
-function Filters({ filterByOutOfStock, setFilterByOutOfStock, filterByDisabled, setFilterByDisabled } : FiltersProps ) {
-  return (
-    <div className="d-flex flex-column">
-      <Switch
-        itemKey={ 'Out of Stock Filter' }
-        value={filterByOutOfStock}
-        fieldName="Out of Stock"
-        isEditing={true}
-        handleChange={() => setFilterByOutOfStock(!filterByOutOfStock)}
-      />
-      <Switch
-        itemKey={ 'Disabled Filter' }
-        value={filterByDisabled}
-        fieldName="Disabled"
-        isEditing={true}
-        handleChange={() => setFilterByDisabled(!filterByDisabled)}
-      />
-    </div>
-  );
-}
 
 export default function DishesRegistry() {
 
@@ -55,44 +30,28 @@ export default function DishesRegistry() {
   const { setLoading } = useLoading();
 
   useEffect(() => {
-    async function fetchData() {
+    const fetchData = async () => {
       setLoading(true);
-      try {
-        const data = await dishesService.fetchItems();
-        setDishes(data)
-        const ingredients = await ingredientsService.fetchItems();
-        setIngredients(ingredients);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
+      await refreshData();
+      setIngredients(await ingredientsService.fetchItems());
+      setLoading(false);
     }
     fetchData();
-  }, [setDishes, setIngredients]);
-
+  }, []);
 
   useEffect(() => {
     let results = dishes;
 
-    if (filterByOutOfStock)
-      results = results.filter(item => item.outOfStock);
-
-    if (filterByDisabled)
-      results = results.filter(item => item.disabled);
+    if (filterByOutOfStock) results = results.filter(item => item.outOfStock);
+    if (filterByDisabled) results = results.filter(item => item.disabled);
 
     setFilteredItems(results);
   }, [dishes, filterByOutOfStock, filterByDisabled]);
 
 
-  async function createItem(newItem: Dish) {
-    try {
-      await dishesService.addItem(newItem); 
-      const freshData = await dishesService.fetchItems();
-      setDishes(freshData);
-    } catch (error) {
-      console.error(error);
-    }
+  async function refreshData() {
+    const freshData = await dishesService.fetchItems();
+    setDishes(freshData);
   }
 
   return (
@@ -100,10 +59,11 @@ export default function DishesRegistry() {
       filteredItems={filteredItems}
       keyField={"name"}
       cardComponent={DishCard}
+      refreshData={refreshData}
       service={dishesService}
       showNavbar={true}
       filtersComponent={
-        <Filters
+        <DishesFilters
           filterByOutOfStock={filterByOutOfStock}
           setFilterByOutOfStock={setFilterByOutOfStock}
           filterByDisabled={filterByDisabled}
@@ -114,7 +74,8 @@ export default function DishesRegistry() {
         <DishCreationModal
           visible={visible}
           close={close}
-          create={createItem}
+          addItem={dishesService.addItem}
+          refreshData={refreshData}
         />
       )}
     />

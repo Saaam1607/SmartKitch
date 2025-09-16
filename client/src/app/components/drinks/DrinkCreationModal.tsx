@@ -22,7 +22,8 @@ import '../../styles/creationModal.css';
 interface DrinkCreationModalProps {
   visible: boolean;
   close: () => void;
-  create: (drink: Drink) => void;
+  addItem: (newItem: Drink) => Promise<Drink>;
+  refreshData: () => void;
 }
 
 const defaultNewDrink: Drink = {
@@ -34,10 +35,10 @@ const defaultNewDrink: Drink = {
   outOfStock: false,
 }
 
-export default function DrinkCreationModal({ visible, close, create }: DrinkCreationModalProps) {
+export default function DrinkCreationModal({ visible, close, addItem, refreshData }: DrinkCreationModalProps) {
 
   const [newDrink, setNewDrink] = useState<Drink>(defaultNewDrink);
-  const [uploadedImage, setUploadedImage] = useState(null);
+  const [uploadedImage, setUploadedImage] = useState("");
 
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
 
@@ -59,9 +60,11 @@ export default function DrinkCreationModal({ visible, close, create }: DrinkCrea
       drinkToCreate = { ...drinkToCreate, imageUrl: imageUrl }
     }
     
-    create(drinkToCreate);
+    await addItem(drinkToCreate);
+    await refreshData();
+
     setNewDrink(defaultNewDrink);
-    setUploadedImage(null);
+    setUploadedImage("");
     close();
     setLoading(false);
   }
@@ -110,7 +113,7 @@ export default function DrinkCreationModal({ visible, close, create }: DrinkCrea
           fieldName="Price"
           isEditing={true}
           handleChange={(e) =>
-            setNewDrink({ ...newDrink, price: e.target.value })
+            setNewDrink({ ...newDrink, price: parseFloat(e.target.value) })
           } 
         />
 

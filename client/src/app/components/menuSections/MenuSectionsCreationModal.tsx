@@ -6,35 +6,63 @@ import Check from '../generic/form/Check';
 
 import { MenuSection } from '@models/MenuSection';
 
+import { useLoading } from '../../loadingProvider/LoadingProvider';
+
+import ComboList from '../generic/form/ComboList';
+
+import useStore from '../../state/useStore'
+
 import '../../styles/creationModal.css';
 
 interface MenuSectionsCreationModalProps {
   visible: boolean;
   close: () => void;
-  create: (ingredient: MenuSection) => void;
+  addItem: (newItem: MenuSection) => Promise<MenuSection>;
+  refreshData: () => void;
 }
 
-export default function MenuSectionsCreationModal({ visible, close, create }: MenuSectionsCreationModalProps) {
+const defaultNewMenuSections: MenuSection = {
+  name: "",
+  description: "",
+  disabled: false,
+  dishes: [],
+} 
 
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
-  const [disabled, setDisabled] = useState(false);
+export default function MenuSectionsCreationModal({ visible, close, addItem, refreshData }: MenuSectionsCreationModalProps) {
+
+  const [newMenuSection, setNewMenuSection] = useState<MenuSection>(defaultNewMenuSections);
+
+  const dishes = useStore((state) => state.dishes);
+  const [dishesNames, setDishesNames] = useState(dishes.map(obj => obj.name));
+
+  const { setLoading } = useLoading();
 
   useEffect(() => {
-    setName("");
-    setDescription("");
-    setDisabled(false);
+    setDishesNames(dishes.map(obj => obj.name))
+  }, [dishes])
+
+  useEffect(() => {
+    setNewMenuSection(defaultNewMenuSections);
   }, [visible])
 
+  function handleIngredientAddition(ingredient: string) {
+    setNewMenuSection({ ...newMenuSection, dishes: [...newMenuSection.dishes, ingredient] });
+  }
+
+  function handleIngredientRemoval(ingredient: string) {
+    setNewMenuSection({ ...newMenuSection, dishes: newMenuSection.dishes.filter(i => i !== ingredient) });
+  }
+
   async function createItem() {
-    const newItem: MenuSection = {
-      name: name,
-      description: description,
-      disabled: disabled,
-      dishes: [],
-    }
-    create(newItem);
+
+    setLoading(true);
+    await addItem(newMenuSection);
+    await refreshData();
+
+    setNewMenuSection(defaultNewMenuSections);
     close();
+
+    setLoading(false);
   }
 
   return (
@@ -46,31 +74,45 @@ export default function MenuSectionsCreationModal({ visible, close, create }: Me
     >
       <Control
         type="text"
-        itemKey={name}
-        value={name}
+        itemKey={newMenuSection.name}
+        value={newMenuSection.name}
         fieldName="Name"
         isEditing={true}
-        handleChange={(e) => setName(e.target.value)}
+        handleChange={(e) =>
+          setNewMenuSection({ ...newMenuSection, name: e.target.value })
+        }
       />
 
       <Control
         type="textarea"
-        itemKey={name}
-        value={description}
+        itemKey={newMenuSection.name}
+        value={newMenuSection.description}
         fieldName="Description"
         isEditing={true}
-        handleChange={(e) => setDescription(e.target.value)}
+        handleChange={(e) =>
+          setNewMenuSection({ ...newMenuSection, description: e.target.value })
+        }
       />
 
-      <div className="d-flex gap-5">
-        <Check
-          itemKey={name}
-          value={disabled}
-          fieldName="Disabled"
-          isEditing={true}
-          handleChange={() => setDisabled(!disabled)}
-        />
-      </div> 
+      <ComboList
+        valueList={newMenuSection.dishes}
+        dataList={dishesNames}
+        handleValueAddition={handleIngredientAddition}
+        handleValueRemoval={handleIngredientRemoval}
+        fieldName="Ingredients"
+        itemKey={newMenuSection.name}
+        isEditing={true}
+      />
+
+      <Check
+        itemKey={newMenuSection.name}
+        value={newMenuSection.disabled}
+        fieldName="Disabled"
+        isEditing={true}
+        handleChange={() =>
+          setNewMenuSection({ ...newMenuSection, disabled: !newMenuSection.disabled })
+        }
+      />
 
     </Modal>
   );
