@@ -91,7 +91,7 @@ export default function RegistryNavBar({ searchTerm, setSearchTerm, showFilters,
             />
           </div>
 
-          <div
+          {/* <div
             className="d-flex align-items-center bg-white border px-2 gap-2 shadow-sm"
             style={{
               width: "100%",
@@ -106,7 +106,7 @@ export default function RegistryNavBar({ searchTerm, setSearchTerm, showFilters,
               <option>Alphabetical Asc</option>
               <option>Alphabetical Desc</option>
             </Form.Select>
-          </div>
+          </div> */}
 
         </div>
           

@@ -4,50 +4,49 @@ import { Form, Button, ListGroup, InputGroup } from 'react-bootstrap';
 
 import Modal from '../modal/Modal';
 
-import DishMiniCard from '../card/DishMiniCard';
-import DishMicroCard from '../card/DishMicroCard';
+import DishMiniCard from '../../dishes/DishMiniCard';
+import DishMicroCard from '../../dishes/DishMicroCard';
 
-import { X, SquarePlus } from 'lucide-react';
+import { SquarePlus } from 'lucide-react';
+
+import type { Dish } from '@models/Dish';
+
 
 interface MenuComboListProps {
-  valueList: string[];
-  dataList: {item: string, menuSection: string}[];
+  selectedDishesNames: string[];
+  allDishesWithMenu: {item: Dish, menuSection: string}[];
   handleArraySet?: (newArray: string[], fieldName: string) => void;
   fieldName: string;
   itemKey: string;
   isEditing: boolean;
 }
 
-export default function MenuComboList({ valueList, dataList, handleArraySet, fieldName, itemKey, isEditing }: MenuComboListProps) {
+export default function MenuComboList({ selectedDishesNames, allDishesWithMenu, handleArraySet, fieldName, itemKey, isEditing }: MenuComboListProps) {
 
-  const [availableValues, setAvailableValues] = useState<{ dish: string, menuSection: string, isSelected: boolean }[]>([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
 
+  const [selectedValues, setSelectedValues] = useState<string[]>(selectedDishesNames || []);
+
   useEffect(() => {
-    const data = dataList.map(item => ({
-      dish: item.item,
-      menuSection: item.menuSection,
-      isSelected: valueList?.includes(item.item) ?? false
-    }));
-    setAvailableValues(data);
-  }, [valueList, dataList]);
+    setSelectedValues(selectedDishesNames || []);
+  }, [selectedDishesNames]);
+
+  function handleSelectionChange(item: string) {
+    setSelectedValues(prev =>
+      prev.includes(item)
+        ? prev.filter(id => id !== item)
+        : [...prev, item]
+    );
+  }
 
   function closeModal() {
     setIsModalVisible(false);
   }
 
-  function handleSelectionChange(item: string) {
-    setAvailableValues(prev =>
-      prev.map(el =>
-        el.dish === item ? { ...el, isSelected: !el.isSelected } : el
-      )
-    );
-  }
-
   function saveChangesFromModal() {
     if (handleArraySet) {
       handleArraySet(
-        availableValues.filter(el => el.isSelected).map(el => el.dish),
+        selectedValues,
         fieldName
       );
     }
@@ -55,38 +54,33 @@ export default function MenuComboList({ valueList, dataList, handleArraySet, fie
   }
 
   return (
-    <Form.Group className="mb-1 d-flex flex-column align-items-left">
-      <div
-        style={{
-          width: '100%',
-          outline: 'none',
-          color: '#212529',
-          backgroundColor: 'transparent',
-        }}
-      >
+    <Form.Group
+      className="mb-1 d-flex flex-column align-items-left"
+      style={{
+        width: '100%',
+        outline: 'none',
+        color: '#212529',
+        backgroundColor: 'transparent',
+      }}
+    >
         <ListGroup className="d-flex flex-row flex-wrap gap-2 rounded-0">
-          {valueList?.map((item, index) => (
-            <ListGroup.Item
-              key={index}
-              className="d-flex justify-content-between align-items-center gap-1 p-0 rounded-0 border-0"
-              style={{
-                width: '100%',
-                backgroundColor: 'transparent',
-              }}
-            >
-              <div
-                className="m-0 w-100"
+          {selectedValues?.map((item, index) => {
+            const dish = allDishesWithMenu?.find(d => d.item.name === item)?.item;
+            return (
+              <ListGroup.Item
+                key={index}
+                className="d-flex justify-content-between align-items-center gap-1 p-0 rounded-0 border-0"
                 style={{
+                  width: '100%',
+                  backgroundColor: 'transparent',
                   userSelect: 'none',
-                  pointerEvents: 'none',
-                }}  
+                  pointerEvents: 'none'
+                }}
               >
-                <DishMiniCard
-                  dishName={item}
-                />
-              </div>
-            </ListGroup.Item>
-          ))}
+                {dish && ( <DishMiniCard dish={dish} /> )}
+              </ListGroup.Item>
+            )
+          })}
         </ListGroup>
 
         {isEditing && (
@@ -114,20 +108,15 @@ export default function MenuComboList({ valueList, dataList, handleArraySet, fie
                 saveItem={saveChangesFromModal}
               >
                 <div className="d-flex flex-column gap-1">
-                  {availableValues.map((item, index) => (
+                  {allDishesWithMenu.map((item: {item: Dish, menuSection: string}, index) => (
                     <div
                       key={index}
-                      onClick={() => {
-                        if (item.menuSection === "")
-                          handleSelectionChange(item.dish);
-                      }}
-                      style={{
-                        cursor: "pointer",
-                      }}
+                      onClick={() => { if (item.menuSection === "") handleSelectionChange(item.item.name) }}
+                      style={{ cursor: "pointer" }}
                     >
                       <DishMicroCard
-                        dishName={item.dish}
-                        isSelected={item.isSelected}
+                        dish={item.item}
+                        isSelected={selectedValues.includes(item.item.name)}
                         menuSection={item.menuSection}
                       />
                     </div>
@@ -138,7 +127,6 @@ export default function MenuComboList({ valueList, dataList, handleArraySet, fie
             </div>
           </InputGroup>
         )}
-      </div>
     </Form.Group>
   );
 }

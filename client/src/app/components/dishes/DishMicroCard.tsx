@@ -1,53 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
 import type { Dish } from '@models/Dish';
 
-import CardImage from '../card/CardImage';
+import CardImage from '../generic/card/CardImage';
 
-import useStore from '../../../state/useStore'
+import '../../styles/card.css';
 
-import dishesService from '../../../services/dishesService'
-
-import '../../../styles/card.css';
-
-interface DishMiniCardProps {
-  dishName: string;
+interface DishMicroCardProps {
+  dish: Dish;
   isSelected: boolean;
   menuSection: string;
 }
 
-export default function DishMicroCard({ dishName, isSelected, menuSection }: DishMiniCardProps) {
-
-  const { dishes } = useStore();
-  const [imageUrl, setImageUrl] = useState("")
-
-  const [dish, setDish] = useState<Dish | null>(null);
-
-  useEffect(() => {
-    const foundDish = dishes.find(d => d.name === dishName);
-    setDish(foundDish || null);
-  }, [dishes, dishName]);
-
-  useEffect(() => {
-    if (dish) {
-      let isMounted = true;
-      const loadImage = async () => {
-        if (dishesService.fetchItemImage) {
-          const url = await dishesService.fetchItemImage(dishName)
-          if (url)
-            if (isMounted)
-              setImageUrl(url);
-        }
-      };
-
-      loadImage();
-
-      return () => {
-        isMounted = false;
-      };
-    }
-  }, [dish]);
-
+export default function DishMicroCard({ dish, isSelected, menuSection }: DishMicroCardProps) {
 
   return (
     <div
@@ -65,9 +30,9 @@ export default function DishMicroCard({ dishName, isSelected, menuSection }: Dis
         <>
           <div
             className="d-flex align-items-center p-0"
-            style={{ minHeight: '100%' }}
+            style={{ width: '60px', height: '60px' }}
           >
-            <CardImage imageUrl={imageUrl} size={60} />
+            <CardImage imageUrl={dish.imageUrl} />
           </div>
 
           <div className="d-flex w-100">

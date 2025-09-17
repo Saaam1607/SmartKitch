@@ -10,6 +10,8 @@ import Check from '../generic/form/Check';
 
 import CardComponentProps from '../../types/props/CardComponentProps';
 
+import type { Dish } from '@models/Dish';
+
 import useStore from '../../state/useStore'
 
 import '../../styles/card.css';
@@ -19,19 +21,20 @@ export default function MenuSectionDishesCard({ item, isEditing, handleCheckChan
   const { menuSections } = useStore();
   const { dishes } = useStore();
 
-  const [availableDishes, setAvailableDishes] = useState<{ item: string; menuSection: string }[]>([]);
+  // all dishes with their menu section (if any)
+  const [availableDishes, setAvailableDishes] = useState<{ item: Dish; menuSection: string }[]>([]);
 
   useEffect(() => {
-    return setAvailableDishes(dishes.map(dish => {
-
-      const menuSection = menuSections.find(section => section.dishes.includes(dish.name))?.name || '';
-
-      return {
-        item: dish.name,
-        menuSection: menuSection !== item.name ? menuSection : '',
-      };
-    }));
-  }, [menuSections])
+    return setAvailableDishes(
+      dishes.map(dish => {
+        const menuSection = menuSections.find(section => section.dishes.includes(dish.name))?.name || '';
+        return {
+          item: dish,
+          menuSection: menuSection !== item.name ? menuSection : '',
+        };
+      })
+    );
+  }, [dishes, menuSections])
 
   return (
     <div className="d-flex w-100" >
@@ -45,7 +48,6 @@ export default function MenuSectionDishesCard({ item, isEditing, handleCheckChan
         >
           <Form isEditing={isEditing}>
             <Title title={item.name} />
-
 
             <Control
               type="textarea"
@@ -67,8 +69,8 @@ export default function MenuSectionDishesCard({ item, isEditing, handleCheckChan
             </div> 
 
             <MenuComboList
-              valueList={item.dishes}
-              dataList={availableDishes}
+              selectedDishesNames={item.dishes}
+              allDishesWithMenu={availableDishes}
               handleArraySet={handleArraySet}
               fieldName="dishes"
               itemKey={item.name}

@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
 
 // Components
-import MenuSectionCard from './MenuSectionCard';
 import MenuSectionDishesCard from './MenuSectionDishesCard';
 import MenuSectionsCreationModal from './MenuSectionsCreationModal';
 import Registry from '../generic/registries/Registry'
 import MenuSectionsFilters from './MenuSectionsFilters';
-
 
 // Types
 import { MenuSection } from '@models/MenuSection';
@@ -16,8 +14,6 @@ import menuSectionsService from '../../services/menuSectionsService';
 
 import dishesService from '../../services/dishesService';
 import useStore from '../../state/useStore'
-
-
 
 export default function MenuSectionRegistry() {
 

@@ -2,11 +2,8 @@ import React from 'react';
 
 import { Image } from 'lucide-react';
 
-import { useThemeStyles } from '../../../hooks/useThemeStyles';
-
 interface CardImageProps {
   imageUrl: string;
-  size?: number;
   isHovered?: boolean;
   borderSize?: number;
   borderRadius?: number;
@@ -14,12 +11,7 @@ interface CardImageProps {
   isEditing?: boolean;
 }
 
-export default function CardImage({ imageUrl, size=175, isHovered, borderSize=0, borderRadius=15, updateImage, isEditing }: CardImageProps) {
-
-  const {
-    mainCardBg,
-    mainCardEditingBg,
-  } = useThemeStyles();
+export default function CardImage({ imageUrl, isHovered, borderSize=0, borderRadius=15, updateImage, isEditing }: CardImageProps) {
 
   return (
     <>
