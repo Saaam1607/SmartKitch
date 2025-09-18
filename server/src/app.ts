@@ -12,6 +12,8 @@ import drinksRoutes from './routes/drinksRoutes';
 import menuSectionsRoutes from './routes/menuSectionsRoutes';
 import imagesRoutes from './routes/imagesRoutes';
 
+import ordersRoutes from './routes/ordersRoutes';
+
 const app = express();
 app.use(cors());
 
@@ -41,5 +43,8 @@ app.use('/ingredients', ingredientsRoutes);
 app.use('/dishes', dishesRoutes);
 app.use('/drinks', drinksRoutes);
 app.use('/menuSections', menuSectionsRoutes);
+
+app.use('/orders', ordersRoutes);
+
 
 export default app;
