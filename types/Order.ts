@@ -4,6 +4,6 @@ export interface Order {
   waiter: string;
   taken_at: Date;
   notes: string;
-  dishes_names: string[];
-  drinks_names: string[];
+  ordered_dishes: {dish_name: string, quantity: number}[];
+  ordered_drinks: {drink_name: string, quantity: number}[];
 }
