@@ -16,9 +16,6 @@ import CardComponentProps from '../../types/props/CardComponentProps';
 
 import useStore from '../../state/useStore'
 
-import '../../styles/card.css';
-
-
 
 export default function DishCard<T extends BaseItem>({ item, isEditing, handleCheckChange, handleTextChange, handleImageChange, handlePriceChange, handleArrayAddition, handleArrayRemoval }: CardComponentProps<Dish>) {
 

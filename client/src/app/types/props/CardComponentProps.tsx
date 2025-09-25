@@ -1,6 +1,6 @@
 import { BaseItem } from '@models/BaseItem';
 
-export default interface CardComponentProps<T extends BaseItem> {
+export default interface CardComponentProps<T> {
   item: T;
   isHovered: boolean;
   isEditing: boolean;

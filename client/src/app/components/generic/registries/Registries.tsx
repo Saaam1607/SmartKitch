@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 
 import { useThemeStyles } from '../../../hooks/useThemeStyles';
 
+import UsersRegistry from '../../users/UsersRegistry'
 import IngredientsRegistry from '../../ingredients/IngredientsRegistry'
 import DrinksRegistry from '../../drinks/DrinksRegistry'
 import DishesRegistry from '../../dishes/DishesRegistry'
@@ -45,6 +46,11 @@ export default function Registries({
         }}
       >
         <AnimatePresence mode="wait">
+          <RegistryContainer
+            key='roles'
+            showRegistry={selectedRegistry === 'roles'}
+            registryComponent={<UsersRegistry />}
+          />
           <RegistryContainer
             key='ingredients'
             showRegistry={selectedRegistry === 'ingredients'}

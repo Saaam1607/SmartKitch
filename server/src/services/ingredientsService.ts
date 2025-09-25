@@ -69,5 +69,4 @@ export const deleteItem = async (name: string): Promise<boolean> => {
   } else {
     return false;
   }
-
 };

@@ -18,9 +18,10 @@ import { useThemeStyles } from '../../../hooks/useThemeStyles';
 
 import Swal from 'sweetalert2'
 
-interface CardProps<T extends BaseItem> {
+interface CardProps<T extends object> {
   item: T;
-  keyField: string,
+  keyField: keyof T;
+  // keyField: string,
   canDelete?: boolean,
   canSave?: (newItem: T) => Promise<boolean>;
   refreshData: () => void;
@@ -28,7 +29,7 @@ interface CardProps<T extends BaseItem> {
   cardComponent: React.ComponentType<CardComponentProps<T>>;
 };
 
-export default function Card<T extends BaseItem>({
+export default function Card<T extends object>({
   item,
   keyField,
   canDelete=true,
@@ -45,7 +46,7 @@ export default function Card<T extends BaseItem>({
 
   const { setLoading } = useLoading();
 
-  const isEditing = componentKey === item.name;
+  const isEditing = componentKey === item[keyField];
 
   const {
     mainCardBg,
@@ -81,8 +82,8 @@ export default function Card<T extends BaseItem>({
 
       setLoading(true);
       await service.editItem(sessionItem);
-      if (sessionItem?.image) {
-        await service.editItemImage(sessionItem.name, sessionItem.image);
+      if ("imageUrl" in sessionItem && "editItemImage" in service) {
+        await service.editItemImage?.(String(sessionItem[keyField]), String(sessionItem.imageUrl));
       }
       toast.success("Changes Saved");
       await service.fetchItems();
@@ -233,7 +234,7 @@ export default function Card<T extends BaseItem>({
                   color={deleteColor}
                   outline={true}
                   title="Delete"
-                  onClick={() => askIfDeleteOk(item.name)}
+                  onClick={() => askIfDeleteOk(String(item[keyField]))}
                 />
               )}
             </>

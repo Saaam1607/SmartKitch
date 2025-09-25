@@ -36,7 +36,7 @@ app.get('/', (req: Request, res: Response) => {
   res.send('Hello World!');
 });
 
-app.use('/user', usersRoutes);
+app.use('/users', usersRoutes);
 app.use('/image', imagesRoutes);
 
 app.use('/ingredients', ingredientsRoutes);

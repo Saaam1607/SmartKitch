@@ -15,6 +15,67 @@ async function verifyPassword(password: string, hash: string): Promise<boolean> 
   return await bcrypt.compare(password, hash);
 }
 
+export const getItems = async (): Promise<User[]> => {
+  const result = await pool.query(`
+    SELECT
+      u.id,
+      u.name,
+      u.surname,
+      u.email,
+      u.role,
+      u.image_url AS "imageUrl",
+      u.created_at AS "createdAt",
+      u.updated_at AS "updatedAt"
+    FROM users u
+  `);
+
+  const items = result.rows;
+
+  return items;
+};
+
+export const editItem = async (newItem: User): Promise<User> => {
+  const result = await pool.query(`
+    UPDATE users
+    SET name = $2,
+        surname = $3,
+        email = $4,
+        role = $5,
+        image_url = $6,
+        updated_at = $7
+    WHERE id = $1
+    RETURNING id, name, surname, email, role, image_url AS "imageUrl", updated_at AS "updatedAt"
+  `, [
+      newItem.id,   
+      newItem.name,
+      newItem.surname,
+      newItem.email,
+      newItem.role,
+      newItem.imageUrl,
+      new Date(),
+    ]
+  );
+
+  if (result.rowCount === 0) {
+    throw new Error(`Item with name "${newItem.name}" not found.`);
+  }
+
+  return result.rows[0];
+};
+
+export const deleteItem = async (id: string): Promise<boolean> => {
+  const result = await pool.query(`
+    DELETE FROM users
+    WHERE id = $1
+  `, [id]);
+
+  if (result.rowCount) {
+    return result.rowCount > 0;
+  } else {
+    return false;
+  }
+};
+
 export const register = async (email: string, password: string, name: string, surname: string): Promise<User> => {
 
   const hashedPassword = await hashPassword(password);

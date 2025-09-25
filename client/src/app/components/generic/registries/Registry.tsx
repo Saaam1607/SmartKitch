@@ -15,7 +15,7 @@ import { useThemeStyles } from '../../../hooks/useThemeStyles';
 
 import CardComponentProps from '../../../types/props/CardComponentProps';
 
-interface RegistryProps<T extends BaseItem> {
+interface RegistryProps<T extends object> {
   filteredItems: T[];
   keyField: string;
   cardComponent: React.ComponentType<CardComponentProps<T>>;
@@ -28,7 +28,7 @@ interface RegistryProps<T extends BaseItem> {
   renderCreationModal: (visible: boolean, close: () => void) => React.ReactNode;
 }
 
-export default function Registry<T extends BaseItem>({
+export default function Registry<T extends object>({
   filteredItems,
   keyField,
   cardComponent,
@@ -151,7 +151,7 @@ export default function Registry<T extends BaseItem>({
                       >
                         <Card
                           item={item}
-                          keyField={keyField}
+                          keyField={keyField as keyof T}
                           canDelete={canDelete}
                           canSave={canSave}
                           refreshData={refreshData}

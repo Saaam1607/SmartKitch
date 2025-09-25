@@ -12,7 +12,7 @@ import AuthLogo from '../components/logo/AuthLogo'
 import TextLogo from '../components/logo/TextLogo'
 import AuthBackgroundWrapper from '../components/generic/backgrounds/AuthBackgroundWrapper'
 
-import usersService from '../services/usersService'
+import { usersAuthService } from '../services/usersService'
 
 import { useLoading } from '../loadingProvider/LoadingProvider';
 
@@ -30,7 +30,7 @@ export default function LoginPage() {
   async function login() {
     setLoading(true);
     try {
-      await usersService.login(email, password);
+      await usersAuthService.login(email, password);
       router.push('/');
     } catch (error) {
       console.error(error);

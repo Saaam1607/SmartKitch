@@ -37,7 +37,7 @@ export default function Main() {
 
   const { componentKey } = useStore();
 
-  const [selectedRegistry, setSelectedRegistry] = useState('');
+  const [selectedRegistry, setSelectedRegistry] = useState('roles');
 
   const handleSelect = (eventKey: string | null) => {
     if (componentKey) {
