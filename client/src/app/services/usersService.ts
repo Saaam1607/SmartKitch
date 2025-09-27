@@ -49,6 +49,12 @@ const usersService: CrudService<User> = {
     return res.json();
   },
 
+  async fetchItem(token: string): Promise<User> {
+    const res = await fetch(`${API_URL}/${encodeURIComponent(token)}`);
+    if (!res.ok) throw new Error('Failed to fetch users');
+    return res.json();
+  },
+
   async addItem(newUser: User): Promise<User> {
     const res = await fetch(API_URL, {
       method: 'POST',

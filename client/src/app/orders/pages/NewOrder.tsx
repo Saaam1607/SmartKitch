@@ -15,9 +15,9 @@ import dishesService from "../../services/dishesService";
 import drinksService from "../../services/drinksService";
 
 interface NewOrderProps {
-  getDishQty: (dishName: string) => number;
-  addItem: (index: number, itemName: string, imageUrl: string) => void;
-  removeDishFromOrder: (dishName: string) => void;
+  getDishQty: (currentDish: Dish, section: string) => number;
+  addItem: (index: number, item: Dish, section: string) => void;
+  removeDishFromOrder: (dishToRemove: Dish, section: string) => void;
   flyingRefs: React.MutableRefObject<(HTMLDivElement | null)[]>;
 }
 
@@ -91,6 +91,7 @@ export default function NewOrder({
           <MenuCard
             key={index}
             item={item}
+            section={menuSectionSelected}
             index={index}
             getDishQty={getDishQty}
             addItem={addItem}

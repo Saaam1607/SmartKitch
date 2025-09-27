@@ -1,7 +1,5 @@
 import React, { MutableRefObject, useRef } from 'react';
 
-import type { Dish } from '@models/Dish';
-
 import CardImage from "../../components/generic/card/CardImage";
 
 import { Plus, Minus } from 'lucide-react';
@@ -13,27 +11,25 @@ type CardItem = BaseItem & {
   price: number;
 }
 
-interface MenuCardProps {
-  item: Dish;
-  section: string;
+interface OrderMenuCardProps {
+  item: CardItem;
   index: number;
-  getDishQty: (currentDish: Dish, section: string) => number;
-  addItem: (index: number, item: Dish, section: string) => void;
-  removeDishFromOrder: (dishToRemove: Dish, section: string) => void;
+  getDishQty: (itemName: string) => number;
+  addItem: (index: number, itemName: string, imageUrl: string) => void;
+  removeDishFromOrder: (dishName: string) => void;
   flyingRefs: MutableRefObject<(HTMLDivElement | null)[]>
 };
 
-export default function MenuCard({
+export default function OrderMenuCard({
   item,
-  section,
   index,
   getDishQty,
   addItem,
   removeDishFromOrder,
   flyingRefs,
-}: MenuCardProps) {
+}: OrderMenuCardProps) {
 
-  const quantity = getDishQty(item, section);
+  const quantity = getDishQty(item.name);
 
   return (
     <div
@@ -51,7 +47,7 @@ export default function MenuCard({
     >
       <div
         className="w-100 flex-grow-1 d-flex flex-column justify-content-center align-items-center p-2"
-        onClick={() => { addItem(index, item, section) }}
+        onClick={() => { addItem(index, item.name, item.imageUrl) }}
       >
         <div
           style={{ width: '150px', height: '150px' }}
@@ -87,7 +83,7 @@ export default function MenuCard({
               style={{
                 cursor: 'pointer',
               }}
-              onClick={() => removeDishFromOrder(item, section)}
+              onClick={() => removeDishFromOrder(item.name)}
             />
             <h3 className="m-0 p-1">{quantity}</h3>
             <Plus
@@ -97,7 +93,7 @@ export default function MenuCard({
               style={{
                 cursor: 'pointer',
               }}
-              onClick={() => { addItem(index, item, section) }}
+              onClick={() => { addItem(index, item.name, item.imageUrl) }}
             />
           </>
         ) : (
@@ -108,7 +104,7 @@ export default function MenuCard({
               backgroundColor: 'transparent',
               border: 'none',
             }}
-            onClick={() => { addItem(index, item, section) }}
+            onClick={() => { addItem(index, item.name, item.imageUrl) }}
           >
             Add
           </button>

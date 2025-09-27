@@ -27,8 +27,8 @@ export default function OrdersMenu({
     >
       <div
         className="p-3"
-        style={{ opacity: orderSection == "User" ? 1 : 0.6 }}
-        onClick={() => setOrderSection("User")}
+        style={{ opacity: orderSection == "Profile" ? 1 : 0.6 }}
+        onClick={() => setOrderSection("Profile")}
       >
         <UserRound size={30} color={"white"}/>
       </div>

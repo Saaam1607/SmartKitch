@@ -3,6 +3,8 @@
 import React, { useState, useEffect, useRef } from "react";
 
 import type { Order } from '@models/Order';
+import type { Dish } from '@models/Dish';
+
 
 import OrdersMenu from "./components/OrdersMenu";
 import Profile from "./pages/Profile";
@@ -17,16 +19,16 @@ import '../styles/scrollbar.css';
 const defaultNewOrder: Order = {
   id: 0,
   table_number: 505,
-  waiter: "Gionny",
+  waiter: "Bomber",
   taken_at: new Date,
   notes: "",
-  ordered_dishes: [],
-  ordered_drinks: [],
-};
+  dishes_body: [],
+  drinks_body: []
+}
 
 export default function OrdersPage() {
   
-  const [orderSection, setOrderSection] = useState<string>("NewOrder");
+  const [orderSection, setOrderSection] = useState<string>("Cart");
   const [newOrder, setNewOrder] = useState<Order>(defaultNewOrder);
   const [numberOfShoppedItems, setNumberOfShoppedItems] = useState<number>(0); 
 
@@ -34,45 +36,91 @@ export default function OrdersPage() {
   const cart = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    setNumberOfShoppedItems(
-      newOrder.ordered_dishes.reduce((total, dish) => total + dish.quantity, 0) +
-      newOrder.ordered_drinks.reduce((total, drink) => total + drink.quantity, 0)
-    );
+    let quantity = 0;
+    newOrder.dishes_body.forEach((item) => {
+      item.ordered_dishes.forEach((subItem) => {
+        quantity += subItem.quantity;
+      });
+    })
+    newOrder.drinks_body.forEach((item) => {
+      item.ordered_drinks.forEach((subItem) => {
+        quantity += subItem.quantity;
+      });
+    })
+
+    setNumberOfShoppedItems(quantity);
   }, [newOrder]);
 
-  function addDishToOrder(dishName: string) {
-    const existingDish = newOrder.ordered_dishes.find(d => d.dish_name === dishName);
-    if (existingDish) {
-      const updatedDishes = newOrder.ordered_dishes.map(d =>
-        d.dish_name === dishName ? { ...d, quantity: d.quantity + 1 } : d
-      );
-      setNewOrder({ ...newOrder, ordered_dishes: updatedDishes });
+  function addDishToOrder(dishToAdd: Dish, section: string) {
+    const editedOrder = {
+      ...newOrder,
+      dishes_body: newOrder.dishes_body.map(d => ({
+        section_name: d.section_name,
+        ordered_dishes: [...d.ordered_dishes],
+      })),
+    };
+
+    const existingSection = editedOrder.dishes_body.find(d => d.section_name === section);
+
+    if (existingSection) {
+      const existingDishGroup = existingSection.ordered_dishes.find(s => s.dish.name === dishToAdd.name);
+      if (existingDishGroup) {
+        existingDishGroup.quantity++;
+      } else {
+        existingSection.ordered_dishes.push({ dish: dishToAdd, quantity: 1 });
+      }
     } else {
-      setNewOrder({
-        ...newOrder,
-        ordered_dishes: [...newOrder.ordered_dishes, { dish_name: dishName, quantity: 1 }],
-      });
+      const newSection = {
+        section_name: section,
+        ordered_dishes: [{ dish: dishToAdd, quantity: 1 }],
+      };
+      editedOrder.dishes_body.push(newSection);
     }
+
+    setNewOrder(editedOrder);
   }
 
-  function removeDishFromOrder(dishName: string) {
-    const existingDish = newOrder.ordered_dishes.find(d => d.dish_name === dishName);
-    if (existingDish) {
-      const updatedDishes = newOrder.ordered_dishes.map(d =>
-        d.dish_name === dishName && d.quantity > 0 ? { ...d, quantity: d.quantity - 1 } : d
-      );
-      setNewOrder({ ...newOrder, ordered_dishes: updatedDishes });
+  function removeDishFromOrder(dishToRemove: Dish, section: string) {
+    const editedOrder = {
+      ...newOrder,
+      dishes_body: newOrder.dishes_body.map(d => ({
+        section_name: d.section_name,
+        ordered_dishes: [...d.ordered_dishes],
+      })),
+    };
+
+    const existingSection = editedOrder.dishes_body.find(d => d.section_name === section);
+    if (!existingSection) return;
+
+    const dishIndex = existingSection.ordered_dishes.findIndex(s => s.dish.name === dishToRemove.name);
+    if (dishIndex === -1) return; 
+
+    if (existingSection.ordered_dishes[dishIndex].quantity > 1) {
+      existingSection.ordered_dishes[dishIndex].quantity--;
+    } else {
+      existingSection.ordered_dishes.splice(dishIndex, 1);
     }
+
+    if (existingSection.ordered_dishes.length === 0) {
+      editedOrder.dishes_body = editedOrder.dishes_body.filter(d => d.section_name !== section);
+    }
+
+    setNewOrder(editedOrder);
   }
 
-  function getDishQty(dishName: string): number {
-    const dish = newOrder.ordered_dishes.find(d => d.dish_name === dishName);
-    return dish ? dish.quantity : 0;
+  function getDishQty(currentDish: Dish, section: string): number {
+    const existingSection = newOrder.dishes_body.find(d => d.section_name === section);
+    if (!existingSection) return 0; 
+
+    const dishGroup = existingSection.ordered_dishes.find(d => d.dish.name === currentDish.name);
+    if (!dishGroup) return 0; 
+
+    return dishGroup.quantity;
   }
 
-  function addItem(index: number, itemName: string, imageUrl: string) {
-    flyToCart(index, imageUrl);
-    addDishToOrder(itemName);
+  function addItem(index: number, item: Dish, section: string) {
+    flyToCart(index, item.imageUrl);
+    addDishToOrder(item, section);
   }
 
   function flyToCart(index: number, imageUrl: string) {
@@ -105,7 +153,7 @@ export default function OrdersPage() {
       )}
 
       {orderSection === "Cart" && (
-        <Cart example={1} />
+        <Cart newOrder={newOrder} />
       )}
 
       <div

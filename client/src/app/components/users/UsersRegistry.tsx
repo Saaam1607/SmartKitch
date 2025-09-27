@@ -26,7 +26,6 @@ export default function UsersRegistry() {
   const { setLoading } = useLoading();
 
   useEffect(() => {
-    console.log("START")
     const fetchData = async () => {
       setLoading(true);
       await refreshData();

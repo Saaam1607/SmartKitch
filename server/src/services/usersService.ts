@@ -34,6 +34,27 @@ export const getItems = async (): Promise<User[]> => {
   return items;
 };
 
+export const getItem = async (id: string): Promise<User> => {
+  const result = await pool.query(`
+    SELECT
+      u.id,
+      u.name,
+      u.surname,
+      u.email,
+      u.role,
+      u.image_url AS "imageUrl",
+      u.created_at AS "createdAt",
+      u.updated_at AS "updatedAt"
+    FROM users u
+    WHERE u.id = $1
+  `, [
+    id
+  ]);
+
+  const item = result.rows[0] ?? null;
+  return item;
+};
+
 export const editItem = async (newItem: User): Promise<User> => {
   const result = await pool.query(`
     UPDATE users

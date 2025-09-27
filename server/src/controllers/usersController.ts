@@ -13,11 +13,30 @@ export const getUsers = async (req: Request, res: Response) => {
   }
 };
 
+export const getUser = async (req: Request, res: Response) => {
+
+  const { token } = req.params;
+
+  if (!token) {
+    return res.status(400).json({ message: 'Token id is required' });
+  }
+
+  // token validation check
+  
+  try {
+    const user = await usersService.getItem(String(1));
+    res.json(user);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error fetching user' });
+  }
+};
+
 export const editUser = async (req: Request, res: Response) => {
   try {
     const newUser = req.body;
 
-    if (!newUser.id) {
+    if (!newUser?.id) {
       return res.status(400).json({ message: 'User id is required' });
     }
 
