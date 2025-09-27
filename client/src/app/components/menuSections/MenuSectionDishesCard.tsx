@@ -14,6 +14,8 @@ import type { Dish } from '@models/Dish';
 
 import useStore from '../../state/useStore'
 
+import { Hamburger, CupSoda } from 'lucide-react';
+
 import '../../styles/card.css';
 
 export default function MenuSectionDishesCard({ item, isEditing, handleCheckChange, handleTextChange, handleImageChange, handlePriceChange, handleArraySet }: CardComponentProps<MenuSection>) {
@@ -48,6 +50,12 @@ export default function MenuSectionDishesCard({ item, isEditing, handleCheckChan
         >
           <Form isEditing={isEditing}>
             <Title title={item.name} />
+            
+            {/* {item.isDrink ? (
+              <Hamburger size={25}/>
+            ) : (
+              <CupSoda size={25}/>
+            )} */}
 
             <Control
               type="textarea"

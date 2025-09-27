@@ -171,12 +171,12 @@ export default function Cart({
                         <div
                           className='d-flex justify-content-between w-100'
                         >
-                          <h3>{orderedDish.dish.name}</h3>
+                          <h3 className='m-0'>{orderedDish.dish.name}</h3>
                           <div className='d-flex gap-3'>
                             {orderedDish.quantity > 1 && (
-                              <h4>{orderedDish.quantity} x</h4>
+                              <h4 className='m-0'>{orderedDish.quantity} x</h4>
                             )}
-                            <h3>€ {orderedDish.dish.price}</h3>
+                            <h3 className='m-0'>€ {orderedDish.dish.price}</h3>
                           </div>
                         </div>
                         <h6>{orderedDish.dish.ingredients.join(", ")}</h6>

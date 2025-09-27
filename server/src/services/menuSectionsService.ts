@@ -6,6 +6,7 @@ export const getItems = async (): Promise<MenuSection[]> => {
   const result = await pool.query(`
     SELECT
       d.name,
+      d.is_drink AS "isDrink",
       d.description,
       d.disabled,
       COALESCE(array_agg(DISTINCT di.dish_name) FILTER (WHERE di.dish_name IS NOT NULL), '{}') AS dishes

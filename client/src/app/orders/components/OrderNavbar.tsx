@@ -48,7 +48,7 @@ export default function OrderNavbar({
             onChange={handleSearchChange}
           />
         </div>
-        <button
+        {/* <button
           className="d-flex justify-content-center align-items-center"
           style={{
             color: 'white',
@@ -60,7 +60,7 @@ export default function OrderNavbar({
           }}
         >
           <Send size={30} color='white' className="" />
-        </button>
+        </button> */}
       </div>
 
       <Navbar

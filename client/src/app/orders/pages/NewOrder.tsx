@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 import type { Dish } from '@models/Dish';
+import type { Drink } from '@models/Drink';
 import type { MenuSection } from '@models/MenuSection';
 
 import OrderNavbar from "../components/OrderNavbar";
@@ -34,8 +35,8 @@ export default function NewOrder({
     drinks, setDrinks,
   } = useStore();
 
-  const [menuSectionSelected, setMenuSectionSelected] = useState<string>("Pizze");
-  const [itemsToShow, setItemsToShow] = useState<Dish[]>([]);
+  const [menuSectionSelected, setMenuSectionSelected] = useState<string>("All");
+  const [itemsToShow, setItemsToShow] = useState<Dish | Drink[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
 
   const { setLoading } = useLoading();
@@ -58,6 +59,14 @@ export default function NewOrder({
 
   useEffect(() => {
     if (menuSectionSelected) {
+
+      if (menuSectionSelected == "All") {
+          const itemsNames: string[] = menuSections.flatMap(section => section.dishes);
+          const filteredDishes = dishes.filter(dish => itemsNames.includes(dish.name));
+          const filteredDrinks = drinks.filter(dish => itemsNames.includes(dish.name));
+          setItemsToShow([...filteredDrinks, ...filteredDishes]);
+      }
+
       const selectedSection = menuSections.find((section: MenuSection) => section.name === menuSectionSelected);
       if (selectedSection) {
         const dishesNames = selectedSection.dishes;
@@ -76,7 +85,7 @@ export default function NewOrder({
     >
       <div>
         <OrderNavbar
-          menuSections={menuSections.map(section => section.name)}
+          menuSections={["All", ...menuSections.map(section => section.name)]}
           menuSectionSelected={menuSectionSelected}
           setMenuSectionSelected={setMenuSectionSelected}
           searchTerm={searchTerm}
