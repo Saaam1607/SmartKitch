@@ -3,4 +3,5 @@ export interface MenuSection {
   description: string;
   disabled: boolean;
   dishes: string[];
+  isDrink: boolean;
 }

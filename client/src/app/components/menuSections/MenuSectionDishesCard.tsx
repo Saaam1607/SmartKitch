@@ -7,14 +7,13 @@ import Title from '../generic/form/Title';
 import MenuComboList from '../generic/form/MenuComboList';
 import Control from '../generic/form/Control';
 import Check from '../generic/form/Check';
+import FoodDrinkSwitch from '../generic/form/FoodDrinkSwitch';
 
 import CardComponentProps from '../../types/props/CardComponentProps';
 
 import type { Dish } from '@models/Dish';
 
 import useStore from '../../state/useStore'
-
-import { Hamburger, CupSoda } from 'lucide-react';
 
 import '../../styles/card.css';
 
@@ -51,11 +50,13 @@ export default function MenuSectionDishesCard({ item, isEditing, handleCheckChan
           <Form isEditing={isEditing}>
             <Title title={item.name} />
             
-            {/* {item.isDrink ? (
-              <Hamburger size={25}/>
-            ) : (
-              <CupSoda size={25}/>
-            )} */}
+            <FoodDrinkSwitch
+              itemKey={item.name}
+              value={item.isDrink}
+              fieldName="IsDrink"
+              isEditing={isEditing}
+              handleChange={(event) => handleCheckChange(event, "isDrink")}
+            />
 
             <Control
               type="textarea"

@@ -61,13 +61,15 @@ export const editItem = async (newItem: MenuSection): Promise<MenuSection> => {
       UPDATE menu_sections
       SET
         description = $2,
-        disabled = $3
+        disabled = $3,
+        is_drink = $4
       WHERE name = $1
-      RETURNING name, description, disabled
+      RETURNING name, description, disabled, is_drink AS "isDrink"
     `, [
       newItem.name,
       newItem.description,
       newItem.disabled,
+      newItem.isDrink
     ]);
 
     if (result.rowCount === 0) {
