@@ -13,36 +13,38 @@ import { useLoading } from '../../loadingProvider/LoadingProvider';
 import menuSectionsService from '../../services/menuSectionsService';
 
 import dishesService from '../../services/dishesService';
+import drinksService from '../../services/drinksService';
+
 import useStore from '../../state/useStore'
 
 export default function MenuSectionRegistry() {
 
   const { menuSections, setMenuSections } = useStore();
-  const { setDishes } = useStore();
+  const { setDishes, setDrinks } = useStore();
   const [filteredItems, setFilteredItems] = useState<MenuSection[]>([]);
 
   const [filterByDisabled, setFilterByDisabled] = useState(false);
 
   const { setLoading } = useLoading();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      await refreshData();
-      setDishes(await dishesService.fetchItems());
-      setLoading(false);
-    }
-    fetchData();
-  }, []);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     setLoading(true);
+  //     await refreshData();
+  //     setDishes(await dishesService.fetchItems());
+  //     setDrinks(await drinksService.fetchItems());
+  //     setLoading(false);
+  //   }
+  //   fetchData();
+  // }, []);
 
   useEffect(() => {
     async function fetchData() {
       setLoading(true);
       try {
-        const data = await menuSectionsService.fetchItems();
-        setMenuSections(data)
-        const dishes = await dishesService.fetchItems();
-        setDishes(dishes);
+        setMenuSections(await menuSectionsService.fetchItems())
+        setDishes(await dishesService.fetchItems());
+        setDrinks(await drinksService.fetchItems());
       } catch (error) {
         console.error(error);
       } finally {

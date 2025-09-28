@@ -16,16 +16,16 @@ import dishesService from "../../services/dishesService";
 import drinksService from "../../services/drinksService";
 
 interface NewOrderProps {
-  getDishQty: (currentDish: Dish, section: string) => number;
-  addItem: (index: number, item: Dish, section: string) => void;
-  removeDishFromOrder: (dishToRemove: Dish, section: string) => void;
+  getItemQuantity: (currentItem: Dish | Drink, section: string, type: string) => number;
+  addItem: (index: number, item: Dish | Drink, itemType: string, section: string) => void;
+  removeItemFromOrder: (item: Dish | Drink, type: string, section: string) => void;
   flyingRefs: React.MutableRefObject<(HTMLDivElement | null)[]>;
 }
 
 export default function NewOrder({
-  getDishQty,
+  getItemQuantity,
   addItem,
-  removeDishFromOrder,
+  removeItemFromOrder,
   flyingRefs,
 }: NewOrderProps) {
 
@@ -36,7 +36,7 @@ export default function NewOrder({
   } = useStore();
 
   const [menuSectionSelected, setMenuSectionSelected] = useState<string>("All");
-  const [itemsToShow, setItemsToShow] = useState<Dish | Drink[]>([]);
+  const [itemsToShow, setItemsToShow] = useState<({ item: Dish; dataType: string } | { item: Drink; dataType: string })[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
 
   const { setLoading } = useLoading();
@@ -61,19 +61,33 @@ export default function NewOrder({
     if (menuSectionSelected) {
 
       if (menuSectionSelected == "All") {
-          const itemsNames: string[] = menuSections.flatMap(section => section.dishes);
-          const filteredDishes = dishes.filter(dish => itemsNames.includes(dish.name));
-          const filteredDrinks = drinks.filter(dish => itemsNames.includes(dish.name));
-          setItemsToShow([...filteredDrinks, ...filteredDishes]);
+        const itemsNames: string[] = [...menuSections.flatMap(section => section.drinks), ...menuSections.flatMap(section => section.dishes)];
+        const filteredDishes = dishes.filter(dish => itemsNames.includes(dish.name));
+        const filteredDrinks = drinks.filter(drink => itemsNames.includes(drink.name));
+        const enhFilteredDishes = filteredDishes.map((item: Dish) => ({ item, dataType: "dish" }));
+        const enhFilteredDrinks = filteredDrinks.map((item: Drink) => ({ item, dataType: "drink" }));
+
+        setItemsToShow([...enhFilteredDrinks, ...enhFilteredDishes ]);
       }
 
       const selectedSection = menuSections.find((section: MenuSection) => section.name === menuSectionSelected);
       if (selectedSection) {
-        const dishesNames = selectedSection.dishes;
+        const itemsNames = selectedSection.isDrink ? selectedSection.drinks : selectedSection.dishes;
 
-        const filteredDishes = dishes.filter(dish => dishesNames.includes(dish.name));
-      
-        setItemsToShow(filteredDishes);
+        let filteredItems: (Dish | Drink)[] = [];
+
+        if (selectedSection.isDrink) {
+          filteredItems = drinks.filter(item => itemsNames.includes(item.name));
+        } else {
+          filteredItems = dishes.filter(item => itemsNames.includes(item.name));
+        }
+
+        const itemsWithType = filteredItems.map((item) => ({
+          item,
+          dataType: selectedSection.isDrink ? "drink" : "dish",
+        }));
+        
+        setItemsToShow(itemsWithType);
       }
     }
   }, [menuSectionSelected, dishes, menuSections]); 
@@ -102,9 +116,9 @@ export default function NewOrder({
             item={item}
             section={menuSectionSelected}
             index={index}
-            getDishQty={getDishQty}
+            getItemQuantity={getItemQuantity}
             addItem={addItem}
-            removeDishFromOrder={removeDishFromOrder}
+            removeItemFromOrder={removeItemFromOrder}
             flyingRefs={flyingRefs}
           />
         ))}

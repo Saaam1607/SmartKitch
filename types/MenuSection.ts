@@ -3,5 +3,6 @@ export interface MenuSection {
   isDrink: boolean;
   description: string;
   disabled: boolean;
+  drinks: string[];
   dishes: string[];
 }

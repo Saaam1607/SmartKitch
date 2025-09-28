@@ -1,6 +1,7 @@
 import React from 'react';
 
 import type { Dish } from '@models/Dish';
+import type { Drink } from '@models/Drink';
 
 import CardImage from '../generic/card/CardImage';
 import Control from '../generic/form/Control';
@@ -8,10 +9,10 @@ import Control from '../generic/form/Control';
 import '../../styles/card.css';
 
 interface DishMiniCardProps {
-  dish: Dish;
+  item: Dish | Drink;
 }
 
-export default function DishMiniCard({ dish }: DishMiniCardProps) {
+export default function DishMiniCard({ item }: DishMiniCardProps) {
 
   return (
     <div
@@ -22,14 +23,14 @@ export default function DishMiniCard({ dish }: DishMiniCardProps) {
         borderRadius: '10px',
       }}
     >
-      {dish && (
+      {item && (
         <>
           <div
             className="d-flex align-items-center p-0"
             style={{ width: '100px', height: '100px' }}
           >
             <CardImage
-              imageUrl={dish.imageUrl}
+              imageUrl={item.imageUrl}
               borderRadius={10}
             />
           </div>
@@ -43,11 +44,12 @@ export default function DishMiniCard({ dish }: DishMiniCardProps) {
           >
 
             <div className="d-flex flex-column w-100 gap-1">
-              <h5 className="m-0 p-0">{dish.name}</h5>
+              <h5 className="m-0 p-0">{item.name}</h5>
+              
               <div className="d-flex gap-2" style={{ fontSize: '0.9rem' }}>
-                {dish.ingredients && dish.ingredients.length > 0 && (
+                {"ingredients" in item && item.ingredients.length > 0 && (
                   <p className="p-0 m-0" style={{ width: "fit-content" }}>
-                    {dish.ingredients.join(", ")}
+                    {item.ingredients.join(", ")}
                   </p>
                 )}
               </div>
@@ -60,8 +62,8 @@ export default function DishMiniCard({ dish }: DishMiniCardProps) {
               <Control
                 type="price"
                 step={0.1}
-                itemKey={dish.name}
-                value={dish.price}
+                itemKey={item.name}
+                value={item.price}
                 fieldName="Price"
                 showLabel={false}
                 width={50}

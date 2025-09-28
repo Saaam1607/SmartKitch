@@ -9,5 +9,5 @@ export interface Order {
   taken_at: Date;
   notes: string;
   dishes_body: { section_name: string, ordered_dishes: {dish: Dish, quantity: number}[] }[],
-  drinks_body: { section_name: string, ordered_drinks: {dish: Drink, quantity: number}[] }[],
+  drinks_body: { section_name: string, ordered_drinks: {drink: Drink, quantity: number}[] }[],
 }

@@ -68,8 +68,8 @@ export default function Cart({
     }
 
     for (const section of order.drinks_body) {
-      for (const { dish, quantity } of section.ordered_drinks) {
-        total += dish.price * quantity;
+      for (const { drink, quantity } of section.ordered_drinks) {
+        total += drink.price * quantity;
       }
     }
 

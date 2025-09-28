@@ -12,6 +12,8 @@ import FoodDrinkSwitch from '../generic/form/FoodDrinkSwitch';
 import CardComponentProps from '../../types/props/CardComponentProps';
 
 import type { Dish } from '@models/Dish';
+import type { Drink } from '@models/Drink';
+
 
 import useStore from '../../state/useStore'
 
@@ -20,22 +22,34 @@ import '../../styles/card.css';
 export default function MenuSectionDishesCard({ item, isEditing, handleCheckChange, handleTextChange, handleImageChange, handlePriceChange, handleArraySet }: CardComponentProps<MenuSection>) {
 
   const { menuSections } = useStore();
-  const { dishes } = useStore();
+  const { dishes, drinks } = useStore();
 
   // all dishes with their menu section (if any)
-  const [availableDishes, setAvailableDishes] = useState<{ item: Dish; menuSection: string }[]>([]);
+  const [availableDishes, setAvailableDishes] = useState<{ item: Dish; menuSection: string; type: string }[]>([]);
+  const [availableDrinks, setAvailableDrinks] = useState<{ item: Drink; menuSection: string; type: string }[]>([]);
 
   useEffect(() => {
-    return setAvailableDishes(
+    setAvailableDishes(
       dishes.map(dish => {
         const menuSection = menuSections.find(section => section.dishes.includes(dish.name))?.name || '';
         return {
           item: dish,
           menuSection: menuSection !== item.name ? menuSection : '',
+          type: "dish"
         };
       })
     );
-  }, [dishes, menuSections])
+    setAvailableDrinks(
+      drinks.map(drink => {
+        const menuSection = menuSections.find(section => section.dishes.includes(drink.name))?.name || '';
+        return {
+          item: drink,
+          menuSection: menuSection !== item.name ? menuSection : '',
+          type: "drink"
+        };
+      }),
+    );
+  }, [drinks, dishes, menuSections])
 
   return (
     <div className="d-flex w-100" >
@@ -78,10 +92,10 @@ export default function MenuSectionDishesCard({ item, isEditing, handleCheckChan
             </div> 
 
             <MenuComboList
-              selectedDishesNames={item.dishes}
-              allDishesWithMenu={availableDishes}
+              selectedDishesNames={item.isDrink ? item.drinks : item.dishes}
+              allItemsWithMenu={item.isDrink ? availableDrinks : availableDishes}
               handleArraySet={handleArraySet}
-              fieldName="dishes"
+              fieldName={item.isDrink ? "drinks" : "dishes"}
               itemKey={item.name}
               isEditing={isEditing}
             />

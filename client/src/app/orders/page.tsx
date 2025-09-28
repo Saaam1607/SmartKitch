@@ -4,6 +4,8 @@ import React, { useState, useEffect, useRef } from "react";
 
 import type { Order } from '@models/Order';
 import type { Dish } from '@models/Dish';
+import type { Drink } from '@models/Drink';
+
 
 
 import OrdersMenu from "./components/OrdersMenu";
@@ -80,6 +82,43 @@ export default function OrdersPage() {
     setNewOrder(editedOrder);
   }
 
+  function addDrinkToOrder(drinkToAdd: Drink, section: string) {
+    const editedOrder = {
+      ...newOrder,
+      drinks_body: newOrder.drinks_body.map(d => ({
+        section_name: d.section_name,
+        ordered_drinks: [...d.ordered_drinks],
+      })),
+    };
+
+    const existingSection = editedOrder.drinks_body.find(d => d.section_name === section);
+
+    if (existingSection) {
+      const existingDrinkGroup = existingSection.ordered_drinks.find(s => s.drink.name === drinkToAdd.name);
+      if (existingDrinkGroup) {
+        existingDrinkGroup.quantity++;
+      } else {
+        existingSection.ordered_drinks.push({ drink: drinkToAdd, quantity: 1 });
+      }
+    } else {
+      const newSection = {
+        section_name: section,
+        ordered_drinks: [{ drink: drinkToAdd, quantity: 1 }],
+      };
+      editedOrder.drinks_body.push(newSection);
+    }
+
+    setNewOrder(editedOrder);
+  }
+
+  function removeItemFromOrder(item: Dish | Drink, type: string, section: string) {
+    if (type == "dish") {
+      return removeDishFromOrder(item as Dish, section)
+    } else if (type == "drink") {
+      return removeDrinkFromOrder(item as Drink, section)
+    }
+  }
+
   function removeDishFromOrder(dishToRemove: Dish, section: string) {
     const editedOrder = {
       ...newOrder,
@@ -108,6 +147,43 @@ export default function OrdersPage() {
     setNewOrder(editedOrder);
   }
 
+  function removeDrinkFromOrder(drinkToRemove: Drink, section: string) {
+    const editedOrder = {
+      ...newOrder,
+      drinks_body: newOrder.drinks_body.map(d => ({
+        section_name: d.section_name,
+        ordered_drinks: [...d.ordered_drinks],
+      })),
+    };
+
+    const existingSection = editedOrder.drinks_body.find(d => d.section_name === section);
+    if (!existingSection) return;
+
+    const drinkIndex = existingSection.ordered_drinks.findIndex(s => s.drink.name === drinkToRemove.name);
+    if (drinkIndex === -1) return; 
+
+    if (existingSection.ordered_drinks[drinkIndex].quantity > 1) {
+      existingSection.ordered_drinks[drinkIndex].quantity--;
+    } else {
+      existingSection.ordered_drinks.splice(drinkIndex, 1);
+    }
+
+    if (existingSection.ordered_drinks.length === 0) {
+      editedOrder.drinks_body = editedOrder.drinks_body.filter(d => d.section_name !== section);
+    }
+
+    setNewOrder(editedOrder);
+  }
+
+  function getItemQuantity(currentItem: Dish | Drink, section: string, type: string): number {
+    if (type == "dish") {
+      return getDishQty(currentItem as Dish, section)
+    } else if (type == "drink") {
+      return getDrinkQty(currentItem as Drink, section)
+    }
+    return 0;
+  }
+
   function getDishQty(currentDish: Dish, section: string): number {
     const existingSection = newOrder.dishes_body.find(d => d.section_name === section);
     if (!existingSection) return 0; 
@@ -118,9 +194,23 @@ export default function OrdersPage() {
     return dishGroup.quantity;
   }
 
-  function addItem(index: number, item: Dish, section: string) {
+  function getDrinkQty(currentDrink: Drink, section: string): number {
+    const existingSection = newOrder.drinks_body.find(d => d.section_name === section);
+    if (!existingSection) return 0; 
+
+    const drinkGroup = existingSection.ordered_drinks.find(d => d.drink.name === currentDrink.name);
+    if (!drinkGroup) return 0; 
+
+    return drinkGroup.quantity;
+  }
+
+  function addItem(index: number, item: Dish | Drink, itemType: string, section: string) {
     flyToCart(index, item.imageUrl);
-    addDishToOrder(item, section);
+    if (itemType == "dish") {
+      addDishToOrder(item as Dish, section);
+    } else if (itemType == "drink") {
+      addDrinkToOrder(item as Drink, section);
+    }
   }
 
   function flyToCart(index: number, imageUrl: string) {
@@ -145,9 +235,9 @@ export default function OrdersPage() {
 
       {orderSection === "NewOrder" && (
         <NewOrder
-          getDishQty={getDishQty}
+          getItemQuantity={getItemQuantity}
           addItem={addItem}
-          removeDishFromOrder={removeDishFromOrder}
+          removeItemFromOrder={removeItemFromOrder}
           flyingRefs={flyingRefs}
         />
       )}

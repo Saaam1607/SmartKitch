@@ -10,18 +10,19 @@ import DishMicroCard from '../../dishes/DishMicroCard';
 import { SquarePlus } from 'lucide-react';
 
 import type { Dish } from '@models/Dish';
+import type { Drink } from '@models/Drink';
 
 
 interface MenuComboListProps {
   selectedDishesNames: string[];
-  allDishesWithMenu: {item: Dish, menuSection: string}[];
+  allItemsWithMenu: {item: Dish | Drink, menuSection: string, type: string}[];
   handleArraySet?: (newArray: string[], fieldName: string) => void;
   fieldName: string;
   itemKey: string;
   isEditing: boolean;
 }
 
-export default function MenuComboList({ selectedDishesNames, allDishesWithMenu, handleArraySet, fieldName, itemKey, isEditing }: MenuComboListProps) {
+export default function MenuComboList({ selectedDishesNames, allItemsWithMenu, handleArraySet, fieldName, itemKey, isEditing }: MenuComboListProps) {
 
   const [isModalVisible, setIsModalVisible] = useState(false);
 
@@ -65,7 +66,7 @@ export default function MenuComboList({ selectedDishesNames, allDishesWithMenu, 
     >
         <ListGroup className="d-flex flex-row flex-wrap gap-2 rounded-0">
           {selectedValues?.map((item, index) => {
-            const dish = allDishesWithMenu?.find(d => d.item.name === item)?.item;
+            const listItem = allItemsWithMenu?.find(d => d.item.name === item)?.item;
             return (
               <ListGroup.Item
                 key={index}
@@ -77,7 +78,7 @@ export default function MenuComboList({ selectedDishesNames, allDishesWithMenu, 
                   pointerEvents: 'none'
                 }}
               >
-                {dish && ( <DishMiniCard dish={dish} /> )}
+                {listItem && ( <DishMiniCard item={listItem} /> )}
               </ListGroup.Item>
             )
           })}
@@ -108,14 +109,14 @@ export default function MenuComboList({ selectedDishesNames, allDishesWithMenu, 
                 saveItem={saveChangesFromModal}
               >
                 <div className="d-flex flex-column gap-1">
-                  {allDishesWithMenu.map((item: {item: Dish, menuSection: string}, index) => (
+                  {allItemsWithMenu.map((item: {item: Dish | Drink, menuSection: string}, index) => (
                     <div
                       key={index}
                       onClick={() => { if (item.menuSection === "") handleSelectionChange(item.item.name) }}
                       style={{ cursor: "pointer" }}
                     >
                       <DishMicroCard
-                        dish={item.item}
+                        item={item.item}
                         isSelected={selectedValues.includes(item.item.name)}
                         menuSection={item.menuSection}
                       />

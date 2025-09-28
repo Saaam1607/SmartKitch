@@ -1,6 +1,7 @@
 import React, { MutableRefObject, useRef } from 'react';
 
 import type { Dish } from '@models/Dish';
+import type { Drink } from '@models/Drink';
 
 import CardImage from "../../components/generic/card/CardImage";
 
@@ -14,12 +15,12 @@ type CardItem = BaseItem & {
 }
 
 interface MenuCardProps {
-  item: Dish;
+  item: { item: Dish; dataType: string; } | { item: Drink; dataType: string; };
   section: string;
   index: number;
-  getDishQty: (currentDish: Dish, section: string) => number;
-  addItem: (index: number, item: Dish, section: string) => void;
-  removeDishFromOrder: (dishToRemove: Dish, section: string) => void;
+  getItemQuantity: (currentItem: Dish | Drink, section: string, type: string) => number;
+  addItem: (index: number, item: Dish | Drink, itemType: string, section: string) => void;
+  removeItemFromOrder: (item: Dish | Drink, type: string, section: string) => void;
   flyingRefs: MutableRefObject<(HTMLDivElement | null)[]>
 };
 
@@ -27,17 +28,17 @@ export default function MenuCard({
   item,
   section,
   index,
-  getDishQty,
+  getItemQuantity,
   addItem,
-  removeDishFromOrder,
+  removeItemFromOrder,
   flyingRefs,
 }: MenuCardProps) {
 
-  const quantity = getDishQty(item, section);
+  const quantity = getItemQuantity(item.item, section, item.dataType);
 
   return (
     <div
-      key={item.name}
+      key={item.item.name}
       className="d-flex flex-column gap-2"
       style={{
         borderRadius: '20px',
@@ -51,7 +52,7 @@ export default function MenuCard({
     >
       <div
         className="w-100 flex-grow-1 d-flex flex-column justify-content-center align-items-center p-2"
-        onClick={() => { addItem(index, item, section) }}
+        onClick={() => { addItem(index, item.item, item.dataType, section) }}
       >
         <div
           style={{ width: '150px', height: '150px' }}
@@ -59,12 +60,12 @@ export default function MenuCard({
             flyingRefs.current[index] = el;
           }}
         >
-          <CardImage imageUrl={item.imageUrl} />
+          <CardImage imageUrl={item.item.imageUrl} />
         </div>
         <div className="w-100">
-          <h5 className="m-0 p-0">{item.name}</h5>
-          <p className="m-0">{item.description}</p>
-          <p className="m-0">€ {item.price}</p>
+          <h5 className="m-0 p-0">{item.item.name}</h5>
+          <p className="m-0">{item.item.description}</p>
+          <p className="m-0">€ {item.item.price}</p>
         </div>
       </div>
       <div
@@ -87,7 +88,7 @@ export default function MenuCard({
               style={{
                 cursor: 'pointer',
               }}
-              onClick={() => removeDishFromOrder(item, section)}
+              onClick={() => removeItemFromOrder(item.item, section, item.dataType)}
             />
             <h3 className="m-0 p-1">{quantity}</h3>
             <Plus
@@ -97,7 +98,7 @@ export default function MenuCard({
               style={{
                 cursor: 'pointer',
               }}
-              onClick={() => { addItem(index, item, section) }}
+              onClick={() => { addItem(index, item.item, item.dataType, section) }}
             />
           </>
         ) : (
@@ -108,7 +109,7 @@ export default function MenuCard({
               backgroundColor: 'transparent',
               border: 'none',
             }}
-            onClick={() => { addItem(index, item, section) }}
+            onClick={() => { addItem(index, item.item, item.dataType, section) }}
           >
             Add
           </button>

@@ -9,9 +9,11 @@ export const getItems = async (): Promise<MenuSection[]> => {
       d.is_drink AS "isDrink",
       d.description,
       d.disabled,
-      COALESCE(array_agg(DISTINCT di.dish_name) FILTER (WHERE di.dish_name IS NOT NULL), '{}') AS dishes
+      COALESCE(array_agg(DISTINCT di.dish_name) FILTER (WHERE di.dish_name IS NOT NULL), '{}') AS dishes,
+      COALESCE(array_agg(DISTINCT dr.drink_name) FILTER (WHERE dr.drink_name IS NOT NULL), '{}') AS drinks
     FROM menu_sections d
     LEFT JOIN menu_section_dishes di ON di.menu_section_name = d.name
+    LEFT JOIN menu_section_drinks dr ON dr.menu_section_name = d.name
     GROUP BY d.name, d.description, d.disabled
   `);
 
@@ -39,6 +41,14 @@ export const createItem = async (item: MenuSection): Promise<MenuSection> => {
         VALUES ${item.dishes.map((_, idx) => `($1, $${idx + 2})`).join(', ')}
       `;
       await pool.query(insertIngredientsQuery, [item.name, ...item.dishes]);
+    }
+
+    if (item.drinks && item.drinks.length > 0) {
+      const insertIngredientsQuery = `
+        INSERT INTO menu_section_drinks (menu_section_name, drink_name)
+        VALUES ${item.drinks.map((_, idx) => `($1, $${idx + 2})`).join(', ')}
+      `;
+      await pool.query(insertIngredientsQuery, [item.name, ...item.drinks]);
     }
 
     await pool.query('COMMIT');
@@ -80,6 +90,10 @@ export const editItem = async (newItem: MenuSection): Promise<MenuSection> => {
       DELETE FROM menu_section_dishes
       WHERE menu_section_name = $1
     `, [newItem.name]);
+    await pool.query(`
+      DELETE FROM menu_section_drinks
+      WHERE menu_section_name = $1
+    `, [newItem.name]);
 
     if (newItem.dishes && newItem.dishes.length > 0) {
       const insertDishesQuery = `
@@ -87,6 +101,14 @@ export const editItem = async (newItem: MenuSection): Promise<MenuSection> => {
         VALUES ${newItem.dishes.map((_, idx) => `($1, $${idx + 2})`).join(', ')}
       `;
       await pool.query(insertDishesQuery, [newItem.name, ...newItem.dishes]);
+    }
+
+    if (newItem.drinks && newItem.drinks.length > 0) {
+      const insertDrinksQuery = `
+        INSERT INTO menu_section_drinks (menu_section_name, drink_name)
+        VALUES ${newItem.drinks.map((_, idx) => `($1, $${idx + 2})`).join(', ')}
+      `;
+      await pool.query(insertDrinksQuery, [newItem.name, ...newItem.drinks]);
     }
 
     await pool.query('COMMIT');

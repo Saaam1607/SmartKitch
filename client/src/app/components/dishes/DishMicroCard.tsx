@@ -1,18 +1,19 @@
 import React from 'react';
 
 import type { Dish } from '@models/Dish';
+import type { Drink } from '@models/Drink';
 
 import CardImage from '../generic/card/CardImage';
 
 import '../../styles/card.css';
 
 interface DishMicroCardProps {
-  dish: Dish;
+  item: Dish | Drink;
   isSelected: boolean;
   menuSection: string;
 }
 
-export default function DishMicroCard({ dish, isSelected, menuSection }: DishMicroCardProps) {
+export default function DishMicroCard({ item, isSelected, menuSection }: DishMicroCardProps) {
 
   return (
     <div
@@ -26,13 +27,13 @@ export default function DishMicroCard({ dish, isSelected, menuSection }: DishMic
       }}
     >
       
-      {dish && (
+      {item && (
         <>
           <div
             className="d-flex align-items-center p-0"
             style={{ width: '60px', height: '60px' }}
           >
-            <CardImage imageUrl={dish.imageUrl} />
+            <CardImage imageUrl={item.imageUrl} />
           </div>
 
           <div className="d-flex w-100">
@@ -47,7 +48,7 @@ export default function DishMicroCard({ dish, isSelected, menuSection }: DishMic
 
                 <div className="d-flex align-items-center gap-2">
                   <h6 className="m-0 p-0">
-                    {dish.name}
+                    {item.name}
                   </h6>
                   {menuSection && (
                     <>
@@ -66,9 +67,9 @@ export default function DishMicroCard({ dish, isSelected, menuSection }: DishMic
                 </div>
                 
                 <div className="d-flex gap-1" >
-                  {dish.ingredients && dish.ingredients.length > 0 && (
+                  {"ingredients" in item && item.ingredients.length > 0 && (
                     <p className="p-0 m-0" style={{ width: "fit-content", fontSize: "0.8rem" }}>
-                      {dish.ingredients.join(", ")}
+                      {item.ingredients.join(", ")}
                     </p>
                   )}
                 </div>
