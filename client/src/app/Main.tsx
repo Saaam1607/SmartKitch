@@ -10,7 +10,7 @@ import NavbarBrand from 'react-bootstrap/NavbarBrand';
 import Container from 'react-bootstrap/Container';
 
 import Registries from './components/generic/registries/Registries';
-import { CircleUserRound, Settings, Palette } from 'lucide-react';
+import { CircleUserRound, Settings, Palette, NotebookPen } from 'lucide-react';
 
 import UserDropDown from './components/generic/dropdown/UserDropDown';
 import ThemeDropDown from './components/generic/dropdown/ThemeDropDown';
@@ -90,6 +90,17 @@ export default function Main() {
             </NavbarBrand>
 
             <Nav className="d-flex justify-content-end ms-auto flex-grow-1 w-100">
+              <Link href="/orders" target="_blank" rel="noopener noreferrer">
+                <div className="nav-link d-flex align-items-center">
+                  <NotebookPen size={25} color={toolbarTextColor} />
+                </div>
+              </Link>
+              <div
+                className='mx-4 my-2 rounded-pill'
+                style={{
+                  border: `1px solid ${toolbarTextColor}`
+                }}
+              />
               <div className="nav-link d-flex align-items-center">
                 <ThemeDropDown iconComponent={<Palette size={25} color={toolbarTextColor} />} />
               </div>
