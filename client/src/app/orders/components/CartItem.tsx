@@ -23,27 +23,28 @@ export default function CardItem({
 
 
   return (
-    <div key={index} className='d-flex flex-column'>
+    <div key={index} className='d-flex gap-2 flex-column'>
       <h3
-        className='d-flex justify-content-center m-0 p-1 px-5 w-100'
+        className='d-flex justify-content-start m-0 p-1 w-100 py-3'
         style={{
-          backgroundColor: 'rgba(220, 24, 44, 1)',
-          color: 'white',
-          borderRadius: '20px',
+          // backgroundColor: 'rgba(220, 24, 44, 1)',
+          // color: 'white',
+          // borderRadius: '20px',
           width: 'fit-content'
         }}
       >
         {section}
       </h3>
-      <div className="d-flex flex-column gap-2 my-2">
+      <div className="d-flex flex-column gap-2">
         {item.ordered_dishes.map((orderedDish, index) => (
           <div
             key={index}
             className='d-flex'
             style={{
-              borderRadius: '20px',
-              backgroundColor: 'white',
-              boxShadow: 'rgba(0, 0, 0, 0.2) 0px 2px 6px',
+              borderRadius: '10px',
+              // backgroundColor: 'white',
+              // boxShadow: 'rgba(0, 0, 0, 0.2) 0px 2px 6px',
+              backgroundColor: 'rgba(235, 235, 235, 1)'
             }}
           >
             <div
@@ -56,15 +57,16 @@ export default function CardItem({
                 maxWidth: '50px',
               }}
             >
-              <h2 className='m-0'>{orderedDish.quantity}</h2>
+              <h5 className='m-0'>{orderedDish.quantity}</h5>
             </div>
             
-            <div className='d-flex w-100 flex-grow-1'>
+            <div className='d-flex w-100 flex-grow-1 p-2'>
               <img
                 src={orderedDish.subItem.imageUrl}
                 style={{
                   width: '100px',
                   height: '100px',
+                  borderRadius: '10px',
                 }}
               />
               <div
@@ -73,12 +75,17 @@ export default function CardItem({
                 <div
                   className='d-flex justify-content-between w-100'
                 >
-                  <h3 className='m-0'>{orderedDish.subItem.name}</h3>
+                  <h5
+                    className='m-0'
+                    style={{ fontWeight: "bold" }}
+                  >
+                    {orderedDish.subItem.name}
+                  </h5>
                   <div className='d-flex gap-3'>
                     {orderedDish.quantity > 1 && (
-                      <h4 className='m-0'>{orderedDish.quantity} x</h4>
+                      <h5 className='m-0'>{orderedDish.quantity} x</h5>
                     )}
-                    <h3 className='m-0'>€ {orderedDish.subItem.price}</h3>
+                    <h5 className='m-0'>€ {orderedDish.subItem.price}</h5>
                   </div>
                 </div>
                 { "ingredients" in orderedDish.subItem && (

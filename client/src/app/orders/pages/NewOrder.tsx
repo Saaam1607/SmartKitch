@@ -36,7 +36,7 @@ export default function NewOrder({
   } = useStore();
 
   const [menuSectionSelected, setMenuSectionSelected] = useState<string>("All");
-  const [itemsToShow, setItemsToShow] = useState<({ item: Dish; dataType: string } | { item: Drink; dataType: string })[]>([]);
+  const [itemsToShow, setItemsToShow] = useState<({ item: Dish; dataType: string; section: string } | { item: Drink; dataType: string; section: string })[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
 
   const { setLoading } = useLoading();
@@ -64,8 +64,8 @@ export default function NewOrder({
         const itemsNames: string[] = [...menuSections.flatMap(section => section.drinks), ...menuSections.flatMap(section => section.dishes)];
         const filteredDishes = dishes.filter(dish => itemsNames.includes(dish.name));
         const filteredDrinks = drinks.filter(drink => itemsNames.includes(drink.name));
-        const enhFilteredDishes = filteredDishes.map((item: Dish) => ({ item, dataType: "dish" }));
-        const enhFilteredDrinks = filteredDrinks.map((item: Drink) => ({ item, dataType: "drink" }));
+        const enhFilteredDishes = filteredDishes.map((item: Dish) => ({ item, dataType: "dish", section: menuSections.find((ms: MenuSection) => ms.dishes.includes(item.name))?.name || "" }));
+        const enhFilteredDrinks = filteredDrinks.map((item: Drink) => ({ item, dataType: "drink", section: menuSections.find((ms: MenuSection) => ms.drinks.includes(item.name))?.name || "" }));
 
         setItemsToShow([...enhFilteredDrinks, ...enhFilteredDishes ]);
       }
@@ -85,12 +85,16 @@ export default function NewOrder({
         const itemsWithType = filteredItems.map((item) => ({
           item,
           dataType: selectedSection.isDrink ? "drink" : "dish",
+          section: selectedSection.isDrink?
+            menuSections.find((ms: MenuSection) => ms.drinks.includes(item.name))?.name || ""
+            :
+            menuSections.find((ms: MenuSection) => ms.dishes.includes(item.name))?.name || ""
         }));
         
         setItemsToShow(itemsWithType);
       }
     }
-  }, [menuSectionSelected, dishes, menuSections]); 
+  }, [menuSectionSelected, dishes, drinks, menuSections]); 
 
   return (
     <div
@@ -114,7 +118,7 @@ export default function NewOrder({
           <MenuCard
             key={index}
             item={item}
-            section={menuSectionSelected}
+            section={item.section}
             index={index}
             getItemQuantity={getItemQuantity}
             addItem={addItem}
