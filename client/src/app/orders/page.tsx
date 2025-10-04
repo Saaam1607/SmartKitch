@@ -219,6 +219,10 @@ export default function OrdersPage() {
     }
   }
 
+  function sendNewOrder() {
+    
+  }
+
   return (
     <div
       className="d-flex flex-column align-items-center"

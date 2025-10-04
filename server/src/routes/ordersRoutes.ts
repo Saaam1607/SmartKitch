@@ -1,10 +1,10 @@
 import { Router } from 'express';
-import { getOrders } from '../controllers/ordersController';
+import { getOrders, createOrder } from '../controllers/ordersController';
 
 const router = Router();
 
 router.get('/', getOrders);
-// router.post('/', createSection);
+router.post('/', createOrder);
 // router.put('/:name', editSection);
 // router.delete('/:name', deleteDish);
 

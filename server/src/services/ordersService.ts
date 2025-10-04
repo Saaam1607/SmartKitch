@@ -1,75 +1,189 @@
 import pool from '../config/database';
 
 import { Order } from '../models/Order';
+import { Dish } from '../models/Dish';
 
-export const getItems = async (): Promise<Order[]> => {
-  const result = await pool.query(`
+import { getDish } from '../functions/dishesFunctions'
+
+async function getOrders() {
+  const ordersResult = await pool.query(`
     SELECT
       o.id,
       o.table_number,
       o.waiter,
       o.taken_at,
-      o.notes,
-      COALESCE(
-        json_agg(
-          DISTINCT jsonb_build_object(
-            'dish_name', di.dish_name,
-            'quantity', di.quantity
-          )
-        ) FILTER (WHERE di.dish_name IS NOT NULL),
-        '[]'
-      ) AS ordered_dishes,
-      COALESCE(
-        json_agg(
-          DISTINCT jsonb_build_object(
-            'drink_name', dr.drink_name,
-            'quantity', dr.quantity
-          )
-        ) FILTER (WHERE dr.drink_name IS NOT NULL),
-        '[]'
-      ) AS ordered_drinks
+      o.notes
     FROM orders o
-    LEFT JOIN order_dishes di ON di.order_id = o.id
-    LEFT JOIN order_drinks dr ON dr.order_id = o.id
-    GROUP BY o.id
   `);
+  return ordersResult.rows;
+}
 
-  const items = result.rows;
+async function getDishesBodiesByOrder(orderId: number) {
+  const result = await pool.query(`
+    SELECT
+      odb.id,
+      odb.order_id,
+      odb.section_name,
+      odb.line
+    FROM orders_dishes_bodies odb
+    WHERE odb.order_id = $1
+  `, [orderId]);
+  return result.rows;
+}
+
+async function getDrinksBodiesByOrder(orderId: number) {
+  const result = await pool.query(`
+    SELECT
+      odb.id,
+      odb.order_id,
+      odb.section_name,
+      odb.line
+    FROM orders_drinks_bodies odb
+    WHERE odb.order_id = $1
+  `, [orderId]);
+  return result.rows;
+}
+
+async function getOrderedDishesByBody(dishesBodyId: number) {
+  const result = await pool.query(`
+    SELECT
+      od.dishes_body_id,
+      od.dish_name,
+      od.quantity
+    FROM order_dishes od
+    WHERE od.dishes_body_id = $1
+  `, [dishesBodyId]);
+  return result.rows;
+}
+
+async function getOrderedDrinksByBody(drinksBodyId: number) {
+  const result = await pool.query(`
+    SELECT
+      od.drinks_body_id,
+      od.drink_name,
+      od.quantity
+    FROM order_drinks od
+    WHERE od.drinks_body_id = $1
+  `, [drinksBodyId]);
+  return result.rows;
+}
+
+export async function getItems(): Promise<Order[]> {
+  const orders = await getOrders();
+  const items: Order[] = [];
+
+  for (const order of orders) {
+    const item: Order = {
+      id: order.id,
+      table_number: order.table_number,
+      waiter: order.waiter,
+      taken_at: order.taken_at,
+      notes: order.notes,
+      dishes_body: [],
+      drinks_body: [],
+    };
+
+    const dishesBodies = await getDishesBodiesByOrder(order.id);
+
+    for (const dishesBody of dishesBodies) {
+      const bodySection = {
+        section_name: dishesBody.section_name,
+        ordered_dishes: [] as { dish: Dish; quantity: number }[],
+      };
+
+      const orderedDishes = await getOrderedDishesByBody(dishesBody.id);
+
+      for (const ordered of orderedDishes) {
+        const dishDetails = await getDish(ordered.dish_name);
+        if (dishDetails) {
+          bodySection.ordered_dishes.push({
+            dish: dishDetails,
+            quantity: ordered.quantity,
+          });
+        }
+      }
+
+      item.dishes_body.push(bodySection);
+    }
+
+    items.push(item);
+  }
 
   return items;
+}
+
+export const createItem = async (item: Order): Promise<Order> => {
+  try {
+    await pool.query('BEGIN');
+
+    const orderResult = await pool.query(
+      `
+      INSERT INTO orders (table_number, waiter, taken_at, notes)
+      VALUES ($1, $2, $3, $4)
+      RETURNING id
+      `,
+      [item.table_number, item.waiter, item.taken_at, item.notes]
+    );
+
+    const orderId = orderResult.rows[0].id;
+
+    for (const dishesBody of item.dishes_body) {
+      const dishesBodyResult = await pool.query(
+        `
+        INSERT INTO orders_dishes_bodies (order_id, section_name, line)
+        VALUES ($1, $2, $3)
+        RETURNING id
+        `,
+        [orderId, dishesBody.section_name, 0]
+      );
+
+      const dishesBodyId = dishesBodyResult.rows[0].id;
+
+      for (const orderedDish of dishesBody.ordered_dishes) {
+        await pool.query(
+          `
+          INSERT INTO order_dishes (dishes_body_id, dish_name, quantity)
+          VALUES ($1, $2, $3)
+          `,
+          [dishesBodyId, orderedDish.dish.name, orderedDish.quantity]
+        );
+      }
+    }
+
+    for (const drinksBody of item.drinks_body ?? []) {
+      const drinksBodyResult = await pool.query(
+        `
+        INSERT INTO orders_drinks_bodies (order_id, section_name, line)
+        VALUES ($1, $2, $3)
+        RETURNING id
+        `,
+        [orderId, drinksBody.section_name, 0]
+      );
+
+      const drinksBodyId = drinksBodyResult.rows[0].id;
+
+      for (const orderedDrink of drinksBody.ordered_drinks) {
+        await pool.query(
+          `
+          INSERT INTO order_drinks (drinks_body_id, drink_name, quantity)
+          VALUES ($1, $2, $3)
+          `,
+          [drinksBodyId, orderedDrink.drink.name, orderedDrink.quantity]
+        );
+      }
+    }
+
+    await pool.query('COMMIT');
+
+    return {
+      ...item,
+      id: orderId,
+    };
+  } catch (err) {
+    await pool.query('ROLLBACK');
+    throw err;
+  }
 };
-
-// export const createItem = async (item: Order): Promise<Order> => {
-//   try {
-//     await pool.query('BEGIN');
-
-//     await pool.query(`
-//       INSERT INTO menu_sections (name, description, disabled)
-//       VALUES ($1, $2, $3)
-//     `, [
-//       item.name,
-//       item.description,
-//       item.disabled,
-//     ]);
-
-//     if (item.dishes && item.dishes.length > 0) {
-//       const insertIngredientsQuery = `
-//         INSERT INTO menu_section_dishes (menu_section_name, dish_name)
-//         VALUES ${item.dishes.map((_, idx) => `($1, $${idx + 2})`).join(', ')}
-//       `;
-//       await pool.query(insertIngredientsQuery, [item.name, ...item.dishes]);
-//     }
-
-//     await pool.query('COMMIT');
-
-//     return {
-//       ...item,
-//     };
-//   } catch (err) {
-//     await pool.query('ROLLBACK');
-//     throw err;
-//   }
-// };
 
 // export const editItem = async (newItem: Order): Promise<Order> => {
   

@@ -6,6 +6,11 @@ import { Trash, Clipboard, User, Send, ShoppingCart } from 'lucide-react';
 
 import CartItem from '../components/CartItem'
 
+import ordersService from '../../services/ordersService'
+
+import '../../styles/scrollbar.css';
+
+
 
 interface CartProps {
   newOrder: Order;
@@ -39,13 +44,18 @@ export default function Cart({
     return total;
   }
 
+  async function confirmOrder() {
+    await ordersService.addItem(newOrder)
+    console.log("OK")
+  }
+
   return (
     <div
-      className="d-flex flex-column gap-2 align-items-start w-100 customScrollbar px-3"
+      className="d-flex flex-column gap-2 align-items-start w-100"
       style={{
-        overflow: 'auto',
+        overflow: 'hidden',
         flex: 1,
-        paddingBottom: '100px',
+        // paddingBottom: '100px',
         backgroundColor: 'rgba(178, 32, 32, 1)',
       }}
     >
@@ -77,10 +87,13 @@ export default function Cart({
       </div>
 
       <div
-        className='w-100 p-4'
+        className='w-100 p-4 pb-0 customScrollbar'
         style={{
           backgroundColor: "white",
-          borderRadius: '50px',
+          borderTopLeftRadius: '15px',
+          borderTopRightRadius: '15px',
+          height: '100%',
+          overflow: 'auto',
         }}
       >
         {newOrder.drinks_body.length > 0 && (
@@ -150,10 +163,20 @@ export default function Cart({
             <h4 className='m-0' style={{ fontWeight: "bold" }}>€ {totalPrice}</h4>
           </div>
 
-          <div className='d-flex justify-content-center w-100'>
+          <div 
+            className='d-flex justify-content-center w-100'
+            style={{
+              marginBottom: '100px',
+            }}
+          >
             <button
-              className='btn btn-success d-flex justify-content-center align-items-center gap-2 p-2 px-4 rounded-pill'
-              style={{ width: '500px', fontSize: '1.25rem' }}
+              className='btn btn-success d-flex justify-content-center align-items-center gap-2 p-2 px-4'
+              style={{
+                width: '300px',
+                fontSize: '1.25rem',
+                borderRadius: '20px',
+              }}
+              onClick={confirmOrder}
             >
               <Send size={20}/>
               Send

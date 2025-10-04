@@ -13,16 +13,16 @@ export const getOrders = async (req: Request, res: Response) => {
   }
 };
 
-// export const createSection = async (req: Request, res: Response) => {
-//   try {
-//     const newItem: MenuSection = req.body;
-//     const inserted = await ordersService.createItem(newItem);
-//     res.status(201).json(inserted);
-//   } catch (error) {
-//     console.error('Error inserting item:', error);
-//     res.status(500).json({ message: 'Failed to add item' });
-//   }
-// };
+export const createOrder = async (req: Request, res: Response) => {
+  try {
+    const newItem: Order = req.body;
+    const inserted = await ordersService.createItem(newItem);
+    res.status(201).json(inserted);
+  } catch (error) {
+    console.error('Error inserting item:', error);
+    res.status(500).json({ message: 'Failed to add item' });
+  }
+};
 
 // export const editSection = async (req: Request, res: Response) => {
 //   try {

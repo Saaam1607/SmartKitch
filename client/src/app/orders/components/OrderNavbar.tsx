@@ -1,4 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+
+import type { User } from '@models/User';
+
+import { usersService } from '../../services/usersService';
 
 import Navbar from 'react-bootstrap/Navbar';
 import { Form } from "react-bootstrap";
@@ -21,6 +25,26 @@ export default function OrderNavbar({
   setSearchTerm,
 }: OrderNavbarProps) {
 
+  const [token, setToken] = useState("");
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem('authToken');
+    if (token)
+      setToken(token);
+    else
+      alert("Token not found")
+  }, [])
+        
+  useEffect(() => {
+    if (!token) return;
+        
+    if (usersService.fetchItem) {
+      usersService.fetchItem(token)
+      .then((fetchedUser: User) => { setUser(fetchedUser) })
+    }
+  }, [token])
+
   function handleSearchChange(event: React.ChangeEvent<HTMLInputElement>) {
     setSearchTerm(event.target.value);
   }
@@ -29,6 +53,20 @@ export default function OrderNavbar({
     <div className="d-flex flex-column gap-2 p-3 w-100">
 
       <div className="w-100 d-flex gap-2 justify-content-center align-items-center">
+        
+        {/* <div>
+          {user && (
+            <img
+              className='rounded-pill'
+              src={user.imageUrl}
+              style={{
+                width: '50px',
+                height: '50px',
+              }}
+            />
+          )}
+        </div> */}
+        
         <div
           className="d-flex align-items-center bg-white border px-2 gap-2 shadow-sm"
           style={{
@@ -48,6 +86,8 @@ export default function OrderNavbar({
             onChange={handleSearchChange}
           />
         </div>
+
+        
         {/* <button
           className="d-flex justify-content-center align-items-center"
           style={{
