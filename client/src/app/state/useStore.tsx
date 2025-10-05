@@ -4,6 +4,9 @@ import { Ingredient } from '@models/Ingredient';
 import type { Dish } from '@models/Dish';
 import { Drink } from '@models/Drink';
 import { MenuSection } from '@models/MenuSection';
+
+import { Order } from '@models/Order';
+
 import { User } from '@models/User';
 
 type Store = {
@@ -27,6 +30,10 @@ type Store = {
   setMenuSections: (newItems: MenuSection[]) => void;
   updateMenuSection: (newItem: MenuSection) => void;
 
+  orders: Order[];
+  setOrders: (newItems: Order[]) => void;
+  updateOrder: (newItem: Order) => void;
+
   users: User[];
   setUsers: (newItems: User[]) => void;
   updateUser: (newItem: User) => void;
@@ -38,6 +45,7 @@ const useStore = create<Store>((set, get) => ({
   dishes: [],
   drinks: [],
   menuSections: [],
+  orders: [],
   users: [],
   
   setIngredients: (newIngredients: Ingredient[]) => {
@@ -98,6 +106,18 @@ const useStore = create<Store>((set, get) => ({
     set((state) => ({
       menuSections: state.menuSections.map((item) =>
         item.name === newItem.name ? newItem : item
+      ),
+    }));
+  },
+
+  setOrders: (newItems: Order[]) => {
+    set({ orders: newItems });
+  },
+
+  updateOrder: (newItem: Order) => {
+    set((state) => ({
+      orders: state.orders.map((item) =>
+        item.id === newItem.id ? newItem : item
       ),
     }));
   },

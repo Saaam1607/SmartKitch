@@ -10,6 +10,7 @@ import IngredientsRegistry from '../../ingredients/IngredientsRegistry'
 import DrinksRegistry from '../../drinks/DrinksRegistry'
 import DishesRegistry from '../../dishes/DishesRegistry'
 import MenuSectionsRegistry from '../../menuSections/MenuSectionsRegistry'
+import OrdersRegistry from '../../orders/OrdersRegistry'
 
 import { AnimatePresence, motion } from "framer-motion";
 
@@ -70,6 +71,11 @@ export default function Registries({
             key='menu'
             showRegistry={selectedRegistry === 'menu'}
             registryComponent={<MenuSectionsRegistry />}
+          />
+          <RegistryContainer
+            key='orders'
+            showRegistry={selectedRegistry === 'orders'}
+            registryComponent={<OrdersRegistry />}
           />
         </AnimatePresence>
       </div>
