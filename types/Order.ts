@@ -24,6 +24,8 @@ export interface Order {
   waiter: string;
   taken_at: Date;
   notes: string;
+  are_drinks_served: boolean;
+  are_dishes_served: boolean;
   dishes_body: DishOrderBody[];
   drinks_body: DrinkOrderBody[];
 }

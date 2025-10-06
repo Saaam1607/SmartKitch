@@ -24,6 +24,28 @@ export const createOrder = async (req: Request, res: Response) => {
   }
 };
 
+export const serveOrderDishes = async (req: Request, res: Response) => {
+  try {
+    const { id, value }: { id: number; value: boolean } = req.body;
+    const editedOrder = await ordersService.serveDishes(id, value);
+    res.status(201).json(editedOrder);
+  } catch (error) {
+    console.error('Error editing item:', error);
+    res.status(500).json({ message: 'Failed to edit item' });
+  }
+}
+
+export const serveOrderDrinks = async (req: Request, res: Response) => {
+  try {
+    const { id, value }: { id: number; value: boolean } = req.body;
+    const editedOrder = await ordersService.serveDrinks(id, value);
+    res.status(201).json(editedOrder);
+  } catch (error) {
+    console.error('Error editing item:', error);
+    res.status(500).json({ message: 'Failed to edit item' });
+  }
+}
+
 // export const editSection = async (req: Request, res: Response) => {
 //   try {
 //     const newItem = req.body;

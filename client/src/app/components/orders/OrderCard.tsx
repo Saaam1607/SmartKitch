@@ -10,6 +10,7 @@ import Check from '../generic/form/Check';
 import CardImageSection from '../generic/card/CardImageSection'
 
 import DishesBody from './DishesBody';
+import DrinksBody from './DrinksBody';
 
 import CardComponentProps from '../../types/props/CardComponentProps';
 
@@ -80,7 +81,10 @@ useEffect(() => {
               // handleChange={(event) => handlePriceChange(event as React.ChangeEvent<HTMLInputElement>, "price")}
             />
 
-            <DishesBody dishBody={item.dishes_body} />
+            <div className='d-flex gap-3'>
+              <DrinksBody drinkBody={item.drinks_body} isServed={item.are_drinks_served} />
+              <DishesBody dishBody={item.dishes_body} isServed={item.are_dishes_served}/>
+            </div>
 
             <Control
               type="textarea"

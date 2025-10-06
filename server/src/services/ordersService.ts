@@ -2,19 +2,17 @@ import pool from '../config/database';
 
 import { Order } from '../models/Order';
 import { Dish } from '../models/Dish';
+import { Drink } from '../models/Drink';
 
 import { getDish } from '../functions/dishesFunctions'
+import { getDrink } from '../functions/drinksFunctions'
 
 async function getOrders() {
   const ordersResult = await pool.query(`
-    SELECT
-      o.id,
-      o.table_number,
-      o.waiter,
-      o.taken_at,
-      o.notes
+    SELECT *
     FROM orders o
   `);
+
   return ordersResult.rows;
 }
 
@@ -73,17 +71,13 @@ export async function getItems(): Promise<Order[]> {
   const items: Order[] = [];
 
   for (const order of orders) {
-    const item: Order = {
-      id: order.id,
-      table_number: order.table_number,
-      waiter: order.waiter,
-      taken_at: order.taken_at,
-      notes: order.notes,
-      dishes_body: [],
-      drinks_body: [],
-    };
+
+    let item: Order = order;
+    item.dishes_body = [];
+    item.drinks_body = [];
 
     const dishesBodies = await getDishesBodiesByOrder(order.id);
+    const drinksBodies = await getDrinksBodiesByOrder(order.id);
 
     for (const dishesBody of dishesBodies) {
       const bodySection = {
@@ -104,6 +98,27 @@ export async function getItems(): Promise<Order[]> {
       }
 
       item.dishes_body.push(bodySection);
+    }
+
+    for (const drinksBody of drinksBodies) {
+      const bodySection = {
+        section_name: drinksBody.section_name,
+        ordered_drinks: [] as { drink: Drink; quantity: number }[],
+      };
+
+      const orderedDishes = await getOrderedDrinksByBody(drinksBody.id);
+
+      for (const ordered of orderedDishes) {
+        const drinkDetails = await getDrink(ordered.drink_name);
+        if (drinkDetails) {
+          bodySection.ordered_drinks.push({
+            drink: drinkDetails,
+            quantity: ordered.quantity,
+          });
+        }
+      }
+
+      item.drinks_body.push(bodySection);
     }
 
     items.push(item);
@@ -184,6 +199,46 @@ export const createItem = async (item: Order): Promise<Order> => {
     throw err;
   }
 };
+
+export const serveDishes = async (id: number, value: boolean): Promise<Order> => {
+  const result = await pool.query(`
+    UPDATE orders
+    SET are_dishes_served = $2
+    WHERE id = $1
+    RETURNING *
+  `, [
+      id,
+      value
+    ]
+  );
+
+  if (result.rowCount === 0) {
+    throw new Error(`Item with not found.`);
+  }
+
+  return result.rows[0];
+}
+
+export const serveDrinks = async (id: number, value: boolean): Promise<Order> => {
+  const result = await pool.query(`
+    UPDATE orders
+    SET are_drinks_served = $2
+    WHERE id = $1
+    RETURNING *
+  `, [
+      id,
+      value
+    ]
+  );
+
+  if (result.rowCount === 0) {
+    throw new Error(`Item with not found.`);
+  }
+
+  return result.rows[0];
+}
+
+
 
 // export const editItem = async (newItem: Order): Promise<Order> => {
   

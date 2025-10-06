@@ -24,6 +24,8 @@ const defaultNewOrder: Order = {
   waiter: "Bomber",
   taken_at: new Date,
   notes: "",
+  are_drinks_served: false,
+  are_dishes_served: false,
   dishes_body: [],
   drinks_body: []
 }
@@ -219,8 +221,8 @@ export default function OrdersPage() {
     }
   }
 
-  function sendNewOrder() {
-    
+  function resetOrder() {
+    setNewOrder(defaultNewOrder);
   }
 
   return (
@@ -247,7 +249,7 @@ export default function OrdersPage() {
       )}
 
       {orderSection === "Cart" && (
-        <Cart newOrder={newOrder} />
+        <Cart newOrder={newOrder} resetOrder={resetOrder} />
       )}
 
       <div

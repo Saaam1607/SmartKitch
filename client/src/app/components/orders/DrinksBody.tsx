@@ -6,12 +6,12 @@ import ServedIcon from './ServedIcon';
 
 import { Wine, Pizza } from 'lucide-react';
 
-interface DishesBodyProps {
-  dishBody: DishOrderBody[];
+interface DrinksBodyProps {
+  drinkBody: DrinkOrderBody[];
   isServed: boolean;
 }
 
-export default function DishesBody({ dishBody, isServed } : DishesBodyProps ) {
+export default function DrinksBody({ drinkBody, isServed } : DrinksBodyProps ) {
   return (
     <div
       className=''
@@ -20,14 +20,13 @@ export default function DishesBody({ dishBody, isServed } : DishesBodyProps ) {
       }}
     >
       <div className='d-flex align-items-center gap-2'>
-        <Pizza size={20} />
-        <h5 className='m-0 p-0'>Dishes</h5>
+        <Wine size={20} />
+        <h5 className='m-0 p-0'>Drinks</h5> 
         <ServedIcon isServed={isServed} />
       </div>
-
+      
       <div className='d-flex gap-2'>
-
-        {dishBody.map((section, index) => (
+        {drinkBody.map((section, index) => (
           <div
             key={index}
             className='p-2 px-3 rounded'
@@ -36,7 +35,7 @@ export default function DishesBody({ dishBody, isServed } : DishesBodyProps ) {
             }}
           >
             <h5 className='m-0 p-0'>{section.section_name}</h5>
-            {section.ordered_dishes.map((ordered_dish, index) => (
+            {section.ordered_drinks.map((ordered_drink, index) => (
               <div key={index}>
                 <h6
                   className='m-0 ms-2 p-0'
@@ -44,16 +43,8 @@ export default function DishesBody({ dishBody, isServed } : DishesBodyProps ) {
                     fontWeight: "bold",
                   }}
                 >
-                  {ordered_dish.quantity} x {ordered_dish.dish.name}
+                  {ordered_drink.quantity} x {ordered_drink.drink.name}
                 </h6>
-                <p
-                  className='m-0 ms-4 p-0'
-                  style={{
-                    fontSize: '0.8rem',
-                  }}
-                >
-                  {ordered_dish.dish.ingredients.join(", ")}
-                </p>
               </div>
             ))}
           </div>

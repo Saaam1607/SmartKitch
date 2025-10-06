@@ -25,7 +25,6 @@ export default function DishCard<T extends BaseItem>({ item, isEditing, handleCh
 
   useEffect(() => {
     setIngredientsNames(ingredients.map(obj => obj.name))
-    console.log(ingredients.map(obj => obj.name))
   }, [ingredients])
 
   function handleIngredientAddition(ingredient: string) {

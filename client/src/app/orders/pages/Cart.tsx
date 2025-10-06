@@ -14,10 +14,12 @@ import '../../styles/scrollbar.css';
 
 interface CartProps {
   newOrder: Order;
+  resetOrder: () => void;
 }
 
 export default function Cart({
   newOrder,
+  resetOrder,
 }: CartProps) {
 
   const [totalPrice, setTotalPrice] = useState(0);
@@ -45,8 +47,13 @@ export default function Cart({
   }
 
   async function confirmOrder() {
-    await ordersService.addItem(newOrder)
-    console.log("OK")
+    try {
+      await ordersService.addItem(newOrder)
+      // toast.success('Ordine inviato con successo!');
+      resetOrder()
+    } catch (err) {
+      // toast.error('Errore durante l’invio dell’ordine');
+    }
   }
 
   return (
@@ -123,7 +130,7 @@ export default function Cart({
           </div>
         )}
 
-        {newOrder.drinks_body.length > 0 && (
+        {newOrder.dishes_body.length > 0 && (
           <div className="d-flex flex-column w-100" >
             <div
               className='d-flex flex-column'
